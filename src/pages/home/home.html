@@ -1,0 +1,64 @@
+
+
+<ion-header>
+  <ion-navbar hideBackButton="true">
+    <ion-title>
+      Linkup
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-menu id="loggedInMenu" [content]="content">
+
+  <!--<ion-header>
+    <ion-toolbar>
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>-->
+
+  <ion-content class="outer-content">
+
+    <ion-list>
+      <ion-item>
+      <ion-avatar item-left>
+        <img src="assets/images/profile-icon.png">
+      </ion-avatar>
+      <h2>Mahesh Nikate</h2>
+      <p>Sr Syetm Executive</p>
+      <ion-badge>10</ion-badge>
+      <!--<ion-badge>20</ion-badge>
+      <ion-badge>20</ion-badge>-->
+
+      <!--assets/images/Business-Leave-icon.png-->
+
+      <img src="assets/images/Business-Leave-icon.png">
+      <!--<button ion-button>Leaves</button>
+      <button ion-button>Timesheets</button>
+      <button ion-button>Birthdays</button>-->
+    </ion-item>
+
+      <ion-list-header (click)="showLeaveManagement()">
+        Leave Management
+      </ion-list-header>
+      <ion-item  class ="animated fadeInUp" ion-item  menuClose *ngFor="let p of appPages" (click)="openPage(p)">
+        <!--<ion-icon item-left [name]="p.icon" [color]="isActive(p)"></ion-icon>-->
+        {{p.title}}
+      </ion-item>
+
+    </ion-list>
+
+  </ion-content>
+
+</ion-menu>
+
+
+
+
+<ion-content padding>
+  <p>
+    This is Home page.
+  </p>
+</ion-content>-->
+
+
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

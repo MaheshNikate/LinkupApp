@@ -1,0 +1,7 @@
+.background.scroll-content {
+    background: url('assets/images/profile-icon.png') no-repeat;
+    background-size: cover;
+    background-position: center; 
+    margin: auto; 
+    z-index: 2; 
+}
