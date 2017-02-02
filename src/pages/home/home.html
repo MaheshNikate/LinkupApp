@@ -10,40 +10,51 @@
 
 <ion-menu id="loggedInMenu" [content]="content">
 
-  <!--<ion-header>
-    <ion-toolbar>
-      <ion-title>Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>-->
-
   <ion-content class="outer-content">
 
     <ion-list>
-      <ion-item>
-      <ion-avatar item-left>
-        <img src="assets/images/profile-icon.png">
-      </ion-avatar>
-      <h2>Mahesh Nikate</h2>
-      <p>Sr Syetm Executive</p>
-      <ion-badge>10</ion-badge>
-      <!--<ion-badge>20</ion-badge>
-      <ion-badge>20</ion-badge>-->
-
-      <!--assets/images/Business-Leave-icon.png-->
-
-      <img src="assets/images/Business-Leave-icon.png">
-      <!--<button ion-button>Leaves</button>
-      <button ion-button>Timesheets</button>
-      <button ion-button>Birthdays</button>-->
-    </ion-item>
+    <!--<ion-item >  -->
+    <ion-card menuClose class="masters" (click)= "openProfile()">
+    <div class="profilephoto">  
+     <img src="assets/images/profile-image.jpg"/>
+    </div>
+      <ion-card-content >
+        <h2 class="centertext">Mahesh Nikate</h2>
+        <p class="centertext">
+          Sr.System Executive
+        </p>
+        <div class="item images-parent">
+          <div class="left-image">
+          <img src="assets/images/birthday-icon.png" />
+          </div>
+          <img src="assets/images/timesheet.png" class="right-image"/>
+          <img src="assets/images/Business-Leave-icon.png" class="center-image"/>
+        </div> 
+      </ion-card-content>
+    </ion-card>
+    <!--</ion-item>-->
 
       <ion-list-header (click)="showLeaveManagement()">
-        Leave Management
+        <ion-icon *ngIf= "isShowLeaveMgt == false" name="arrow-dropdown" item-right></ion-icon>
+        <ion-icon *ngIf= "isShowLeaveMgt == true" name="arrow-dropleft" item-right ></ion-icon>
+	     <h2 style="display: inline-block;">Leave Management</h2>
       </ion-list-header>
-      <ion-item  class ="animated fadeInUp" ion-item  menuClose *ngFor="let p of appPages" (click)="openPage(p)">
+      <ion-item  class ="animated fadeInUp" ion-item  menuClose *ngFor="let p of leavePages" (click)="openPage(p)">
         <!--<ion-icon item-left [name]="p.icon" [color]="isActive(p)"></ion-icon>-->
         {{p.title}}
       </ion-item>
+
+      <ion-list-header (click)="showTimesheet()">
+        <ion-icon *ngIf= "isShowTimesheet == false" name="arrow-dropdown" item-right></ion-icon>
+        <ion-icon *ngIf= "isShowTimesheet == true" name="arrow-dropleft" item-right ></ion-icon>
+	     <h2 style="display: inline-block;">Timesheet</h2>
+      </ion-list-header>
+
+       <ion-item  class ="animated fadeInUp" ion-item  menuClose *ngFor="let p of timesheetPages" (click)="openPage(p)">
+        <!--<ion-icon item-left [name]="p.icon" [color]="isActive(p)"></ion-icon>-->
+        {{p.title}}
+      </ion-item>
+      <ion-item class ="animated fadeInUp" ion-item menuClose (click)="logout()">Logout</ion-item>
 
     </ion-list>
 

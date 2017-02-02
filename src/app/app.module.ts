@@ -9,6 +9,7 @@ import { ApplyForLeave } from '../pages/LeaveManagement/ApplyForLeave/applyforle
 import { MyLeaves } from '../pages/LeaveManagement/MyLeaves/myleaves';
 import { Holidays } from '../pages/LeaveManagement/Holidays/holidays';
 import { LeaveApproval } from '../pages/LeaveManagement/LeaveApproval/leaveapproval';
+import { ProfilePage } from '../pages/profile/profile';
 
 
 
@@ -22,6 +23,7 @@ import { LeaveApproval } from '../pages/LeaveManagement/LeaveApproval/leaveappro
     MyLeaves,
     Holidays,
     LeaveApproval,
+    ProfilePage,
     ScrollableTabs
   ],
   imports: [
@@ -36,7 +38,8 @@ import { LeaveApproval } from '../pages/LeaveManagement/LeaveApproval/leaveappro
     ApplyForLeave,
     MyLeaves,
     Holidays,
-    LeaveApproval
+    LeaveApproval,
+    ProfilePage
   ],
   providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler }]
 })

@@ -1,5 +1,5 @@
 import { Component,ViewChild } from '@angular/core';
-import { Events, MenuController, Nav, Platform } from 'ionic-angular';
+import { App, Events, MenuController, Nav, Platform } from 'ionic-angular';
 
 
 import { NavController } from 'ionic-angular';
@@ -7,6 +7,8 @@ import {ApplyForLeave} from '../LeaveManagement/ApplyForLeave/applyforleave';
 import {MyLeaves} from '../LeaveManagement/MyLeaves/myleaves';
 import {Holidays} from '../LeaveManagement/Holidays/holidays';
 import {LeaveApproval} from '../LeaveManagement/LeaveApproval/leaveapproval';
+import {ProfilePage} from '../profile/profile';
+import { LoginPage } from '../Login/login';
 
 export interface PageInterface {
   title: string;
@@ -23,12 +25,15 @@ export class HomePage {
 
   @ViewChild(Nav) nav: Nav;
   public isShowLeaveMgt : boolean;
+  public isShowTimesheet : boolean;
 
 
-  appPages: PageInterface[] = [];
+   leavePages: PageInterface[] = [];
+   timesheetPages: PageInterface[] = [];
  
 
   constructor(
+    public appCtrl: App,
     public navCtrl: NavController,
     public menu: MenuController,
     public platform: Platform,
@@ -36,12 +41,18 @@ export class HomePage {
   ) {
     
     this.isShowLeaveMgt = false;
+    this.isShowTimesheet = false;
+  }
+
+  openProfile(){
+    console.log('calling profile');
+    this.nav.setRoot(ProfilePage);
   }
 
   showLeaveManagement() {
       if(this.isShowLeaveMgt == false)
       {
-      this.appPages = [
+      this.leavePages = [
           { title: 'Apply For Leave', component: ApplyForLeave },
           { title: 'My Leaves', component: MyLeaves, index: 1},
           { title: 'Holidays', component: Holidays,  index: 2 },
@@ -51,8 +62,28 @@ export class HomePage {
       }
       else
       {
-        this.appPages = [];
+        this.leavePages = [];
         this.isShowLeaveMgt = false;
+      }
+   
+  }
+
+  showTimesheet() {
+      if(this.isShowTimesheet == false)
+      {
+      this.timesheetPages = [
+          { title: 'My Timesheets', component: ApplyForLeave },
+          { title: 'Enter Timesheets', component: MyLeaves, index: 1},
+          { title: 'Approve Timesheets', component: Holidays,  index: 2 },
+          { title: 'Approved Timesheets', component: LeaveApproval,  index: 3 },
+          { title: 'Timesheet Report', component: LeaveApproval,  index: 3 }
+        ];
+        this.isShowTimesheet = true;
+      }
+      else
+      {
+        this.timesheetPages = [];
+        this.isShowTimesheet = false;
       }
    
   }
@@ -66,6 +97,12 @@ export class HomePage {
         console.log("Didn't set nav root");
       });
     }
+    }
+
+    logout()
+    {
+      localStorage.removeItem('accessToken');
+      this.appCtrl.getRootNav().setRoot(LoginPage);
     }
   
 

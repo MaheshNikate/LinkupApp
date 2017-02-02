@@ -13,21 +13,27 @@ import { LoginPage } from '../pages/Login/login';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage = LoginPage;
+  
+  rootPage :any;
   @ViewChild(Nav) nav: Nav;
 
   constructor(platform: Platform , private app: IonicApp) {
   
     //this.initializeApp();
+    
+        if (localStorage.getItem('accessToken')) {
+          this.rootPage = HomePage;
+        } else {
+          this.rootPage = LoginPage;
+        }
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
+
+   // this.initializeApp();
   }
 
-  initializeApp() {
-      //this.rootPage = HomePage;
-  }
 }
