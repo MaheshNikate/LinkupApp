@@ -4,7 +4,7 @@
 page-user {
 
   .masters {
-    background-image: url('assets/images/background.png') no-repeat;
+    background: url('../../assets/images/background.png') no-repeat;
     background-size: cover;
     background-position: center; 
     margin: auto; 
@@ -20,7 +20,39 @@ page-user {
     }
   }
 
+  .scroll-content {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+   
+
   .list {
     margin-bottom: 0;
+    margin-top: 120px;
   }
+
+  ion-row {
+        align-items: center;
+        text-align: center;
+      }
+
+  ion-item {
+          border-radius: 40px !important;
+          padding-left: 20px !important;
+          padding-right: 20px !important;
+          margin-top: 20px;
+          background-color:transparent;
+          opacity: 0.5;
+          font-size: 0.9em;
+      }
+
+  .login-button {
+          width: 100%;
+          border-radius: 20px;
+          font-size: 0.9em;
+          border: 1px solid #fff;
+          background-color: #39acdc;
+      }
 }
