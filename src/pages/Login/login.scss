@@ -42,6 +42,7 @@ page-user {
           border-radius: 40px !important;
           padding-left: 20px !important;
           padding-right: 20px !important;
+          max-height: 70px;
           margin-top: 20px;
           background-color:transparent;
           opacity: 0.5;
@@ -51,6 +52,7 @@ page-user {
   .login-button {
           width: 100%;
           border-radius: 20px;
+          height: 44px;
           font-size: 0.9em;
           border: 1px solid #fff;
           background-color: #39acdc;

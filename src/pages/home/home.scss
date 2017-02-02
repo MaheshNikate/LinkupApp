@@ -1,3 +1,53 @@
 page-home {
 
+    .masters {
+    background: url('../../assets/images/background.png') no-repeat;
+    background-size: cover;
+    background-position: center; 
+    margin: auto; 
+    z-index: 2; 
+}
+
+
+    .profilephoto {
+         img {
+                height: 70px !important;
+                width: 70px !important;
+                margin: 0 auto;
+                border-radius: 40px !important;
+             }
+            }
+
+      .centertext{
+          text-align: center;
+          color:whitesmoke;
+      }
+
+      .images-parent{
+  text-align: center;
+  margin-left: 60px;
+  margin-right: 60px;
+  margin-top: 20px;
+  max-height: 100px ;
+      }
+
+.left-image{
+  float:left;
+  max-width: 24px !important;
+  max-height: 24px !important;
+}
+
+.center-image{
+  margin:0 auto;
+  max-width: 24px !important;
+  max-height: 24px !important;
+}
+
+.right-image{
+  float:right;
+  max-width: 24px !important;
+  max-height: 24px !important;
+  
+}      
+
 }

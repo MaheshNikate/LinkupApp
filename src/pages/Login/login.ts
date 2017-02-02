@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component ,ViewChild} from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { NavController } from 'ionic-angular';
+import { NavController ,Nav} from 'ionic-angular';
 import { HomePage } from '../../pages/home/home';
 import { AuthService } from './login.service';
 
@@ -16,6 +16,8 @@ import { AuthService } from './login.service';
   providers:[AuthService]
 })
 export class LoginPage {
+    @ViewChild(Nav) nav: Nav;
+  
   login: {username?: string, password?: string} = {};
   submitted = false;
   public errorMessage: string;
@@ -24,7 +26,9 @@ export class LoginPage {
 
   constructor(public navCtrl: NavController , private authService: AuthService) { 
      this.model = new User('', '');
+     //this.initializeApp();
   }
+  
 
   onLogin(form: NgForm) {
     this.submitted = true;
@@ -57,7 +61,14 @@ export class LoginPage {
                 this.errorMessage = error.message;
             });
     }
+    initializeApp() {
+      if (localStorage.getItem('accessToken')) {
+            this.navCtrl.push(HomePage);
+        } 
+  }
 }
+
+
 
 class User {
     constructor(

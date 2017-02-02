@@ -1,0 +1,17 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Profile</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content padding style="background-color:#e600e6">
+<ion-tabs [scrollable-tabs]="selectedTabIndex" color="default" mode='md' tabsHighlight="true" tabsPlacement="top">
+	<ion-tab [root]="AboutRoot" (ionSelect)="selectTab(1)" tabIcon="information-circle" tabTitle="Personal Info"></ion-tab>
+	<ion-tab [root]="AboutRoot" (ionSelect)="selectTab(2)" tabIcon="information-circle" tabTitle="Details"></ion-tab>
+	<ion-tab [root]="AboutRoot" (ionSelect)="selectTab(3)" tabIcon="information-circle" tabTitle="Education"></ion-tab>
+	<ion-tab [root]="AboutRoot" (ionSelect)="selectTab(4)" tabIcon="information-circle" tabTitle="Employment History"></ion-tab>
+	<ion-tab [root]="AboutRoot" (ionSelect)="selectTab(5)" tabIcon="information-circle" tabTitle="Experience"></ion-tab>
+	<ion-tab [root]="AboutRoot" (ionSelect)="selectTab(6)" tabIcon="information-circle" tabTitle="Skill Set"></ion-tab>
+	<ion-tab [root]="AboutRoot" (ionSelect)="selectTab(6)" tabIcon="information-circle" tabTitle="Certification"></ion-tab>
+	<ion-tab [root]="AboutRoot" (ionSelect)="selectTab(6)" tabIcon="information-circle" tabTitle="Achievements"></ion-tab>
+</ion-tabs>
+</ion-content>
