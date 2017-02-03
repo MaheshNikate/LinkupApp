@@ -12,10 +12,16 @@
   <br>
   <br>
   <ion-card>
-  <ion-card-header>
-    My Leaves
+  <ion-card-header (click)="showMyLeaves()">
+   <ion-item>
+        My Leaves
+        <button ion-button icon-only item-right clear>
+        <ion-icon *ngIf= "isShowMyLeave == false" name="arrow-dropdown" item-right></ion-icon>
+        <ion-icon *ngIf= "isShowMyLeave == true" name="arrow-dropleft" item-right ></ion-icon>
+      </button>
+      </ion-item>
   </ion-card-header>
-  <ion-card-content>
+  <ion-card-content *ngIf="isShowMyLeave == true">
      <ion-row>
       <ion-col width-70>
         <p>Leave Type</p>
