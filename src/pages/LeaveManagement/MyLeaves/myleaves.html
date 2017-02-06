@@ -38,19 +38,19 @@
       <ion-col width-15>
         <p>Taken</p>
         <br>
-        <p>6</p>
+        <p>{{leaveDetail.LeaveTaken}}</p>
         <br>
-        <p>0</p>
+        <p>{{leaveDetail.HalfdayLeaveTaken}}</p>
         <br>
-        <p>0</p>
+        <p>{{leaveDetail.AbsentTaken}}</p>
         <br>
-        <p>0</p>
+        <p>{{leaveDetail.HalfdayAbsentTaken}}</p>
         <br>
       </ion-col>
       <ion-col width-15>
         <p>Balance</p>
         <br>
-        <p>7.992</p>
+        <p>{{leaveDetail.LeaveBalance}}</p>
         <br>
         <p>--</p>
         <br>
@@ -67,12 +67,17 @@
   <ion-list-header>
     Leave Status
   </ion-list-header>
-  <ion-item-sliding>
+  <ion-item-sliding ion-item-sliding *ngFor="let leave of leaveObs | async">
     <ion-item>
-      <p>Start Date : 30-01-2017</p>
-      <p>End Date : 30-01-2017</p>
-      <p>Number of Leaves : 1</p>
-      <p>Status : Approved</p>
+      <h2>{{leave.Type.Title}}</h2>
+      <p>Start Date : {{leave.StartDate}}</p>
+      <p>End Date : {{leave.EndDate}}</p>
+      <p>Number of Leaves : {{leave.NumberOfDays}}</p>
+      <p>Reason : {{leave.Reason}}</p>
+      <p>Comment : {{leave.Comment}}</p>
+      <p>Status : {{leave.Status}}</p>
+      <p>Approver : </p>
+      <p *ngFor="let approver of leave.Approvers"> {{approver.Manager}} - {{approver.Status}} </p>
     </ion-item>
    <ion-item-options side="right">
       <button ion-button color="primary">
@@ -80,7 +85,7 @@
       </button>
     </ion-item-options>
   </ion-item-sliding>
-  <ion-item-sliding>
+  <!--<ion-item-sliding>
     <ion-item>
       <p>Start Date : 15-01-2017</p>
       <p>End Date : 16-01-2017</p>
@@ -120,6 +125,6 @@
         Edit
       </button>
     </ion-item-options>
-  </ion-item-sliding>
+  </ion-item-sliding>-->
  </ion-list>
 </ion-content>

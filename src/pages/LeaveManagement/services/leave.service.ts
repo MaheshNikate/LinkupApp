@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response ,Headers,RequestOptions } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { BaseService } from '../../../shared/index';
@@ -16,7 +16,7 @@ export class LeaveService extends BaseService {
         super( http, CONTEXT);
     }
 
-    /**
+     /**
      * getLeave method
      * Gets leave object corresponding to ID specified
      */
@@ -29,9 +29,20 @@ export class LeaveService extends BaseService {
      * Gets array of leaves
      */
     getLeaves(): Observable<Leave> {
-        return this.getList$().map(res => res.json());
+        return this.getList$(0,0,true).map(res => res.json());
     }
-
+    getMyLeaves(): Observable<Leave> {
+        return this.getChildList$('myleaves',0,0,true).map(res => res.json());
+    }
+    getApproverLeaves(): Observable<Leave[]> {
+        return this.getChildList$('ApproverLeaves',0,0,true).map(res => res.json());
+    }
+    getLeaveDetails(): Observable<any> {
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get('/api/EmployeeLeaves/GetMyLeaveDetails',options).map((res => res.json()));
+    }
     /**
      * getLeaveArray method
      * Gets child array in the object to be returned. List of applied leaves, in this case

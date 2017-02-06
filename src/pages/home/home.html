@@ -37,7 +37,7 @@
     </ion-card>
     <!--</ion-item>-->
 
-      <ion-list-header (click)="showLeaveManagement()">
+      <ion-list-header (click)="showLeaveManagement()" [ngStyle]="{'height': 36}">
         <ion-icon *ngIf= "isShowLeaveMgt == false" name="arrow-dropdown" item-right></ion-icon>
         <ion-icon *ngIf= "isShowLeaveMgt == true" name="arrow-dropleft" item-right ></ion-icon>
 	     <h2 style="display: inline-block;">Leave Management</h2>

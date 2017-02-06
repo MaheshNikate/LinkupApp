@@ -18,7 +18,7 @@ export class MyLeaves {
 
   public leaveObs: Observable<Leave>;
   public leaveDetObs: Observable<LeaveDetail>;
-  public leaveDetailObs: Observable<LeaveDetail>;
+  public leaveDetail: any;
   servRows = 5;
   leaves: {};
   leave: any;
@@ -35,8 +35,16 @@ export class MyLeaves {
   getLeaves()
   {
     console.log('calling leaves');
-    this.leaveObs = this.leaveService.getLeaves();
-    this.leaveDetObs = this.userService.getLeaveDetails('LeaveDetails');
+     this.leaveObs = this.leaveService.getMyLeaves();
+    // this.leaveService.getMyLeaves().subscribe(
+    //   (res:any) =>  {
+    //     console.log("Data from server", res); 
+    //     this.leaveObs = res;
+    //   });
+      this.leaveService.getLeaveDetails().subscribe((res:any) => {
+        this.leaveDetail = res[0];
+    });
+    //this.leaveDetObs = this.userService.getLeaveDetails('LeaveDetails');
   }
   showMyLeaves()
   {
