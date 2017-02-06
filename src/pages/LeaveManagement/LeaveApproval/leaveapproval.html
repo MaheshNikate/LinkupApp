@@ -1,18 +1,195 @@
-<ion-header>
+<!--<ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      My Leaves
     </ion-title>
   </ion-navbar>
-</ion-header>
+</ion-header>-->
 
-<ion-content padding>
-  <ion-card>
+<ion-content padding class="itemBackground">
+  <br>
+  <br>
+  <br>
+  <br>
+  <!--<ion-card>
+  <ion-card-header (click)="showMyLeaves()">
+   <ion-item>
+        Approve Leaves
+        <button ion-button icon-only item-right clear>
+        <ion-icon *ngIf= "isShowMyLeave == false" name="arrow-dropdown" item-right></ion-icon>
+        <ion-icon *ngIf= "isShowMyLeave == true" name="arrow-dropleft" item-right ></ion-icon>
+      </button>
+      </ion-item>
+  </ion-card-header>
+  <ion-card-content *ngIf="isShowMyLeave == true">
+     <ion-row>
+      <ion-col width-70>
+        <p>Leave Type</p>
+        <br>
+        <p>Leave</p>
+        <br>
+        <p>Half Day Leave</p>
+        <br>
+        <p>Absent</p>
+        <br>
+        <p>Half Day Absent</p>
+        <br>
+      </ion-col>
+      <ion-col width-15>
+        <p>Taken</p>
+        <br>
+        <p>6</p>
+        <br>
+        <p>0</p>
+        <br>
+        <p>0</p>
+        <br>
+        <p>0</p>
+        <br>
+      </ion-col>
+      <ion-col width-15>
+        <p>Balance</p>
+        <br>
+        <p>7.992</p>
+        <br>
+        <p>--</p>
+        <br>
+        <p>--</p>
+        <br>
+        <p>--</p>
+        <br>
+      </ion-col>
+     </ion-row>
+  </ion-card-content>
+</ion-card>-->
+
+<ion-card class="itemBackground">
   <ion-card-header>
-    Leave Approval
+  <h2 class="itemTextColor">Approve Leaves</h2>
+   <ion-item class="itemBackground" >
+        <button ion-button icon-only item-left clear (click)="selectAllLeaves()"> 
+        <ion-icon *ngIf= "isSelectall == false" name="radio-button-off" item-left></ion-icon>
+        <ion-icon *ngIf= "isSelectall == true" name="radio-button-on" item-left ></ion-icon>
+         Select All </button>
+        <button ion-button icon-only item-right clear (click)="approveLeave()">
+        <ion-icon name="checkmark" item-right></ion-icon>
+        </button>
+        <button ion-button icon-only item-right clear (click)="rejectLeave()">
+        <ion-icon name="close" item-right></ion-icon>
+        </button>
+    </ion-item>
+
   </ion-card-header>
   <ion-card-content>
-    This is Leave Approval page.
   </ion-card-content>
 </ion-card>
+
+<ion-list>
+  <!--<ion-list-header>
+    Approve Leaves
+  </ion-list-header>-->
+    <!--<ion-row>
+      
+      
+      <button>Approve</button>
+      <button>Reject</button>
+    </ion-row>-->
+  
+  <ion-item-sliding>
+    <ion-item class="itemBackground">
+      <p class ="itemTextColor">Employee : Mahesh Nikate</p>
+      <p class ="itemTextColor">Approver : Kunal Adhikari - Pending</p>
+      <p class ="itemTextColor">Approver : Harnish Padia - Approved</p>
+      <p class ="itemTextColor">Start Date : 11-02-2017</p>
+      <p class ="itemTextColor">End Date : 11-02-2017</p>
+      <p class ="itemTextColor">Number of Leaves : 1</p>
+      <p class ="itemTextColor">Status : Partially Approved</p>
+      
+    </ion-item>
+    <ion-item-divider class="itemDeviderColor"></ion-item-divider>
+   <ion-item-options side="right">
+      <button ion-button class="itemBackground">
+      <ion-checkbox [(ngModel)]="leavechecked"></ion-checkbox>
+      </button>
+      <button ion-button color="secondary" (click)="approveLeave()">
+        Approve
+      </button>
+      <button ion-button color="danger" (click)="rejectLeave()">
+        Reject
+      </button>
+    </ion-item-options>
+  </ion-item-sliding>
+  
+  <ion-item-sliding>
+    <ion-item class="itemBackground">
+      <p class ="itemTextColor">Employee : Harnish Padia</p>
+      <p class ="itemTextColor">Approver : Kunal Adhikari - Pending</p>
+      <p class ="itemTextColor">Approver : Aradhana C - Approved</p>
+      <p class ="itemTextColor">Start Date : 15-02-2017</p>
+      <p class ="itemTextColor">End Date : 16-02-2017</p>
+      <p class ="itemTextColor">Number of Leaves : 3</p>
+      <p class ="itemTextColor" >Status : Parially Approved</p>
+    </ion-item>
+    <ion-item-divider class="itemDeviderColor"></ion-item-divider>
+   <ion-item-options side="right">
+      <button ion-button class="itemBackground">
+      <ion-checkbox [(ngModel)]="leavechecked"></ion-checkbox>
+      </button>
+     <button ion-button color="secondary" (click)="approveLeave()">
+        Approve
+      </button>
+      <button ion-button color="danger" (click)="rejectLeave()">
+        Reject
+      </button>
+    </ion-item-options>
+  </ion-item-sliding>
+
+   <ion-item-sliding>
+    <ion-item class="itemBackground">
+      <p class ="itemTextColor">Employee : Shrikant Mane</p>
+      <p class ="itemTextColor">Approver : Kunal Adhikari - Pending</p>
+      <p class ="itemTextColor">Approver : Aradhana C - Pending</p>
+      <p class ="itemTextColor">Start Date : 5-02-2017</p>
+      <p class ="itemTextColor">End Date : 7-02-2017</p>
+      <p class ="itemTextColor">Number of Leaves : 3</p>
+      <p class ="itemTextColor">Status : Pending</p>
+    </ion-item>
+    <ion-item-divider class="itemDeviderColor"></ion-item-divider>
+   <ion-item-options side="right">
+      <button ion-button class="itemBackground">
+      <ion-checkbox [(ngModel)]="leavechecked"></ion-checkbox>
+      </button>
+      <button ion-button color="secondary" (click)="approveLeave()">
+        Approve
+      </button>
+      <button ion-button color="danger" (click)="rejectLeave()">
+        Reject
+      </button>
+    </ion-item-options>
+  </ion-item-sliding>
+
+     <ion-item-sliding>
+    <ion-item class="itemBackground">
+      <p class ="itemTextColor">Employee : Mayur Kapadins</p>
+      <p class ="itemTextColor">Approver : Kunal Adhikari - Pending</p>
+      <p class ="itemTextColor">Approver : Aradhana C - Pending</p>
+      <p class ="itemTextColor">Start Date : 26-02-2016</p>
+      <p class ="itemTextColor">End Date : 27-02-2016</p>
+      <p class ="itemTextColor">Number of Leaves : 2</p>
+      <p class ="itemTextColor">Status : Pending</p>
+    </ion-item>
+    <ion-item-divider class="itemDeviderColor"></ion-item-divider>
+   <ion-item-options side="right">
+      <button ion-button class="itemBackground">
+      <ion-checkbox [(ngModel)]="leavechecked"></ion-checkbox>
+      </button>
+      <button ion-button color="secondary" (click)="approveLeave()">
+        Approve
+      </button>
+      <button ion-button color="danger" (click)="rejectLeave()">
+        Reject
+      </button>
+    </ion-item-options>
+  </ion-item-sliding>
+ </ion-list>
 </ion-content>
