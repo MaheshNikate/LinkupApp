@@ -74,7 +74,7 @@
       <p>End Date : {{leave.EndDate}}</p>
       <p>Number of Leaves : {{leave.NumberOfDays}}</p>
       <p>Reason : {{leave.Reason}}</p>
-      <p>Comment : {{leave.Comment}}</p>
+      <p>Comment : {{leave.Comment.title}}</p>
       <p>Status : {{leave.Status}}</p>
       <p>Approver : </p>
       <p *ngFor="let approver of leave.Approvers"> {{approver.Manager}} - {{approver.Status}} </p>

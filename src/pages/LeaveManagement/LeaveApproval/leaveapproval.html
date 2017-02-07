@@ -11,14 +11,14 @@
   <ion-card-header>
   <h2 >Approve Leaves</h2>
    <ion-item>
-        <button ion-button icon-only item-left clear (click)="selectAllLeaves()"> 
+        <button  ion-button icon-only item-left clear (click)="selectAllLeaves()"> 
         <ion-icon *ngIf= "isSelectall == false" name="radio-button-off" item-left></ion-icon>
         <ion-icon *ngIf= "isSelectall == true" name="radio-button-on" item-left ></ion-icon>
          Select All </button>
-        <button ion-button icon-only item-right clear (click)="approveLeave()">
+        <button ion-button icon-only [disabled] = "leavechecked == false" item-right clear (click)="approveBulkLeave()">
         <ion-icon name="checkmark" item-right></ion-icon>
         </button>
-        <button ion-button icon-only item-right clear (click)="rejectLeave()">
+        <button ion-button icon-only [disabled] = "leavechecked == false" item-right clear (click)="rejectBulkLeave()">
         <ion-icon name="close" item-right></ion-icon>
         </button>
     </ion-item>
@@ -39,8 +39,8 @@
       <button>Reject</button>
     </ion-row>-->
   
-  <ion-item-sliding *ngFor="let leave of leaveObs | async">
-    <ion-item [ngStyle]="{'background-color': itemcolor}">
+  <ion-item-sliding #slidingItem *ngFor="let leave of leaveObs let i = index" >
+    <ion-item [ngStyle]="{'background-color': leave.selectionColor}" (press)="getEditMode()">
       <p>Employee : {{leave.Employee.Name}}</p>
       <p>Start Date : {{leave.StartDate}}</p>
       <p>End Date : {{leave.EndDate}}</p>
@@ -54,12 +54,12 @@
     <!--<ion-item-divider class="itemDeviderColor"></ion-item-divider>-->
    <ion-item-options side="right">
       <button ion-button >
-      <ion-checkbox [(ngModel)]="leavechecked"></ion-checkbox>
+      <ion-checkbox [(ngModel)]="leave.selected" (click) = "selectLeaveClicked(leave,slidingItem,leavechecked,i)"></ion-checkbox>
       </button>
-      <button ion-button color="secondary" (click)="approveLeave(leave)">
+      <button ion-button color="secondary" (click)="approveLeave(leave,slidingItem)">
         Approve
       </button>
-      <button ion-button color="danger" (click)="rejectLeave(leave)">
+      <button ion-button color="danger" (click)="rejectLeave(leave,slidingItem)">
         Reject
       </button>
     </ion-item-options>

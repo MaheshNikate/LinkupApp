@@ -11,6 +11,8 @@ export interface Leave {
     Status: string;
     Reason: string;
     Comment: string;
+    selected : boolean ;
+    selectionColor : string;
     Approvers: [
         {
             Project: string,
