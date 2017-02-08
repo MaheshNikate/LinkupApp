@@ -1,4 +1,23 @@
+$categories: (
+ ionic: color($colors, primary),
+ rejected: #FE4C52,
+ pending: #FED035,
+ approved: #69BB7B,
+);
+
+@function auxiliary-categories() {
+  @return map-remove($categories);
+}
+
+
 page-leaveapproval {
+
+    @each $status, $value in auxiliary-categories() {
+   ion-item-sliding[status=#{$status}] ion-label {
+     border-left: 2px solid $value;
+     padding-left: 10px;
+   }
+  }
     .tranperentcolor{
         color:transparent;
         
@@ -6,6 +25,10 @@ page-leaveapproval {
     .itemBackground{
         background-color
         : #2E2E2E;
+    }
+    .bulkapprovecolor
+    {
+        color:#44679F;
     }
     .itemTransperentBackground{
         background-color

@@ -4,7 +4,7 @@
 page-user {
 
   .masters {
-    background: url('../../assets/images/background.png') no-repeat;
+    background: url('../assets/images/background.png') ;
     background-size: cover;
     background-position: center; 
     margin: auto; 
@@ -50,8 +50,8 @@ page-user {
       }
 
   .login-button {
-          width: 100%;
-          border-radius: 20px;
+          width: 80%;
+          // border-radius: 20px;
           height: 44px;
           font-size: 0.9em;
           border: 1px solid #fff;

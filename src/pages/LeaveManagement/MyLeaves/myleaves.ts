@@ -43,6 +43,8 @@ export class MyLeaves {
     //   });
       this.leaveService.getLeaveDetails().subscribe((res:any) => {
         this.leaveDetail = res[0];
+        this.isShowMyLeave = true;
+
     });
     //this.leaveDetObs = this.userService.getLeaveDetails('LeaveDetails');
   }

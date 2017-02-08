@@ -19,6 +19,7 @@ import { ApprovalForm } from '../models/leaveApprovalValidation';
 export class LeaveApproval {
 
 public isSelectall:boolean;
+public isSelect:boolean;
 public leavechecked: boolean;
 public editMode: boolean;
 public itemcolor:string;
@@ -52,6 +53,7 @@ selectedEmployees: any[];
   getLeavesToApprove()
   {
      this.isSelectall = false;
+     this.isSelect = false;
      this.leavechecked = false;
       this.model.comments = '';
      this.leaveService.getApproverLeaves()
@@ -138,9 +140,18 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
 
 /*Selection of Leaves */
 
+selectLeaves()
+{
+  if(this.isSelectall == true)
+  return;
+  
+   this.isSelect = !this.isSelect;
+}
+
   selectAllLeaves()
   {
     this.isSelectall = !this.isSelectall;
+    this.isSelect = false;
     if(this.isSelectall == true)
     {
       this.selectedEmployees = [];
@@ -182,7 +193,7 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
     else
     {
       this.selectedEmployees.push(leave);
-      leave.selectionColor = "limegreen";
+      leave.selectionColor = "#44679F";
       leave.selected = true;
     }
    this.setboolean();

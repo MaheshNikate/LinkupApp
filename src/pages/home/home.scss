@@ -1,11 +1,14 @@
 page-home {
 
     .masters {
-    background: url('../../assets/images/background.png') no-repeat;
+    background: url('../assets/images/background.png') no-repeat;
     background-size: cover;
     background-position: center; 
     margin: auto; 
     z-index: 2; 
+}
+.barcolor{
+    color: #3D3E51;
 }
 
 

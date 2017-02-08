@@ -9,16 +9,17 @@
   
   <ion-list >
     <ion-list-header>
-    Holidays
+    <h2> Holidays </h2>
   </ion-list-header>
-  <ion-item *ngFor="let holiday of holidaysObs | async">
-    <ion-avatar item-left>
+  <ion-item *ngFor="let holiday of holidaysObs | async" [attr.holidaytype]="holiday.HolidayType | lowercase">
+    <!--<ion-avatar item-left>
       <img src="assets/images/date_icons/26Date.png">
-    </ion-avatar>
+    </ion-avatar>-->
     <h2>{{holiday.title}}</h2>
     <p>{{holiday.start}}</p>
-    <p>{{holiday.WeekDay}}</p>
-    <p>{{holiday.HolidayType}}</p>
+    <!--<p>{{holiday.WeekDay}}</p>-->
+    <ion-badge item-right>{{holiday.WeekDay}}</ion-badge>
+    <!--<p>{{holiday.HolidayType}}</p>-->
   </ion-item>
  
   <!--<ion-item >
