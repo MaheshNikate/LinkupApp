@@ -49,10 +49,12 @@
       <ion-label *ngIf= "isSelect == true">{{leave.Employee.Name}}</ion-label>
       <h3>{{leave.StartDate}}</h3>
       <h3>{{leave.EndDate}}</h3>
+      <h3>{{leave.Status}}</h3>
       <!--<p>Number of Leaves : {{leave.NumberOfDays}}</p>-->
       <ion-badge item-right>{{leave.NumberOfDays}}</ion-badge>
       <ion-checkbox *ngIf= "isSelect == true" item-left color="red" 
       [(ngModel)]="leave.selected" (click) = "selectLeaveClicked(leave,slidingItem,leavechecked,i)"></ion-checkbox>
+      <!--<ion-icon name="more" item-right (click)="showMoreMenu(leave)"></ion-icon>-->
       <!--<p>Reason : {{leave.Reason}}</p>
       <p>Status : Partially Approved</p>
       <p>Approver : </p>

@@ -30,21 +30,56 @@ export class AuthService extends BaseService {
     getCurrentUser() {
       return JSON.parse(localStorage.getItem('loggedInUserDetails'));
     }
+    // authenticate(credentials: any): Observable<any> {
+    //        let headers = new Headers();
+    //     let credentialString : string = 'grant_type=password&UserName='+credentials.UserName+'&Password='+credentials.Password;
+    //     headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.post('http://espld200:8090/api/auth/Token', credentialString, options)
+    //         .map((res: Response) => { this.setToken(res); })
+    //         .catch(this.handleError);
+    // }
     authenticate(credentials: any): Observable<any> {
            let headers = new Headers();
         let credentialString : string = 'grant_type=password&UserName='+credentials.UserName+'&Password='+credentials.Password;
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
         let options = new RequestOptions({ headers: headers });
-        return this.http.post('/api/auth/Token', credentialString, options)
+        return this.http.post('http://linkupmobile.eternussolutions.com/webapi/api/auth/Token', credentialString, options)
             .map((res: Response) => { this.setToken(res); })
             .catch(this.handleError);
     }
+    //http://espld200:8090
     getLoggedInUserPermission() {
-         return this.getChildList$('permissions',0, 0, true).map((res: Response) => { this.setLoggedInUserPermission(res); });
+        //  return this.getChildList$('permissions',0, 0, true).map((res: Response) => { this.setLoggedInUserPermission(res); });
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        let options = new RequestOptions({ headers: headers });
+        // let windowRef = this._window();
+       
+        return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/auth/permissions',options)
+         .map((res: Response) => {
+           this.setLoggedInUserPermission(res);
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
     }
     getCurrentUserDetails() {
-         return this.getChildList$('currentusername',0, 0, true).map((res: Response) => {
-            this.setLoggedInUserDetail(res);
+        //  return this.getChildList$('currentusername',0, 0, true).map((res: Response) => {
+        //     this.setLoggedInUserDetail(res);
+        // });
+
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        let options = new RequestOptions({ headers: headers });
+        // let windowRef = this._window();
+       
+        return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/auth/currentusername',options)
+         .map((res: Response) => {
+           this.setLoggedInUserDetail(res);
+        })
+        .catch(err => {
+            return this.handleError(err);
         });
     }
 
@@ -68,6 +103,6 @@ export class AuthService extends BaseService {
             throw new Error('Bad response status: ' + res.status);
         }
         let body = res.json();
-        localStorage.setItem('loggedInUserDetails', JSON.stringify(body));
+        localStorage.setItem('loggedInUserDetails', body.Name);
     }
 }

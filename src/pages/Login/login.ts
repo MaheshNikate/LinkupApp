@@ -1,7 +1,7 @@
 import { Component ,ViewChild} from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { NavController ,Nav} from 'ionic-angular';
+import {App, NavController ,Nav ,LoadingController} from 'ionic-angular';
 import { HomePage } from '../../pages/home/home';
 import { AuthService } from './login.service';
 
@@ -23,9 +23,12 @@ export class LoginPage {
   public errorMessage: string;
   showError: boolean = false;
   public model: User;
+  
 
-  constructor(public navCtrl: NavController , private authService: AuthService) { 
+  constructor(public appCtrl: App,public navCtrl: NavController , private authService: AuthService ,
+  public loading: LoadingController) { 
      this.model = new User('', '');
+      
      //this.initializeApp();
   }
   
@@ -36,13 +39,18 @@ export class LoginPage {
     if (form.valid) {
       //this.userData.login(this.login.username);
       //this.navCtrl.push(HomePage);
-
+      let loading = this.createLoading();
+       loading.present();
        this.authService.authenticate(this.model)
             .subscribe(
+                
             results => {
+                loading.dismiss();
                 this.getLoggedInUserPermission();
+                // this.getCurrentUserDetails();
             },
             error => {
+                loading.dismiss();
                 this.showError = true;
                 this.errorMessage = error.message;
             });
@@ -54,9 +62,11 @@ export class LoginPage {
             .subscribe(
             results => {
                 //this._router.navigate(['/']);
+               
                 this.getCurrentUserDetails();
             },
             error => {
+                
                 this.showError = true;
                 this.errorMessage = error.message;
             });
@@ -65,19 +75,33 @@ export class LoginPage {
         this.authService.getCurrentUserDetails()
             .subscribe(
             results => {
+               
                 this.navCtrl.push(HomePage);
             },
             error => {
+                
                 this.showError = true;
                 this.errorMessage = error.message;
             });
     }
     initializeApp() {
       if (localStorage.getItem('accessToken')) {
-            this.navCtrl.push(HomePage);
+             this.navCtrl.push(HomePage);
+            //this.appCtrl.getRootNav().setRoot(LoginPage);
         } 
   }
+
+        createLoading()
+        {
+            let loading = this.loading.create({
+            content: 'Please wait...'
+            });
+            loading.present();
+            return loading;
+        }
+
 }
+
 
 
 

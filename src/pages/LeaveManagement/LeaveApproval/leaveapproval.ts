@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController,Alert,ItemSliding,AlertController } from 'ionic-angular';
+import { NavController,Alert,ItemSliding,AlertController ,PopoverController } from 'ionic-angular';
 
 /** Third Party Dependencies */
 import { Observable } from 'rxjs/Rx';
@@ -10,6 +10,7 @@ import { LeaveService } from '../services/leave.service';
 import { Leave } from '../models/leave';
 import { User } from '../models/user';
 import { ApprovalForm } from '../models/leaveApprovalValidation';
+import { MorePopoverPage } from '../../morePopover/morepopover';
 
 @Component({
   selector: 'page-leaveapproval',
@@ -36,8 +37,10 @@ approved: boolean = false;
 rejected: boolean = false;
 leaveList:any;
 selectedEmployees: any[];
+comment:string = '';
 
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController , private leaveService: LeaveService) {
+  constructor(public navCtrl: NavController,public alertCtrl: AlertController , private leaveService: LeaveService
+  ,public popoverCtrl: PopoverController) {
    
     this.model = {
             comments: ''
@@ -46,6 +49,20 @@ selectedEmployees: any[];
     this.selectedEmployees = [];
 
     this.getLeavesToApprove()
+  }
+
+    showMoreMenu(event: Event,leave:any) {
+    let popover = this.popoverCtrl.create(MorePopoverPage,{leave:leave});
+    popover.present({ ev: event });
+    popover.onDidDismiss(
+      function(_leave) {
+        // alert(JSON.stringify())
+    //  this.approveLeaveFromMore(_leave);
+      this.selectedLeave = _leave;
+      this.showApproveRejectPromt(true);
+
+      })
+      
   }
 
   /*Get Leaves to Approve*/
@@ -76,6 +93,12 @@ selectedEmployees: any[];
   }
 /*Approve/ Reject Leaves */
 
+approveLeaveFromMore(sLeave:any)
+  {
+    this.selectedLeave = sLeave;
+    this.showApproveRejectPromt(true);
+  }
+
 approveLeave(sLeave:any , slidingItem: ItemSliding)
   {
     slidingItem.close();
@@ -93,13 +116,21 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
         // if (valid) {
         //    BACKEND CALL HERE
         this.leaveID = this.selectedLeave.ID;
-            var params = [{
-                ID: this.leaveID,
-                Comment: this.model.comments,
-                Status: 'Approved'
-            }];
+            // var params = [{
+            //     LeaveRequestRefId: this.leaveID,
+            //     Comments: this.model.comments,
+            //     Status: 'Approved'
+            // }];
 
-            this.leaveService.updateLeaveRecord(this.leaveID, params)
+             var params = {
+                LeaveRequestRefId: this.leaveID,
+                Comments: this.comment,
+                Status: 'Approved'
+            };
+
+
+
+            this.leaveService.singleLeaveApprove(params)
                 .subscribe(res => {
                     if (res) {
                         this.rejected = false;
@@ -117,13 +148,13 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
     rejectClicked() {
        
         this.leaveID = this.selectedLeave.ID;
-            var params = [{
-                ID: this.leaveID,
-                Comment: this.model.comments,
+           var params = {
+                LeaveRequestRefId: this.leaveID,
+                Comments: this.comment,
                 Status: 'Rejected'
-            }];
+            };
 
-            this.leaveService.updateLeaveRecord(this.leaveID, params)
+            this.leaveService.singleLeaveReject(params)
                 .subscribe(res => {
                     if (res) {
                         this.rejected = false;
@@ -249,13 +280,15 @@ let prompt = this.alertCtrl.create({
           handler: data => {
             console.log('Saved clicked');
             this.model.comments = data;
-            var cmt = this.model.comments;
+            this.comment = data.title;
+            var cmt = this.comment;//this.model.comments;
             
             if(isApprove == 'Approve')
             {
             if(cmt.length == 0)
             {
               this.model.comments = '';
+              this.comment = '';
               this.showApproveRejectPromt(true);
               return;
              }
@@ -269,6 +302,7 @@ let prompt = this.alertCtrl.create({
               if(cmt.length == 0)
             {
               this.model.comments = '';
+              this.comment = '';
               this.showApproveRejectPromt(false);
               return;
              }

@@ -42,7 +42,7 @@ export class MyLeaves {
     //     this.leaveObs = res;
     //   });
       this.leaveService.getLeaveDetails().subscribe((res:any) => {
-        this.leaveDetail = res[0];
+        this.leaveDetail = res;
         this.isShowMyLeave = true;
 
     });
