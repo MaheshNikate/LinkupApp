@@ -1,7 +1,7 @@
 import { Component ,ViewChild} from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import {App, NavController ,Nav ,LoadingController} from 'ionic-angular';
+import {App, NavController ,Nav ,LoadingController ,AlertController} from 'ionic-angular';
 import { HomePage } from '../../pages/home/home';
 import { AuthService } from './login.service';
 
@@ -26,7 +26,7 @@ export class LoginPage {
   
 
   constructor(public appCtrl: App,public navCtrl: NavController , private authService: AuthService ,
-  public loading: LoadingController) { 
+  public loading: LoadingController , public alertCtrl: AlertController) { 
      this.model = new User('', '');
       
      //this.initializeApp();
@@ -51,6 +51,7 @@ export class LoginPage {
             },
             error => {
                 loading.dismiss();
+                this.showAlert('Failed','Failed to login!');
                 this.showError = true;
                 this.errorMessage = error.message;
             });
@@ -76,7 +77,8 @@ export class LoginPage {
             .subscribe(
             results => {
                
-                this.navCtrl.push(HomePage);
+                // this.navCtrl.push(HomePage);
+                this.appCtrl.getRootNav().setRoot(HomePage);
             },
             error => {
                 
@@ -98,6 +100,15 @@ export class LoginPage {
             });
             loading.present();
             return loading;
+        }
+
+         showAlert(title:string, subTitle:string) {
+            let alert = this.alertCtrl.create({
+            title: title,
+            subTitle: subTitle,
+            buttons: ['OK']
+            });
+            alert.present();
         }
 
 }

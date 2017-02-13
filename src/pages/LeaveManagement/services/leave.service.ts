@@ -38,6 +38,13 @@ export class LeaveService extends BaseService {
         let options = new RequestOptions({ headers: headers });
         return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/Leave/myleaves',options).map((res => res.json()));
     }
+    // getMyLeaves(): Observable<Leave> {
+    //     // return this.getChildList$('myleaves',0,0,true).map(res => res.json());
+    //     let headers = new Headers();
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.get('/api/Leave/myleaves',options).map((res => res.json()));
+    // }
     getApproverLeaves(): Observable<Leave[]> {
         // return this.getChildList$('ApproverLeaves',0,0,true).map(res => res.json());
         let headers = new Headers();
@@ -45,6 +52,24 @@ export class LeaveService extends BaseService {
         let options = new RequestOptions({ headers: headers });
         return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/Leave/ApproverLeaves',options).map((res => res.json()));
     }
+
+    // getApproverLeaves(): Observable<Leave[]> {
+    //     // return this.getChildList$('ApproverLeaves',0,0,true).map(res => res.json());
+    //     let headers = new Headers();
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.get('/api/Leave/ApproverLeaves',options).map((res => res.json()));
+    // }
+   
+
+    //  getLeaveByStatus(status:any): Observable<Leave[]> {
+    //     // return this.getChildList$('ByStatus/'+status,0,0,true).map(res => res.json());
+    //     let headers = new Headers();
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.get('/api/Leave/ByStatus/Pending',options).map((res => res.json()));
+    // }
+
      getLeaveByStatus(status:any): Observable<Leave[]> {
         // return this.getChildList$('ByStatus/'+status,0,0,true).map(res => res.json());
         let headers = new Headers();
@@ -52,12 +77,19 @@ export class LeaveService extends BaseService {
         let options = new RequestOptions({ headers: headers });
         return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/Leave/ByStatus/Pending',options).map((res => res.json()));
     }
+
     getLeaveDetails(): Observable<any> {
         let headers = new Headers();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         let options = new RequestOptions({ headers: headers });
         return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/EmployeeLeaves/GetMyLeaveDetails',options).map((res => res.json()));
     }
+    // getLeaveDetails(): Observable<any> {
+    //     let headers = new Headers();
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.get('/api/EmployeeLeaves/GetMyLeaveDetails',options).map((res => res.json()));
+    // }
     /**
      * 
      * getLeaveArray method
@@ -103,6 +135,36 @@ export class LeaveService extends BaseService {
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         let options = new RequestOptions({ headers: headers });
         return this.http.put('http://linkupmobile.eternussolutions.com/webapi/api/LeaveApprovers/ApproveByManager',payload,options).map((res => res.json()));
+    }
+
+    // bulkLeaveApproval(payload:any) {
+    //     let headers = new Headers();
+    //     let body=JSON.stringify(payload);
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     headers.append('Content-Type', 'application/json');
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.put('/api/LeaveApprovers/BulkLeaveApproval',body,options)
+    //      .map(res => {
+    //         return res.json();
+    //     })
+    //     .catch(err => {
+    //         return this.handleError(err);
+    //     });
+    // }
+
+     bulkLeaveApproval(payload:any) {
+        let headers = new Headers();
+        let body=JSON.stringify(payload);
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        headers.append('Content-Type', 'application/json');
+        let options = new RequestOptions({ headers: headers });
+        return this.http.put('http://linkupmobile.eternussolutions.com/webapi/api/LeaveApprovers/BulkLeaveApproval',body,options)
+         .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
     }
 
     singleLeaveApprove(payload:any) {

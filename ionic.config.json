@@ -5,6 +5,6 @@
   "typescript": true,
   "proxies": [{
     "path": "/",
-    "proxyUrl": "http://192.168.101.21:8009"
+    "proxyUrl": "http://linkupmobile.eternussolutions.com/webapi"
   }]
 }

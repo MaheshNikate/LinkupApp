@@ -30,15 +30,7 @@ export class AuthService extends BaseService {
     getCurrentUser() {
       return JSON.parse(localStorage.getItem('loggedInUserDetails'));
     }
-    // authenticate(credentials: any): Observable<any> {
-    //        let headers = new Headers();
-    //     let credentialString : string = 'grant_type=password&UserName='+credentials.UserName+'&Password='+credentials.Password;
-    //     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    //     let options = new RequestOptions({ headers: headers });
-    //     return this.http.post('http://espld200:8090/api/auth/Token', credentialString, options)
-    //         .map((res: Response) => { this.setToken(res); })
-    //         .catch(this.handleError);
-    // }
+   
     authenticate(credentials: any): Observable<any> {
            let headers = new Headers();
         let credentialString : string = 'grant_type=password&UserName='+credentials.UserName+'&Password='+credentials.Password;
@@ -48,7 +40,16 @@ export class AuthService extends BaseService {
             .map((res: Response) => { this.setToken(res); })
             .catch(this.handleError);
     }
-    //http://espld200:8090
+    // authenticate(credentials: any): Observable<any> {
+    //        let headers = new Headers();
+    //     let credentialString : string = 'grant_type=password&UserName='+credentials.UserName+'&Password='+credentials.Password;
+    //     headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.post('/api/auth/Token', credentialString, options)
+    //         .map((res: Response) => { this.setToken(res); })
+    //         .catch(this.handleError);
+    // }
+    
     getLoggedInUserPermission() {
         //  return this.getChildList$('permissions',0, 0, true).map((res: Response) => { this.setLoggedInUserPermission(res); });
         let headers = new Headers();
@@ -64,6 +65,22 @@ export class AuthService extends BaseService {
             return this.handleError(err);
         });
     }
+
+    // getLoggedInUserPermission() {
+    //     //  return this.getChildList$('permissions',0, 0, true).map((res: Response) => { this.setLoggedInUserPermission(res); });
+    //     let headers = new Headers();
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     let options = new RequestOptions({ headers: headers });
+    //     // let windowRef = this._window();
+       
+    //     return this.http.get('/api/auth/permissions',options)
+    //      .map((res: Response) => {
+    //        this.setLoggedInUserPermission(res);
+    //     })
+    //     .catch(err => {
+    //         return this.handleError(err);
+    //     });
+    // }
     getCurrentUserDetails() {
         //  return this.getChildList$('currentusername',0, 0, true).map((res: Response) => {
         //     this.setLoggedInUserDetail(res);
@@ -82,6 +99,25 @@ export class AuthService extends BaseService {
             return this.handleError(err);
         });
     }
+    // getCurrentUserDetails() {
+    //     //  return this.getChildList$('currentusername',0, 0, true).map((res: Response) => {
+    //     //     this.setLoggedInUserDetail(res);
+    //     // });
+
+    //     let headers = new Headers();
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     let options = new RequestOptions({ headers: headers });
+    //     // let windowRef = this._window();
+       
+    //     return this.http.get('/api/auth/currentusername',options)
+    //      .map((res: Response) => {
+    //        this.setLoggedInUserDetail(res);
+    //     })
+    //     .catch(err => {
+    //         return this.handleError(err);
+    //     });
+    // }
+
 
     private setToken(res: Response) {
         if (res.status < 200 || res.status >= 300) {

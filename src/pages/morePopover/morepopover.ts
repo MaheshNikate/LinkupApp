@@ -7,8 +7,8 @@ import { ViewController, NavController, App, ModalController,NavParams } from 'i
 @Component({
   template: `
     <ion-list>
-      <button ion-item (click)="close('http://ionicframework.com/docs/v2/getting-started')">Approve</button>
-      <button ion-item (click)="close('http://ionicframework.com/docs/v2')">Reject</button>
+      <button ion-item (click)="close(true)">Approve</button>
+      <button ion-item (click)="close(false)">Reject</button>
     </ion-list>
   `
 })
@@ -40,8 +40,8 @@ this.leave = params;
     this.viewCtrl.dismiss();
   }
 
-  close(url: string) {
+  close(isapproove: boolean) {
    
-    this.viewCtrl.dismiss(this.leave);
+    this.viewCtrl.dismiss(this.leave,isapproove);
   }
 }

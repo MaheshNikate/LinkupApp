@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController,Alert,ItemSliding,AlertController ,PopoverController } from 'ionic-angular';
+import { NavController,Alert,ItemSliding,AlertController ,PopoverController,ActionSheetController } from 'ionic-angular';
 
 /** Third Party Dependencies */
 import { Observable } from 'rxjs/Rx';
@@ -24,9 +24,10 @@ public isSelect:boolean;
 public leavechecked: boolean;
 public editMode: boolean;
 public itemcolor:string;
-leaveID: number;
+leaveID: string;
 leaveObs: Observable<Leave[]>;
 selectedLeave:Leave;
+selectedLeaveID:string;
 userDetObs: Observable<User>;
 requests: any;
 servRows = 6;
@@ -40,7 +41,7 @@ selectedEmployees: any[];
 comment:string = '';
 
   constructor(public navCtrl: NavController,public alertCtrl: AlertController , private leaveService: LeaveService
-  ,public popoverCtrl: PopoverController) {
+  ,public popoverCtrl: PopoverController ,public actionSheetCtrl: ActionSheetController) {
    
     this.model = {
             comments: ''
@@ -51,18 +52,52 @@ comment:string = '';
     this.getLeavesToApprove()
   }
 
-    showMoreMenu(event: Event,leave:any) {
-    let popover = this.popoverCtrl.create(MorePopoverPage,{leave:leave});
+    showMoreMenu(event: Event) {
+    let popover = this.popoverCtrl.create(MorePopoverPage,{event});
     popover.present({ ev: event });
-    popover.onDidDismiss(
-      function(_leave) {
-        // alert(JSON.stringify())
-    //  this.approveLeaveFromMore(_leave);
-      this.selectedLeave = _leave;
-      this.showApproveRejectPromt(true);
+    popover.onDidDismiss( this.getLeavetoAcceptRejcet)
+  }
 
-      })
-      
+   presentActionSheet(leaveID:string) {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Leave Action',
+      buttons: [
+        {
+          text: 'Approve',
+          role: 'destructive',
+          handler: () => {
+          this.selectedLeaveID = leaveID;
+          this.showApproveRejectPromt(true);  
+          }
+        },{
+          text: 'Reject',
+          handler: () => {
+            this.selectedLeaveID = leaveID;
+            this.showApproveRejectPromt(false);  
+          }
+        },{
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
+
+  getLeavetoAcceptRejcet(leave:any,approve:boolean)
+  {
+     console.log(status);
+    this.selectedLeaveID = leave.data.event;
+    if(this.showApproveRejectPromt)
+    {
+      this.showApproveRejectPromt(true);
+    }
+    
+
   }
 
   /*Get Leaves to Approve*/
@@ -86,6 +121,25 @@ comment:string = '';
     
   }
 
+   getPendingLeavesToApprove()
+  {
+     this.isSelectall = false;
+     this.isSelect = false;
+     this.leavechecked = false;
+      this.model.comments = '';
+     this.leaveService.getLeaveByStatus('Pending')
+    .subscribe(
+      (res:any) =>  {
+        console.log("Data from server", res); 
+        this.leaveObs = res;
+        this.leaveObs.forEach(leave => {
+          this.selectLeave(leave,false);
+        });
+        
+      });
+    
+  }
+
   /*long press list */
   getEditMode()
   {
@@ -93,11 +147,6 @@ comment:string = '';
   }
 /*Approve/ Reject Leaves */
 
-approveLeaveFromMore(sLeave:any)
-  {
-    this.selectedLeave = sLeave;
-    this.showApproveRejectPromt(true);
-  }
 
 approveLeave(sLeave:any , slidingItem: ItemSliding)
   {
@@ -113,17 +162,9 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
   }
 
   approveClicked() {
-        // if (valid) {
-        //    BACKEND CALL HERE
-        this.leaveID = this.selectedLeave.ID;
-            // var params = [{
-            //     LeaveRequestRefId: this.leaveID,
-            //     Comments: this.model.comments,
-            //     Status: 'Approved'
-            // }];
 
              var params = {
-                LeaveRequestRefId: this.leaveID,
+                LeaveRequestRefId: this.selectedLeaveID,
                 Comments: this.comment,
                 Status: 'Approved'
             };
@@ -147,9 +188,8 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
 
     rejectClicked() {
        
-        this.leaveID = this.selectedLeave.ID;
            var params = {
-                LeaveRequestRefId: this.leaveID,
+                LeaveRequestRefId: this.selectedLeaveID,
                 Comments: this.comment,
                 Status: 'Rejected'
             };
@@ -185,26 +225,48 @@ selectLeaves()
     this.isSelect = false;
     if(this.isSelectall == true)
     {
+     this.isSelectall = false;
+     this.isSelect = false;
+     this.leavechecked = false;
+     this.model.comments = '';
       this.selectedEmployees = [];
-      this.leaveObs.forEach(leave => {
+     this.leaveService.getLeaveByStatus('Pending')
+    .subscribe(
+      (res:any) =>  {
+        console.log("Data from server", res); 
+        this.leaveObs = res;
+        this.leaveObs.forEach(leave => {
           this.selectLeave(leave,true);
         });
+        
+      });
+
+      
+      // this.leaveObs.forEach(leave => {
+      //     this.selectLeave(leave,true);
+      //   });
     }
     else
     {
       this.selectedEmployees = [];
-      this.editMode = false;
-        this.leaveObs.forEach(leave => {
-          this.selectLeave(leave,false);
-        });
+      this.getLeavesToApprove();
+      // this.editMode = false;
+      //   this.leaveObs.forEach(leave => {
+      //     this.selectLeave(leave,false);
+      //   });
     }
     
   }
-  selectLeaveClicked(leave:any, slidingItem: ItemSliding , checked:boolean , index:number)
-  {
-    slidingItem.close();
-    this.selectLeave(leave,leave.selected);
+  // selectLeaveClicked(leave:any, slidingItem: ItemSliding , checked:boolean , index:number)
+  // {
+  //   slidingItem.close();
+  //   this.selectLeave(leave,leave.selected);
    
+  // }
+
+  selectLeaveClicked(leave:any, checked:boolean , index:number)
+  {
+    this.selectLeave(leave,leave.selected);
   }
   selectLeave(leave:any ,checked:boolean)
   {
@@ -334,39 +396,39 @@ let prompt = this.alertCtrl.create({
 
 
   assembleReqPayload(status: string) {
-    var payload:any = [];
+    var payload:any = {
+          LeaveRequestIDs:[],
+          StatusAndComments:{
+            Comments: this.comment,
+            Status: status
+          }
+        };
     for (var index in this.selectedEmployees) {
-      payload.push(
+      payload.LeaveRequestIDs.push(
         {
-          ID: this.selectedEmployees[index].ID,
-          Comment: this.model.comments,
-          Status: status
+          LeaveRequestRefId: this.selectedEmployees[index].LeaveRequestMasterId,
         });
     }
-
     return payload;
   }
+  
 
   sendRequest(status:any) {
-    return this.leaveService.updateLeaveRecord(1, this.assembleReqPayload(status)).subscribe(res => {
-      if (res) {
-        if (status === 'Rejected') {
-          this.rejected = false;
-          this.approved = true;
-          this.showAlert('Success!','Selected leaves Rejected');
-          
-        } else {
-          this.rejected = true;
-          this.approved = false;
-          this.showAlert('Success!','Selected leaves Approved');
-          
-        }
-       this.getLeavesToApprove();
-        this.selectedEmployees = [];
-      } else {
-        this.showAlert('Failed!','Request failed');
+
+    if (this.selectedEmployees.length > 0) {
+        //    BACKEND CALL HERE
+         this.leaveService.bulkLeaveApproval(this.assembleReqPayload(status)).subscribe(res => {
+            if (res) {
+               this.rejected = true;
+               this.approved = false;
+               this.getLeavesToApprove();
+               this.selectedEmployees = [];
+               this.showAlert('Success','Selected leaves are '+ status + '!');
+         } else {
+           this.showAlert('Failed','Action failed!');
+         }
+      });
       }
-    });
   }
 
 /* Alert */

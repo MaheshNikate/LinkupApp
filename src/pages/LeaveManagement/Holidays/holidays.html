@@ -16,7 +16,7 @@
       <img src="assets/images/date_icons/26Date.png">
     </ion-avatar>-->
     <h2>{{holiday.Title}}</h2>
-    <p>{{holiday.HolidayDate}}</p>
+    <p>{{holiday.HolidayDate | date:'dd/MM/y'}}</p>
     <!--<p>{{holiday.WeekDay}}</p>-->
     <ion-badge item-right>{{holiday.WeekDay}}</ion-badge>
     <!--<p>{{holiday.HolidayType}}</p>-->

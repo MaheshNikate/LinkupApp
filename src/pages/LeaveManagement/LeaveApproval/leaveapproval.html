@@ -43,29 +43,21 @@
       <button>Reject</button>
     </ion-row>-->
   
-  <ion-item-sliding #slidingItem *ngFor="let leave of leaveObs let i = index" [attr.status]="leave.Status | lowercase">
-    <ion-item [ngStyle]="{'background-color': leave.selectionColor}" (press)="getEditMode()">
+  <!--<ion-item-sliding #slidingItem *ngFor="let leave of leaveObs let i = index" [attr.status]="leave.Status | lowercase">-->
+    <ion-item [ngStyle]="{'background-color': leave.selectionColor}" *ngFor="let leave of leaveObs let i = index" [attr.status]="leave.Status | lowercase">
       <h2 *ngIf= "isSelect == false">{{leave.Employee.Name}}</h2>
       <ion-label *ngIf= "isSelect == true">{{leave.Employee.Name}}</ion-label>
-      <h3>{{leave.StartDate}}</h3>
-      <h3>{{leave.EndDate}}</h3>
-      <h3>{{leave.Status}}</h3>
-      <!--<p>Number of Leaves : {{leave.NumberOfDays}}</p>-->
+      <h3>{{leave.StartDate | date:'dd/MM/y'}}</h3>
+      <h3>{{leave.EndDate | date:'dd/MM/y'}}</h3>
       <ion-badge item-right>{{leave.NumberOfDays}}</ion-badge>
       <ion-checkbox *ngIf= "isSelect == true" item-left color="red" 
-      [(ngModel)]="leave.selected" (click) = "selectLeaveClicked(leave,slidingItem,leavechecked,i)"></ion-checkbox>
-      <!--<ion-icon name="more" item-right (click)="showMoreMenu(leave)"></ion-icon>-->
-      <!--<p>Reason : {{leave.Reason}}</p>
-      <p>Status : Partially Approved</p>
-      <p>Approver : </p>
-      <p *ngFor="let approver of leave.Approvers">{{approver.Manager}} - {{approver.Status}}</p>-->
-      
+      [(ngModel)]="leave.selected" (click) = "selectLeaveClicked(leave,leavechecked,i)"></ion-checkbox>
+      <!--<ion-icon name="more" item-right (click)="showMoreMenu(leave.LeaveRequestMasterId)"></ion-icon>-->
+       <ion-icon *ngIf= "isSelectall == false" name="more" item-right (click)="presentActionSheet(leave.LeaveRequestMasterId)"></ion-icon>
+    
     </ion-item>
     <!--<ion-item-divider class="itemDeviderColor"></ion-item-divider>-->
-   <ion-item-options side="right">
-      <!--<button ion-button >
-      <ion-checkbox [(ngModel)]="leave.selected" (click) = "selectLeaveClicked(leave,slidingItem,leavechecked,i)"></ion-checkbox>
-      </button>-->
+   <!--<ion-item-options side="right">
       <button ion-button color="secondary" (click)="approveLeave(leave,slidingItem)">
         Approve
       </button>
@@ -73,7 +65,7 @@
         Reject
       </button>
     </ion-item-options>
-  </ion-item-sliding>
+  </ion-item-sliding>-->
   
  </ion-list>
 </ion-content>
