@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response ,Headers,RequestOptions } from '@angular/http';
-import { Router } from '@angular/router';
+// import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { BaseService } from '../../../shared/index';
 import { Leave } from '../models/leave';
@@ -15,6 +15,7 @@ export class LeaveService extends BaseService {
     constructor( public http: Http) {
         super( http, CONTEXT);
     }
+    /* Mobile API */
 
      /**
      * getLeave method
@@ -31,64 +32,44 @@ export class LeaveService extends BaseService {
     getLeaves(): Observable<Leave> {
         return this.getList$(0,0,true).map(res => res.json());
     }
-    getMyLeaves(): Observable<Leave> {
-        // return this.getChildList$('myleaves',0,0,true).map(res => res.json());
-        let headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
-        let options = new RequestOptions({ headers: headers });
-        return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/Leave/myleaves',options).map((res => res.json()));
-    }
+
+    //Get My leaves
+
     // getMyLeaves(): Observable<Leave> {
     //     // return this.getChildList$('myleaves',0,0,true).map(res => res.json());
     //     let headers = new Headers();
     //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
     //     let options = new RequestOptions({ headers: headers });
-    //     return this.http.get('/api/Leave/myleaves',options).map((res => res.json()));
+    //     return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/Leave/myleaves',options).map((res => res.json()));
     // }
-    getApproverLeaves(): Observable<Leave[]> {
-        // return this.getChildList$('ApproverLeaves',0,0,true).map(res => res.json());
-        let headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
-        let options = new RequestOptions({ headers: headers });
-        return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/Leave/ApproverLeaves',options).map((res => res.json()));
-    }
+   
+   // Get Leaves to approve 
 
     // getApproverLeaves(): Observable<Leave[]> {
     //     // return this.getChildList$('ApproverLeaves',0,0,true).map(res => res.json());
     //     let headers = new Headers();
     //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
     //     let options = new RequestOptions({ headers: headers });
-    //     return this.http.get('/api/Leave/ApproverLeaves',options).map((res => res.json()));
+    //     return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/Leave/ApproverLeaves',options).map((res => res.json()));
     // }
-   
+    
+    // Get Pending status leaves for bulk approval
 
     //  getLeaveByStatus(status:any): Observable<Leave[]> {
     //     // return this.getChildList$('ByStatus/'+status,0,0,true).map(res => res.json());
     //     let headers = new Headers();
     //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
     //     let options = new RequestOptions({ headers: headers });
-    //     return this.http.get('/api/Leave/ByStatus/Pending',options).map((res => res.json()));
+    //     return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/Leave/ByStatus/Pending',options).map((res => res.json()));
     // }
 
-     getLeaveByStatus(status:any): Observable<Leave[]> {
-        // return this.getChildList$('ByStatus/'+status,0,0,true).map(res => res.json());
-        let headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
-        let options = new RequestOptions({ headers: headers });
-        return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/Leave/ByStatus/Pending',options).map((res => res.json()));
-    }
+    // Get My applied leave details
 
-    getLeaveDetails(): Observable<any> {
-        let headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
-        let options = new RequestOptions({ headers: headers });
-        return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/EmployeeLeaves/GetMyLeaveDetails',options).map((res => res.json()));
-    }
     // getLeaveDetails(): Observable<any> {
     //     let headers = new Headers();
     //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
     //     let options = new RequestOptions({ headers: headers });
-    //     return this.http.get('/api/EmployeeLeaves/GetMyLeaveDetails',options).map((res => res.json()));
+    //     return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/EmployeeLeaves/GetMyLeaveDetails',options).map((res => res.json()));
     // }
     /**
      * 
@@ -137,13 +118,15 @@ export class LeaveService extends BaseService {
         return this.http.put('http://linkupmobile.eternussolutions.com/webapi/api/LeaveApprovers/ApproveByManager',payload,options).map((res => res.json()));
     }
 
-    // bulkLeaveApproval(payload:any) {
+    // Bulk approval 
+
+    //  bulkLeaveApproval(payload:any) {
     //     let headers = new Headers();
     //     let body=JSON.stringify(payload);
     //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
     //     headers.append('Content-Type', 'application/json');
     //     let options = new RequestOptions({ headers: headers });
-    //     return this.http.put('/api/LeaveApprovers/BulkLeaveApproval',body,options)
+    //     return this.http.put('http://linkupmobile.eternussolutions.com/webapi/api/LeaveApprovers/BulkLeaveApproval',body,options)
     //      .map(res => {
     //         return res.json();
     //     })
@@ -152,13 +135,163 @@ export class LeaveService extends BaseService {
     //     });
     // }
 
-     bulkLeaveApproval(payload:any) {
+    // Single leave approval
+
+    // singleLeaveApprove(payload:any) {
+    //     let headers = new Headers();
+    //     let body=JSON.stringify(payload);
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     headers.append('Content-Type', 'application/json');
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.put('http://linkupmobile.eternussolutions.com/webapi/api/LeaveApprovers/ApproveByManager',body,options)
+    //      .map(res => {
+    //         return res.json();
+    //     })
+    //     .catch(err => {
+    //         return this.handleError(err);
+    //     });
+    // }
+
+    // Single leave Reject
+
+    // singleLeaveReject(payload:any) {
+    //     let headers = new Headers();
+    //     let body=JSON.stringify(payload);
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     headers.append('Content-Type', 'application/json');
+    //     let options = new RequestOptions({ headers: headers });
+    //     // let windowRef = this._window();
+    //     // windowRef['App'].blockUI();
+    //     return this.http.put('http://linkupmobile.eternussolutions.com/webapi/api/LeaveApprovers/RejectLeave',body,options)
+    //      .map(res => {
+    //         // windowRef['App'].unblockUI();
+    //         return res.json();
+    //     })
+    //     .catch(err => {
+    //         // windowRef['App'].unblockUI();
+    //         return this.handleError(err);
+    //     });
+    // }
+
+    // Get approver list 
+
+    // getApproverListByRefID(refId:any): Observable<any> {
+    //     let headers = new Headers();
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.get(this.baseUrl+'LeaveApprovers/'+refId,options)
+    //     .map(res => {
+    //         return res.json();
+    //     })
+    //     .catch(err => {
+    //         return this.handleError(err);
+    //     });
+    // }
+
+    // Get active projects
+
+    // getActiveProjects(): Observable<any> {
+    //     let headers = new Headers();
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.get(this.baseUrl+'Project/GetMyActiveProjects',options)
+    //      .map(res => {
+    //         return res.json();
+    //     })
+    //     .catch(err => {
+    //         return this.handleError(err);
+    //     });
+    // }
+
+    // Submit new leave
+
+    // submitLeaveRecord(leavePayload:any): Observable<boolean> {
+    //     let headers = new Headers();
+    //     let body=JSON.stringify(leavePayload);
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     headers.append('Content-Type', 'application/json');
+        
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.post(this.baseUrl+'LeaveDetails',body,options)
+    //      .map(res => {
+    //         return res.json();
+    //     })
+    //     .catch(err => {
+    //         return this.handleError(err);
+    //     });
+    // }
+
+    // Get current pending leaves
+
+    //  getCurrentUserPendingLeaveCount() {
+    //     let headers = new Headers();
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.get(this.baseUrl+'LeaveDetails/GetCurrentUserPendingLeaveCount',options)
+    //      .map(res => {
+    //         return res.json();
+    //     })
+    //     .catch(err => {
+    //         return this.handleError(err);
+    //     });
+    // }
+
+    // Cancel leave
+
+    //  deleteLeaveRecord(leavePayload:any): Observable<boolean> {
+    //     let headers = new Headers();
+    //     let body=JSON.stringify(leavePayload);
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     headers.append('Content-Type', 'application/json');
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.post(this.baseUrl+'Leave/cancel',body,options)
+    //      .map(res => {
+    //         return res.json();
+    //     })
+    //     .catch(err => {
+    //         return this.handleError(err);
+    //     });
+    // }
+
+    /* Browser API */
+
+
+    getMyLeaves(): Observable<Leave> {
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get('/api/Leave/myleaves',options).map((res => res.json()));
+    }
+
+     getApproverLeaves(): Observable<Leave[]> {
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get('/api/Leave/ApproverLeaves',options).map((res => res.json()));
+    }
+
+      getLeaveByStatus(status:any): Observable<Leave[]> {
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get('/api/Leave/ByStatus/Pending',options).map((res => res.json()));
+    }
+
+
+     getLeaveDetails(): Observable<any> {
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get('/api/EmployeeLeaves/GetMyLeaveDetails',options).map((res => res.json()));
+    }
+
+      bulkLeaveApproval(payload:any) {
         let headers = new Headers();
         let body=JSON.stringify(payload);
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         headers.append('Content-Type', 'application/json');
         let options = new RequestOptions({ headers: headers });
-        return this.http.put('http://linkupmobile.eternussolutions.com/webapi/api/LeaveApprovers/BulkLeaveApproval',body,options)
+        return this.http.put('/api/LeaveApprovers/BulkLeaveApproval',body,options)
          .map(res => {
             return res.json();
         })
@@ -166,6 +299,7 @@ export class LeaveService extends BaseService {
             return this.handleError(err);
         });
     }
+
 
     singleLeaveApprove(payload:any) {
         let headers = new Headers();
@@ -173,45 +307,103 @@ export class LeaveService extends BaseService {
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         headers.append('Content-Type', 'application/json');
         let options = new RequestOptions({ headers: headers });
-        // let windowRef = this._window();
-        // windowRef['App'].blockUI();
-        return this.http.put('http://linkupmobile.eternussolutions.com/webapi/api/LeaveApprovers/ApproveByManager',body,options)
+        return this.http.put('/api/LeaveApprovers/ApproveByManager',body,options)
          .map(res => {
-            // windowRef['App'].unblockUI();
             return res.json();
         })
         .catch(err => {
-            // windowRef['App'].unblockUI();
             return this.handleError(err);
         });
     }
-    singleLeaveReject(payload:any) {
+
+
+     singleLeaveReject(payload:any) {
         let headers = new Headers();
         let body=JSON.stringify(payload);
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         headers.append('Content-Type', 'application/json');
         let options = new RequestOptions({ headers: headers });
-        // let windowRef = this._window();
-        // windowRef['App'].blockUI();
-        return this.http.put('http://linkupmobile.eternussolutions.com/webapi/api/LeaveApprovers/RejectLeave',body,options)
+        return this.http.put('/api/LeaveApprovers/RejectLeave',body,options)
          .map(res => {
-            // windowRef['App'].unblockUI();
             return res.json();
         })
         .catch(err => {
-            // windowRef['App'].unblockUI();
             return this.handleError(err);
         });
     }
 
-    /**
-     * deleteLeaveRecord method
-     * Delete request to delete a record.
-     * @ID : Parameter : ID of entity to update
-     */
-    deleteLeaveRecord(ID:any): Observable<boolean> {
-        return this.delete$(ID).map((res) => {
-            return res.status === 200 ? true : false;
+     getApproverListByRefID(refId:any): Observable<any> {
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get(this.baseUrl+'LeaveApprovers/'+refId,options)
+        .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
         });
     }
+
+
+      getActiveProjects(): Observable<any> {
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get(this.baseUrl+'Project/GetMyActiveProjects',options)
+         .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
+    }
+
+
+     submitLeaveRecord(leavePayload:any): Observable<boolean> {
+        let headers = new Headers();
+        let body=JSON.stringify(leavePayload);
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        headers.append('Content-Type', 'application/json');
+        
+        let options = new RequestOptions({ headers: headers });
+        return this.http.post('/api/LeaveDetails',body,options)
+         .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
+    }
+
+      getCurrentUserPendingLeaveCount() {
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get(this.baseUrl+'LeaveDetails/GetCurrentUserPendingLeaveCount',options)
+         .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
+    }
+
+      deleteLeaveRecord(leavePayload:any): Observable<boolean> {
+        let headers = new Headers();
+        let body=JSON.stringify(leavePayload);
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        headers.append('Content-Type', 'application/json');
+        let options = new RequestOptions({ headers: headers });
+        return this.http.post(this.baseUrl+'Leave/cancel',body,options)
+         .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
+    }
+
+   
+  
 }

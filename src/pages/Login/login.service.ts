@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response,Headers,RequestOptions } from '@angular/http';
-import { Router } from '@angular/router';
+// import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { BaseService } from '../../shared/index';
 
@@ -31,33 +31,62 @@ export class AuthService extends BaseService {
       return JSON.parse(localStorage.getItem('loggedInUserDetails'));
     }
    
-    authenticate(credentials: any): Observable<any> {
-           let headers = new Headers();
-        let credentialString : string = 'grant_type=password&UserName='+credentials.UserName+'&Password='+credentials.Password;
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        let options = new RequestOptions({ headers: headers });
-        return this.http.post('http://linkupmobile.eternussolutions.com/webapi/api/auth/Token', credentialString, options)
-            .map((res: Response) => { this.setToken(res); })
-            .catch(this.handleError);
-    }
     // authenticate(credentials: any): Observable<any> {
     //        let headers = new Headers();
     //     let credentialString : string = 'grant_type=password&UserName='+credentials.UserName+'&Password='+credentials.Password;
     //     headers.append('Content-Type', 'application/x-www-form-urlencoded');
     //     let options = new RequestOptions({ headers: headers });
-    //     return this.http.post('/api/auth/Token', credentialString, options)
+    //     return this.http.post('http://linkupmobile.eternussolutions.com/webapi/api/auth/Token', credentialString, options)
     //         .map((res: Response) => { this.setToken(res); })
     //         .catch(this.handleError);
     // }
     
-    getLoggedInUserPermission() {
-        //  return this.getChildList$('permissions',0, 0, true).map((res: Response) => { this.setLoggedInUserPermission(res); });
+    // getLoggedInUserPermission() {
+    //     let headers = new Headers();
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/auth/permissions',options)
+    //      .map((res: Response) => {
+    //        this.setLoggedInUserPermission(res);
+    //     })
+    //     .catch(err => {
+    //         return this.handleError(err);
+    //     });
+    // }
+
+    // getCurrentUserDetails() {
+    //     let headers = new Headers();
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/auth/currentusername',options)
+    //      .map((res: Response) => {
+    //        this.setLoggedInUserDetail(res);
+    //     })
+    //     .catch(err => {
+    //         return this.handleError(err);
+    //     });
+    // }
+   
+
+
+    /* Browser API */
+
+     authenticate(credentials: any): Observable<any> {
+           let headers = new Headers();
+        let credentialString : string = 'grant_type=password&UserName='+credentials.UserName+'&Password='+credentials.Password;
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        let options = new RequestOptions({ headers: headers });
+        return this.http.post('/api/auth/Token', credentialString, options)
+            .map((res: Response) => { this.setToken(res); })
+            .catch(this.handleError);
+    }
+
+
+     getLoggedInUserPermission() {
         let headers = new Headers();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         let options = new RequestOptions({ headers: headers });
-        // let windowRef = this._window();
-       
-        return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/auth/permissions',options)
+        return this.http.get('/api/auth/permissions',options)
          .map((res: Response) => {
            this.setLoggedInUserPermission(res);
         })
@@ -66,32 +95,11 @@ export class AuthService extends BaseService {
         });
     }
 
-    // getLoggedInUserPermission() {
-    //     //  return this.getChildList$('permissions',0, 0, true).map((res: Response) => { this.setLoggedInUserPermission(res); });
-    //     let headers = new Headers();
-    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
-    //     let options = new RequestOptions({ headers: headers });
-    //     // let windowRef = this._window();
-       
-    //     return this.http.get('/api/auth/permissions',options)
-    //      .map((res: Response) => {
-    //        this.setLoggedInUserPermission(res);
-    //     })
-    //     .catch(err => {
-    //         return this.handleError(err);
-    //     });
-    // }
-    getCurrentUserDetails() {
-        //  return this.getChildList$('currentusername',0, 0, true).map((res: Response) => {
-        //     this.setLoggedInUserDetail(res);
-        // });
-
+     getCurrentUserDetails() {
         let headers = new Headers();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         let options = new RequestOptions({ headers: headers });
-        // let windowRef = this._window();
-       
-        return this.http.get('http://linkupmobile.eternussolutions.com/webapi/api/auth/currentusername',options)
+        return this.http.get('/api/auth/currentusername',options)
          .map((res: Response) => {
            this.setLoggedInUserDetail(res);
         })
@@ -99,24 +107,6 @@ export class AuthService extends BaseService {
             return this.handleError(err);
         });
     }
-    // getCurrentUserDetails() {
-    //     //  return this.getChildList$('currentusername',0, 0, true).map((res: Response) => {
-    //     //     this.setLoggedInUserDetail(res);
-    //     // });
-
-    //     let headers = new Headers();
-    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
-    //     let options = new RequestOptions({ headers: headers });
-    //     // let windowRef = this._window();
-       
-    //     return this.http.get('/api/auth/currentusername',options)
-    //      .map((res: Response) => {
-    //        this.setLoggedInUserDetail(res);
-    //     })
-    //     .catch(err => {
-    //         return this.handleError(err);
-    //     });
-    // }
 
 
     private setToken(res: Response) {

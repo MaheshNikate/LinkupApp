@@ -36,17 +36,10 @@ export class MyLeaves {
   {
     console.log('calling leaves');
      this.leaveObs = this.leaveService.getMyLeaves();
-    // this.leaveService.getMyLeaves().subscribe(
-    //   (res:any) =>  {
-    //     console.log("Data from server", res); 
-    //     this.leaveObs = res;
-    //   });
       this.leaveService.getLeaveDetails().subscribe((res:any) => {
         this.leaveDetail = res;
         this.isShowMyLeave = true;
-
     });
-    //this.leaveDetObs = this.userService.getLeaveDetails('LeaveDetails');
   }
   showMyLeaves()
   {

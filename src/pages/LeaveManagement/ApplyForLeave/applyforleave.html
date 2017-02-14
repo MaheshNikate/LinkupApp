@@ -66,31 +66,16 @@
   </ion-card-content>
 </ion-card>
 
-<ion-card>
-  <ion-card-header (click)="showMyLeaves()">
-   <ion-item>
-        Active On Projects
-        <button ion-button icon-only item-right clear>
-        <ion-icon *ngIf= "isShowMyLeave == false" name="arrow-dropdown" item-right></ion-icon>
-        <ion-icon *ngIf= "isShowMyLeave == true" name="arrow-dropleft" item-right ></ion-icon>
-      </button>
-      </ion-item>
-  </ion-card-header>
-  <ion-card-content *ngIf="isShowMyLeave == true">
-     <ion-row>
-      <ion-col width-50>
-        <p>Project</p>
-        <br>
-        <p>ESPLE COE</p>
-      </ion-col>
-      <ion-col width-50>
-        <p>Manager</p>
-        <br>
-        <p>Jigar Shaha</p>
-      </ion-col>
-     </ion-row>
-  </ion-card-content>
-</ion-card>
+<ion-list>
+    <ion-list-header>
+    <h2> Active on Projects </h2>
+  </ion-list-header>
+  <ion-item *ngFor="let project of activeProjects">
+    <h2>{{ project.Title }}</h2>
+    <p>{{ project.ProjectManager.Name }}</p>
+
+  </ion-item>
+</ion-list>
 
 
 <ion-card>
@@ -105,17 +90,14 @@
 		<ion-list class="list">
       <ion-item>
         <ion-label>Leave Type *</ion-label>
-        <ion-select >
-          <ion-option value="leave">Leave</ion-option>
-          <ion-option value="halfdayleave">Half Day Leave</ion-option>
-          <ion-option value="absent">Absent</ion-option>
-          <ion-option value="halfdayabsent">Half Day Absent</ion-option>
+        <ion-select [(ngModel)]="model.leaveType" name ="leavetype" (ionChange)= "validateLeaveType()" >
+          <ion-option [value]="leavetype" *ngFor="let leavetype of leaves">{{ leavetype.Type }}</ion-option>
         </ion-select>
      </ion-item>
 			<ion-item>
 				<ion-label floating color="primary">Number of Leaves *</ion-label>
-				<ion-input  spellcheck="false" autocapitalize="off"
-					required>
+				<ion-input  name="numLeaves" type="text" disabled="true"  autocapitalize="off"
+					[ngModel]="model.numDays" required>
 				</ion-input>
 			</ion-item>
 		
@@ -123,18 +105,18 @@
 
 			<ion-item>
       <ion-label>Start Date</ion-label>
-      <ion-datetime displayFormat="MMM DD YYYY"  (ionChange)="changedStartDate($event)" ></ion-datetime>
+      <ion-datetime name ="startdate" [(ngModel)]="model.start" displayFormat="MMM DD YYYY"  (ionChange)="startChanged()" ></ion-datetime>
       </ion-item>
 
       <ion-item>
       <ion-label>End Date</ion-label>
-      <ion-datetime displayFormat="MMM DD YYYY"  (ionChange)="changedEndDate($event)"></ion-datetime>
+      <ion-datetime name ="enddate"  [(ngModel)]="model.end" displayFormat="MMM DD YYYY"  (ionChange)="endChanged()"></ion-datetime>
       </ion-item>
 	
 		
       <ion-item>
         <ion-label>Reason *</ion-label>
-        <ion-textarea></ion-textarea>
+        <ion-textarea name ="reason"  [(ngModel)]="model.reason" ></ion-textarea>
       </ion-item>
 		</ion-list>
        </ion-col>
@@ -142,10 +124,10 @@
 
 		<ion-row>
 			<ion-col col-50>
-				<button class="applybutton" (click)="onLogin(loginForm)" type="submit" block>Add Leaves</button>
+				<button class="applybutton" (click)="onAddLeave()" type="submit" block>Add Leaves</button>
 			</ion-col>
       <ion-col col-50>
-				<button class="applybutton" (click)="onLogin(loginForm)" type="submit" block>Submit</button>
+				<button class="applybutton" (click)="submitForm()" type="submit" block>Submit</button>
 			</ion-col >
 			<!--<ion-col>
 				<button ion-button (click)="onSignup()" color="light" block>Signup</button>
@@ -156,8 +138,5 @@
 
   </ion-card-content>
 </ion-card>
-
-
-
 
 </ion-content>
