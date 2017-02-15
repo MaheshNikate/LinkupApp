@@ -5,6 +5,18 @@
   <br>
   <br>
   <br>
+ 
+
+   <ion-fab left bottom>
+    <button ion-fab color="secondary"><ion-icon name="arrow-dropright"></ion-icon></button>
+    <ion-fab-list side="right">
+      <button ion-fab><ion-icon name="arrow-dropup-circle" (click)="showFirst()"></ion-icon></button>
+      <button ion-fab (click)="showPrevious()"><ion-icon name="rewind" ></ion-icon></button>
+      <button ion-fab  (click)="showNext()" ><ion-icon name="fastforward" ></ion-icon></button>
+      <button ion-fab><ion-icon name="arrow-dropdown-circle" (click)="showLast()"></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
+
   
 
 <ion-card >
@@ -32,6 +44,8 @@
   </ion-card-content>
 </ion-card>
 
+ 
+
 <ion-list>
   <!--<ion-list-header>
     Approve Leaves
@@ -44,17 +58,16 @@
     </ion-row>-->
   
   <!--<ion-item-sliding #slidingItem *ngFor="let leave of leaveObs let i = index" [attr.status]="leave.Status | lowercase">-->
-    <ion-item [ngStyle]="{'background-color': leave.selectionColor}" *ngFor="let leave of leaveObs let i = index" [attr.status]="leave.Status | lowercase">
+    <ion-item [ngStyle]="{'background-color': leave.selectionColor}" *ngFor="let leave of pages let i = index" [attr.status]="leave.Status | lowercase">
       <h2 *ngIf= "isSelect == false">{{leave.Employee.Name}}</h2>
       <ion-label *ngIf= "isSelect == true">{{leave.Employee.Name}}</ion-label>
       <h3>{{leave.StartDate | date:'dd/MM/y'}}</h3>
       <h3>{{leave.EndDate | date:'dd/MM/y'}}</h3>
       <ion-badge item-right>{{leave.NumberOfDays}}</ion-badge>
-      <ion-checkbox *ngIf= "isSelect == true" item-left color="red" 
+      <ion-checkbox *ngIf= "isSelect == true && leave.Status == 'Pending'" item-left color="red" 
       [(ngModel)]="leave.selected" (click) = "selectLeaveClicked(leave,leavechecked,i)"></ion-checkbox>
       <!--<ion-icon name="more" item-right (click)="showMoreMenu(leave.LeaveRequestMasterId)"></ion-icon>-->
-       <ion-icon *ngIf= "isSelectall == false" name="more" item-right (click)="presentActionSheet(leave.LeaveRequestMasterId)"></ion-icon>
-    
+       <ion-icon *ngIf= "isSelectall == false" name="more" item-right (click)="presentActionSheet(leave , leave.LeaveRequestMasterId)"></ion-icon>
     </ion-item>
     <!--<ion-item-divider class="itemDeviderColor"></ion-item-divider>-->
    <!--<ion-item-options side="right">
@@ -68,4 +81,6 @@
   </ion-item-sliding>-->
   
  </ion-list>
+
+
 </ion-content>

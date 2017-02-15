@@ -11,11 +11,12 @@ import { Leave } from '../models/leave';
 import { User } from '../models/user';
 import { ApprovalForm } from '../models/leaveApprovalValidation';
 import { MorePopoverPage } from '../../morePopover/morepopover';
+import { Spinnerservice } from '../../../shared/services/spinner';
 
 @Component({
   selector: 'page-leaveapproval',
   templateUrl: 'leaveapproval.html',
-  providers:[LeaveService]
+  providers:[LeaveService,Spinnerservice]
 })
 export class LeaveApproval {
 
@@ -24,8 +25,12 @@ public isSelect:boolean;
 public leavechecked: boolean;
 public editMode: boolean;
 public itemcolor:string;
+public pageIndex:number;
+public totalCount:number;
 leaveID: string;
 leaveObs: Observable<Leave[]>;
+leavesArray:Leave[];
+pages:Leave[];
 selectedLeave:Leave;
 selectedLeaveID:string;
 userDetObs: Observable<User>;
@@ -40,12 +45,14 @@ leaveList:any;
 selectedEmployees: any[];
 comment:string = '';
 
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController , private leaveService: LeaveService
+  constructor(public navCtrl: NavController,public alertCtrl: AlertController , private leaveService: LeaveService,
+  public spinner:Spinnerservice
   ,public popoverCtrl: PopoverController ,public actionSheetCtrl: ActionSheetController) {
    
     this.model = {
             comments: ''
         };
+        this.pageIndex = 0;
 
     this.selectedEmployees = [];
 
@@ -58,7 +65,10 @@ comment:string = '';
     popover.onDidDismiss( this.getLeavetoAcceptRejcet)
   }
 
-   presentActionSheet(leaveID:string) {
+   presentActionSheet(leave:any,leaveID:string) {
+     if(leave.Status =='Approved'|| leave.Status =='Rejected'||leave.Status =='Cancelled')
+     return;
+
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Leave Action',
       buttons: [
@@ -96,8 +106,6 @@ comment:string = '';
     {
       this.showApproveRejectPromt(true);
     }
-    
-
   }
 
   /*Get Leaves to Approve*/
@@ -108,17 +116,94 @@ comment:string = '';
      this.isSelect = false;
      this.leavechecked = false;
       this.model.comments = '';
+     this.spinner.createSpinner('Please wait..');  
      this.leaveService.getApproverLeaves()
     .subscribe(
       (res:any) =>  {
+        this.spinner.stopSpinner();
         console.log("Data from server", res); 
-        this.leaveObs = res;
-        this.leaveObs.forEach(leave => {
+        //this.leaveObs = res;
+        this.leavesArray =[];
+        this.leavesArray = res;
+         this.leavesArray.forEach(leave => {
           this.selectLeave(leave,false);
         });
+        this.totalCount = this.leavesArray.length;
+        this.showFirst();
+
+        // this.leaveObs.forEach(leave => {
+        //   this.selectLeave(leave,false);
+        // });
         
       });
     
+  }
+  getOffsetValue(pageindx:number)
+  {
+    if(this.leavesArray.length ==0)
+    return 0;
+
+    if(this.totalCount - pageindx >10)
+    return 10;
+    else if(pageindx == this.totalCount)
+    {
+      if(this.totalCount - pageindx > 10)
+      return 10;
+      else
+      return this.totalCount;
+    }
+    else
+    return this.totalCount - pageindx;
+  }
+  showFirst()
+  {
+    this.pages = [];
+    this.pageIndex = 0;
+    for (let index = this.pageIndex; index< this.pageIndex+this.getOffsetValue(this.pageIndex) ;index++)
+        {
+         this.pages.push(this.leavesArray[index]);
+        }
+       // this.pageIndex = this.pageIndex+this.getOffsetValue(this.pageIndex);
+  }
+
+   showPrevious()
+  {
+    if(this.pageIndex == 0)
+    return;
+
+    this.pages = [];
+    this.pageIndex = this.pageIndex-this.getOffsetValue(this.pageIndex);
+    for (let index = this.pageIndex; index< this.pageIndex+this.getOffsetValue(this.pageIndex) ;index++)
+        {
+         this.pages.push(this.leavesArray[index]);
+        }
+        if(this.pageIndex !=0)
+        this.pageIndex = this.pageIndex+this.getOffsetValue(this.pageIndex);
+  }
+   showNext()
+  {
+     if(this.pageIndex == this.totalCount)
+     return;
+
+    this.pageIndex = this.pageIndex+this.getOffsetValue(this.pageIndex);
+    this.pages = [];
+    for (let index = this.pageIndex ; index< this.pageIndex+this.getOffsetValue(this.pageIndex) ;index++)
+        {
+         this.pages.push(this.leavesArray[index]);
+        }
+    this.pageIndex = this.pageIndex+this.getOffsetValue(this.pageIndex);
+        
+  }
+
+   showLast()
+  {
+    this.pages = [];
+    this.pageIndex = this.totalCount-this.getOffsetValue(this.pageIndex);
+    for (let index = this.pageIndex; index< this.pageIndex+this.getOffsetValue(this.pageIndex) ;index++)
+        {
+         this.pages.push(this.leavesArray[index]);
+        }
+        this.pageIndex = this.pageIndex+this.getOffsetValue(this.pageIndex);
   }
 
    getPendingLeavesToApprove()
@@ -127,14 +212,25 @@ comment:string = '';
      this.isSelect = false;
      this.leavechecked = false;
       this.model.comments = '';
+      this.spinner.createSpinner('Please wait..');
      this.leaveService.getLeaveByStatus('Pending')
     .subscribe(
       (res:any) =>  {
+        this.spinner.stopSpinner();
         console.log("Data from server", res); 
-        this.leaveObs = res;
-        this.leaveObs.forEach(leave => {
-          this.selectLeave(leave,false);
+         
+         this.leavesArray =[];
+         this.leavesArray = res;
+         this.leavesArray.forEach(leave => {
+          this.selectLeave(leave,true);
         });
+        this.totalCount = this.leavesArray.length;
+        this.showFirst();
+
+        // this.leaveObs = res;
+        // this.leaveObs.forEach(leave => {
+        //   this.selectLeave(leave,false);
+        // });
         
       });
     
@@ -163,20 +259,21 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
 
   approveClicked() {
 
+         
              var params = {
                 LeaveRequestRefId: this.selectedLeaveID,
                 Comments: this.comment,
                 Status: 'Approved'
             };
 
-
-
+            this.spinner.createSpinner('Please wait..');
             this.leaveService.singleLeaveApprove(params)
                 .subscribe(res => {
+                  this.spinner.stopSpinner();
                     if (res) {
                         this.rejected = false;
                         this.approved = true
-                        this.showAlert('Success!','Leave Approved');
+                        //this.showAlert('Success!','Leave Approved');
                         this.getLeavesToApprove();
                     } else {
                         this.showAlert('Failed!','Request failed');
@@ -187,7 +284,9 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
     }
 
     rejectClicked() {
-       
+
+      
+           this.spinner.createSpinner('Please wait..');
            var params = {
                 LeaveRequestRefId: this.selectedLeaveID,
                 Comments: this.comment,
@@ -196,10 +295,11 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
 
             this.leaveService.singleLeaveReject(params)
                 .subscribe(res => {
+                  this.spinner.stopSpinner();
                     if (res) {
                         this.rejected = false;
                         this.approved = true;
-                        this.showAlert('Success!','Leave Rejected');
+                        //this.showAlert('Success!','Leave Rejected');
                         this.getLeavesToApprove();
                     } else {
                         this.showAlert('Failed!','Request failed');
@@ -217,6 +317,16 @@ selectLeaves()
   return;
   
    this.isSelect = !this.isSelect;
+
+   if(this.isSelect == false)
+   {
+      this.leavesArray.forEach(leave => {
+          this.selectLeave(leave,false);
+        });
+         this.totalCount = this.leavesArray.length;
+        this.showFirst();
+   }
+
 }
 
   selectAllLeaves()
@@ -230,14 +340,24 @@ selectLeaves()
      this.leavechecked = false;
      this.model.comments = '';
       this.selectedEmployees = [];
+      this.spinner.createSpinner('Please wait..');
      this.leaveService.getLeaveByStatus('Pending')
     .subscribe(
       (res:any) =>  {
+        this.spinner.stopSpinner();
         console.log("Data from server", res); 
-        this.leaveObs = res;
-        this.leaveObs.forEach(leave => {
+
+         this.leavesArray =[];
+        this.leavesArray = res;
+         this.leavesArray.forEach(leave => {
           this.selectLeave(leave,true);
         });
+        this.totalCount = this.leavesArray.length;
+        this.showFirst();
+        // this.leaveObs = res;
+        // this.leaveObs.forEach(leave => {
+        //   this.selectLeave(leave,true);
+        // });
         
       });
 
@@ -273,7 +393,7 @@ selectLeaves()
      if(checked == false)
     {
       var index : number = 0;
-      this.leaveObs.forEach(leaves => {
+      this.leavesArray.forEach(leaves => {
           if(leaves == leave)
           {
             this.selectedEmployees.splice(index,1);
@@ -300,7 +420,7 @@ selectLeaves()
       this.leavechecked = true;
 
       var count : number = 0;
-      this.leaveObs.forEach(leaves => {
+      this.leavesArray.forEach(leaves => {
           count ++;
         });
       if(count == this.selectedEmployees.length)
@@ -347,7 +467,7 @@ let prompt = this.alertCtrl.create({
             
             if(isApprove == 'Approve')
             {
-            if(cmt.length == 0)
+            if(this.comment.trim().length == 0)
             {
               this.model.comments = '';
               this.comment = '';
@@ -361,7 +481,7 @@ let prompt = this.alertCtrl.create({
             }
             else
             {
-              if(cmt.length == 0)
+              if(this.comment.trim().length == 0)
             {
               this.model.comments = '';
               this.comment = '';
@@ -396,6 +516,7 @@ let prompt = this.alertCtrl.create({
 
 
   assembleReqPayload(status: string) {
+
     var payload:any = {
           LeaveRequestIDs:[],
           StatusAndComments:{
@@ -415,15 +536,17 @@ let prompt = this.alertCtrl.create({
 
   sendRequest(status:any) {
 
+    this.spinner.createSpinner('Please wait..');
     if (this.selectedEmployees.length > 0) {
         //    BACKEND CALL HERE
          this.leaveService.bulkLeaveApproval(this.assembleReqPayload(status)).subscribe(res => {
+           this.spinner.stopSpinner();
             if (res) {
                this.rejected = true;
                this.approved = false;
                this.getLeavesToApprove();
                this.selectedEmployees = [];
-               this.showAlert('Success','Selected leaves are '+ status + '!');
+               //this.showAlert('Success','Selected leaves are '+ status + '!');
          } else {
            this.showAlert('Failed','Action failed!');
          }

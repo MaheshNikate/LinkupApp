@@ -26,6 +26,15 @@ export class HolidayService extends BaseService {
      * getHolidays method
      * Gets array of Holiday objects
      */
+    /* Browser API */
+
+    //  getHolidays(): Observable<Holiday> {
+    //     // return this.getList$().map(res=> res.json());
+    //       let headers = new Headers();
+    //     headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+    //     let options = new RequestOptions({ headers: headers });
+    //     return this.http.get('/api/Holiday',options).map((res => res.json()));
+    // }
 
      getHolidayByFinancialYear(id:string) {
         return this

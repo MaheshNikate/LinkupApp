@@ -15,11 +15,12 @@ import { UserService } from '../services/user.service';
 import { Leave } from '../models/leave';
 import { Select } from '../models/select';
 import { LeaveDetail } from '../models/leaveDetail';
+import { Spinnerservice } from '../../../shared/services/spinner';
 
 @Component({
   selector: 'page-applyforleave',
   templateUrl: 'applyforleave.html',
-  providers:[LeaveService,UserService ,LeaveTypeMasterService,HolidayService]
+  providers:[LeaveService,UserService ,LeaveTypeMasterService,HolidayService,Spinnerservice]
 })
 export class ApplyForLeave {
 
@@ -65,7 +66,8 @@ export class ApplyForLeave {
   private leaveService: LeaveService,
   private userService: UserService,
   private leaveTypeService: LeaveTypeMasterService,
-  private holidayService: HolidayService) {
+  private holidayService: HolidayService,
+  public spinner:Spinnerservice) {
 
       this.isShowMyLeave = false;
       this.leaves = [];
@@ -91,8 +93,10 @@ export class ApplyForLeave {
 
   getLeaveAssets()
   {
+      this.spinner.createSpinner('Please wait..');
      this.leaveObs = this.leaveService.getMyLeaves();
       this.leaveService.getLeaveDetails().subscribe((res:any) => {
+        
         this.leaveDetail = res;
     });
 
@@ -121,6 +125,7 @@ export class ApplyForLeave {
         });
         this.leaveService.getLeaveDetails().subscribe((res: any) => {
              this.currentUserLeaveDetail = res;
+             this.spinner.stopSpinner();  
         });
        
   }

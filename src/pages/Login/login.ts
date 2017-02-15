@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import {App, NavController ,Nav ,LoadingController ,AlertController} from 'ionic-angular';
 import { HomePage } from '../../pages/home/home';
 import { AuthService } from './login.service';
+import { Spinnerservice } from '../../shared/services/spinner';
 
 // import { SignupPage } from '../signup/signup';
 // import { TabsPage } from '../tabs/tabs';
@@ -13,7 +14,7 @@ import { AuthService } from './login.service';
 @Component({
   selector: 'page-user',
   templateUrl: 'login.html',
-  providers:[AuthService]
+  providers:[AuthService,Spinnerservice]
 })
 export class LoginPage {
     @ViewChild(Nav) nav: Nav;
@@ -26,7 +27,7 @@ export class LoginPage {
   
 
   constructor(public appCtrl: App,public navCtrl: NavController , private authService: AuthService ,
-  public loading: LoadingController , public alertCtrl: AlertController) { 
+  public loading: LoadingController , public alertCtrl: AlertController, public spinner:Spinnerservice) { 
      this.model = new User('', '');
       
      //this.initializeApp();
@@ -37,20 +38,16 @@ export class LoginPage {
     this.submitted = true;
 
     if (form.valid) {
-      //this.userData.login(this.login.username);
-      //this.navCtrl.push(HomePage);
-      let loading = this.createLoading();
-       loading.present();
+      this.spinner.createSpinner('Please wait..');
        this.authService.authenticate(this.model)
             .subscribe(
-                
+               
             results => {
-                loading.dismiss();
+                
                 this.getLoggedInUserPermission();
-                // this.getCurrentUserDetails();
             },
-            error => {
-                loading.dismiss();
+            error => { 
+                this.spinner.stopSpinner();
                 this.showAlert('Failed','Failed to login!');
                 this.showError = true;
                 this.errorMessage = error.message;
@@ -62,12 +59,11 @@ export class LoginPage {
         this.authService.getLoggedInUserPermission()
             .subscribe(
             results => {
-                //this._router.navigate(['/']);
-               
                 this.getCurrentUserDetails();
             },
             error => {
-                
+                this.showAlert('Failed','Failed to get user permissions!');
+                this.spinner.stopSpinner();
                 this.showError = true;
                 this.errorMessage = error.message;
             });
@@ -76,12 +72,13 @@ export class LoginPage {
         this.authService.getCurrentUserDetails()
             .subscribe(
             results => {
-               
+               this.spinner.stopSpinner();
                 // this.navCtrl.push(HomePage);
                 this.appCtrl.getRootNav().setRoot(HomePage);
             },
             error => {
-                
+                 this.showAlert('Failed','Failed to get user details!');
+                this.spinner.stopSpinner();
                 this.showError = true;
                 this.errorMessage = error.message;
             });
