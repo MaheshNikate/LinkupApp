@@ -1,18 +1,134 @@
-<ion-header>
+<!--<ion-header>
   <ion-navbar>
     <ion-title>
       My Leaves
     </ion-title>
   </ion-navbar>
-</ion-header>
+</ion-header>-->
 
-<ion-content padding>
+<ion-content padding >
+  <br>
+  <br>
+  <br>
+  <br>
   <ion-card>
-  <ion-card-header>
-    My Leaves
+  <ion-card-header class="headercolor">
+    <h2 class="textcolor">My Leaves</h2>
+    
+   <!--<ion-item>
+        My Leaves
+        <button ion-button icon-only item-right clear>
+        <ion-icon *ngIf= "isShowMyLeave == false" name="arrow-dropdown" item-right></ion-icon>
+        <ion-icon *ngIf= "isShowMyLeave == true" name="arrow-dropleft" item-right ></ion-icon>
+      </button>
+      </ion-item>-->
   </ion-card-header>
-  <ion-card-content>
-    This is My Leaves page.
+  <ion-card-content *ngIf="isShowMyLeave == true">
+     <ion-row>
+      <ion-col width-70>
+        <p>Leave Type</p>
+        <br>
+        <p>Leave</p>
+        <br>
+        <p>Half Day Leave</p>
+        <br>
+        <p>Absent</p>
+        <br>
+        <p>Half Day Absent</p>
+        <br>
+      </ion-col>
+      <ion-col width-15>
+        <p>Taken</p>
+        <br>
+        <p>{{leaveDetail.LeaveTaken}}</p>
+        <br>
+        <p>{{leaveDetail.HalfdayLeaveTaken}}</p>
+        <br>
+        <p>{{leaveDetail.AbsentTaken}}</p>
+        <br>
+        <p>{{leaveDetail.HalfdayAbsentTaken}}</p>
+        <br>
+      </ion-col>
+      <ion-col width-15>
+        <p>Balance</p>
+        <br>
+        <p>{{leaveDetail.LeaveBalance}}</p>
+        <br>
+        <p>--</p>
+        <br>
+        <p>--</p>
+        <br>
+        <p>--</p>
+        <br>
+      </ion-col>
+     </ion-row>
   </ion-card-content>
 </ion-card>
+
+<ion-list>
+  <ion-list-header class="subhedaercolor">
+    <h2 class="textcolor">Leave Status</h2>
+  </ion-list-header>
+  <ion-item-sliding ion-item-sliding *ngFor="let leave of leaveObs | async"  [attr.status]="leave.Status | lowercase">
+    <ion-item>
+      <!--<h2>{{leave.Type.Title}}</h2>-->
+      <p>Start Date : {{leave.StartDate | date:'dd/MM/y'}}</p>
+      <p>End Date : {{leave.EndDate | date:'dd/MM/y'}}</p>
+      <!--<p>Number of Leaves : {{leave.NumberOfDays}}</p>
+      <p>Reason : {{leave.Reason}}</p>
+      <p>Comment : {{leave.Comment.title}}</p>
+      <p>Status : {{leave.Status}}</p>-->
+      <ion-badge item-right>{{leave.NumberOfDays}}</ion-badge>
+      <!--<ion-badge item-right>2</ion-badge>-->
+      <!--<p>Approver : </p>
+      <p *ngFor="let approver of leave.Approvers"> {{approver.Manager}} - {{approver.Status}} </p>-->
+    </ion-item>
+   <ion-item-options side="right">
+      <button ion-button color="primary">
+        Edit
+      </button>
+    </ion-item-options>
+  </ion-item-sliding>
+  <!--<ion-item-sliding>
+    <ion-item>
+      <p>Start Date : 15-01-2017</p>
+      <p>End Date : 16-01-2017</p>
+      <p>Number of Leaves : 3</p>
+      <p>Status : Approved</p>
+    </ion-item>
+   <ion-item-options side="right">
+      <button ion-button color="primary">
+        Edit
+      </button>
+    </ion-item-options>
+  </ion-item-sliding>
+
+   <ion-item-sliding>
+    <ion-item>
+      <p>Start Date : 5-01-2017</p>
+      <p>End Date : 7-01-2017</p>
+      <p>Number of Leaves : 3</p>
+      <p>Status : Approved</p>
+    </ion-item>
+   <ion-item-options side="right">
+      <button ion-button color="primary">
+        Edit
+      </button>
+    </ion-item-options>
+  </ion-item-sliding>
+
+     <ion-item-sliding>
+    <ion-item>
+      <p>Start Date : 26-12-2016</p>
+      <p>End Date : 27-12-2016</p>
+      <p>Number of Leaves : 2</p>
+      <p>Status : Approved</p>
+    </ion-item>
+   <ion-item-options side="right">
+      <button ion-button color="primary">
+        Edit
+      </button>
+    </ion-item-options>
+  </ion-item-sliding>-->
+ </ion-list>
 </ion-content>

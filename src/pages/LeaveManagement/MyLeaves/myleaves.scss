@@ -1,0 +1,35 @@
+$categories: (
+ ionic: color($colors, primary),
+ rejected: #FE4C52,
+ pending: #FED035,
+ approved: #69BB7B,
+ cancelled: #000000,
+);
+
+@function auxiliary-categories() {
+  @return map-remove($categories);
+}
+
+
+page-myleaves {
+
+   @each $status, $value in auxiliary-categories() {
+   ion-item-sliding[status=#{$status}] ion-label {
+     border-left: 2px solid $value;
+     padding-left: 10px;
+   }
+  }
+
+    .headercolor{
+        color: #EAECF3;
+    }
+    .subhedaercolor{
+        color:#D4D5D8;
+    }
+      .textcolor{
+          color:black;
+      }
+
+   
+}
+

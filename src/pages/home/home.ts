@@ -26,7 +26,7 @@ export class HomePage {
   @ViewChild(Nav) nav: Nav;
   public isShowLeaveMgt : boolean;
   public isShowTimesheet : boolean;
-
+  public userdetails : string;
 
    leavePages: PageInterface[] = [];
    timesheetPages: PageInterface[] = [];
@@ -42,6 +42,8 @@ export class HomePage {
     
     this.isShowLeaveMgt = false;
     this.isShowTimesheet = false;
+    this.userdetails = localStorage.getItem('loggedInUserDetails');
+    console.log('calling profile' + this.userdetails);
   }
 
   openProfile(){
@@ -102,6 +104,7 @@ export class HomePage {
     logout()
     {
       localStorage.removeItem('accessToken');
+      localStorage.removeItem('loggedInUserDetails');
       this.appCtrl.getRootNav().setRoot(LoginPage);
     }
   

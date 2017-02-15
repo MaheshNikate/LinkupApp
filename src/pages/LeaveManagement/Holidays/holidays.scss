@@ -1,0 +1,37 @@
+$categories: (
+ ionic: color($colors, primary),
+ fixed: #FE4C52,
+ floating: #FED035,
+);
+
+@function auxiliary-categories() {
+  @return map-remove($categories);
+}
+
+
+page-holidays {
+
+     @each $holidaytype, $value in auxiliary-categories() {
+   ion-item[holidaytype=#{$holidaytype}] ion-label {
+     border-left: 2px solid $value;
+     padding-left: 10px;
+   }
+  }
+    .tranperentcolor{
+        color:transparent;
+    }
+    .itemBackground{
+        background-color
+        : #2E2E2E;
+    }
+    .itemTransperentBackground{
+        background-color
+        : transparent;
+    }
+    .itemDeviderColor{
+       color: white;
+    }
+    .itemTextColor{
+       color: white;
+    }
+};

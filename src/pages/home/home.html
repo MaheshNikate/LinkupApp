@@ -1,9 +1,12 @@
 
 
-<ion-header>
-  <ion-navbar hideBackButton="true">
+<ion-header >
+  <ion-navbar hideBackButton="true" align-title=”center”>
+     <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>
-      Linkup
+      <img src="assets/images/elogo.png">
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -16,25 +19,25 @@
     <!--<ion-item >  -->
     <ion-card menuClose class="masters" (click)= "openProfile()">
     <div class="profilephoto">  
-     <img src="assets/images/profile-image.jpg"/>
+     <img src="assets/images/default-user.png"/>
     </div>
       <ion-card-content >
-        <h2 class="centertext">Mahesh Nikate</h2>
-        <p class="centertext">
+        <h2 class="centertext">{{userdetails}}</h2>
+        <!--<p class="centertext">
           Sr.System Executive
-        </p>
-        <div class="item images-parent">
+        </p>-->
+        <!--<div class="item images-parent">
           <div class="left-image">
           <img src="assets/images/birthday-icon.png" />
           </div>
           <img src="assets/images/timesheet.png" class="right-image"/>
           <img src="assets/images/Business-Leave-icon.png" class="center-image"/>
-        </div> 
+        </div> -->
       </ion-card-content>
     </ion-card>
     <!--</ion-item>-->
 
-      <ion-list-header (click)="showLeaveManagement()">
+      <ion-list-header (click)="showLeaveManagement()" [ngStyle]="{'height': 36}">
         <ion-icon *ngIf= "isShowLeaveMgt == false" name="arrow-dropdown" item-right></ion-icon>
         <ion-icon *ngIf= "isShowLeaveMgt == true" name="arrow-dropleft" item-right ></ion-icon>
 	     <h2 style="display: inline-block;">Leave Management</h2>
@@ -65,7 +68,7 @@
 
 
 
-<ion-content padding>
+<!--<ion-content padding>
   <p>
     This is Home page.
   </p>
