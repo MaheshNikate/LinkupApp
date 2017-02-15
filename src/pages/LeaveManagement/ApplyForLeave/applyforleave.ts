@@ -233,6 +233,23 @@ export class ApplyForLeave {
         }
     }
 
+    checkIfAlreadyApplied() {
+        if(this.model.leaveType!==null && !this.isValidationMessage) {
+             let param = {
+                LeaveType: { ID: this.model.leaveType.ID, Value: this.model.leaveType.Name },
+                StartDate:this.model.start,
+                EndDate :this.model.end
+            };
+            this.leaveService.checkIfAlreadyApplied(param).subscribe(res => {
+            if(res.StartDate!==null && !this.isValidationMessage) {
+                 this.validationMessage='You have already applied a leave from '
+                                        +moment(res.StartDate).format('DD/MM/YYYY')+' to '+moment(res.EndDate).format('DD/MM/YYYY');
+                 this.isValidationMessage=true;
+              }
+            });
+      }
+    }
+
 
   
 
