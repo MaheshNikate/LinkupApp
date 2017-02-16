@@ -58,7 +58,8 @@
     </ion-row>-->
   
   <!--<ion-item-sliding #slidingItem *ngFor="let leave of leaveObs let i = index" [attr.status]="leave.Status | lowercase">-->
-    <ion-item [ngStyle]="{'background-color': leave.selectionColor}" *ngFor="let leave of pages let i = index" [attr.status]="leave.Status | lowercase">
+    <ion-item [ngStyle]="{'background-color': leave.selectionColor}" *ngFor="let leave of pages let i = index" [attr.status]="leave.Status | lowercase"
+    (click)="showLeaveDetails(leave)">
       <h2 *ngIf= "isSelect == false">{{leave.Employee.Name}}</h2>
       <ion-label *ngIf= "isSelect == true">{{leave.Employee.Name}}</ion-label>
       <h3>{{leave.StartDate | date:'dd/MM/y'}}</h3>

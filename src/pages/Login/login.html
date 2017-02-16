@@ -32,6 +32,10 @@
 			<p ion-text [hidden]="password.valid || submitted == false" color="danger" padding-left>
 				Password is required
 			</p>
+			<p ion-text [hidden]="showError == true" color="danger" padding-left>
+				{{errorMessage}}
+			</p>
+
 		</ion-list>
        </ion-col>
 	 </ion-row>

@@ -43,13 +43,19 @@ export class HomePage {
     this.isShowLeaveMgt = false;
     this.isShowTimesheet = false;
     this.userdetails = localStorage.getItem('loggedInUserDetails');
-    console.log('calling profile' + this.userdetails);
+    // console.log('calling profile' + this.userdetails);
   }
+
+  ionViewDidLoad() { 
+    this.nav.setRoot(MyLeaves);
+        
+    }
 
   openProfile(){
     console.log('calling profile');
     this.nav.setRoot(ProfilePage);
   }
+  
 
   showLeaveManagement() {
       if(this.isShowLeaveMgt == false)

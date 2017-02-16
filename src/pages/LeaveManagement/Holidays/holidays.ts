@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController } from 'ionic-angular';
+import { NavController,AlertController } from 'ionic-angular';
 
 /** Third Party Dependencies */
 import { Observable } from 'rxjs/Rx';
@@ -25,7 +25,7 @@ export class MyEvent {
 })
 export class Holidays {
 
-  holidaysObs: Observable<Holiday>;
+  holidaysObs: Holiday[];
   servRows = 7;
 
   holidays: any;
@@ -37,7 +37,11 @@ export class Holidays {
   holidayDetails: boolean = false;
   holiday: Holiday;
 
-  constructor(public navCtrl: NavController , private holidayService: HolidayService,public spinner:Spinnerservice) {
+  constructor(
+    public navCtrl: NavController, 
+    private holidayService: HolidayService,
+    public spinner:Spinnerservice,
+    public alertCtrl :AlertController) {
     this.holidays = [];
     this.holiday = { ID: null, HolidayDate: '', HolidayType: '', WeekDay: '', Title: '' };
     this.getHolidays();
@@ -51,8 +55,23 @@ export class Holidays {
       this.holidayService.getHolidays().subscribe((res:any) => {
         this.spinner.stopSpinner();
         this.holidaysObs = res;
+        this.holidaysObs.reverse();
+    },
+    error =>{
+       this.spinner.stopSpinner();
+      this.showAlert('Failed','Failed to get response from server.');
     });
   }
+
+  showAlert(title:string, subTitle:string) {
+      this.spinner.stopSpinner();
+            let alert = this.alertCtrl.create({
+            title: title,
+            subTitle: subTitle,
+            buttons: ['OK']
+            });
+            alert.present();
+        }
    
 
 }

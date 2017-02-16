@@ -7,6 +7,7 @@ import { AboutPage } from '../pages/about/about';
 import { LoginPage } from '../pages/Login/login';
 import { ApplyForLeave } from '../pages/LeaveManagement/ApplyForLeave/applyforleave';
 import { MyLeaves } from '../pages/LeaveManagement/MyLeaves/myleaves';
+import { LeaveDetails } from '../pages/LeaveManagement/leaveDetails/leaveDetails';
 import { Holidays } from '../pages/LeaveManagement/Holidays/holidays';
 import { LeaveApproval } from '../pages/LeaveManagement/LeaveApproval/leaveapproval';
 import { ProfilePage } from '../pages/profile/profile';
@@ -28,7 +29,8 @@ import { MorePopoverPage } from '../pages/morePopover/morepopover';
     ProfilePage,
     ScrollableTabs,
     MorePopoverPage,
-    TimesheetPage
+    TimesheetPage,
+    LeaveDetails
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -45,7 +47,8 @@ import { MorePopoverPage } from '../pages/morePopover/morepopover';
     LeaveApproval,
     ProfilePage,
     MorePopoverPage,
-    TimesheetPage
+    TimesheetPage,
+    LeaveDetails
   ],
   providers: [{ provide: ErrorHandler, useClass: IonicErrorHandler }]
 })

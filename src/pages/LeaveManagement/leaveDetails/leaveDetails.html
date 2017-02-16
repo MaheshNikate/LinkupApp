@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Leave Details
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content padding>
+
+<ion-card>
+  <ion-card-content *ngIf="ishowLeaveDetails == true">
+      <h2>{{userDetail.Department.Value }}</h2>
+      <p>{{userDetail.EmpID }}</p>
+      <p>{{userDetail.Employee.Name}}</p>
+      <p>{{userDetail.Designation.Value}}</p>
+  </ion-card-content>
+</ion-card>    
+
+    
+<ion-card>
+  <ion-card-content *ngIf="ishowLeaveDetails == true">
+      <h2>{{leaveList[0].LeaveType.Value }}</h2>
+      <p>Start Date : {{leaveList[0].StartDate | date:'dd/MM/y'}}</p>
+      <p>End Date : {{leaveList[0].EndDate | date:'dd/MM/y'}}</p>
+      <p>Reason : {{leaveList[0].Reason}}</p>
+      <p>Status : {{leaveList[0].Status}}</p>
+      <p>Number of Days : {{leaveList[0].NumberOfDays}}</p>
+  </ion-card-content>
+</ion-card>
+
+<ion-list>
+    <ion-list-header>
+    <h2> Approvers </h2>
+  </ion-list-header>
+  <ion-item *ngFor="let approver of approverList">
+    <p>{{ approver.Approver.Name }} - {{ approver.Status }}</p>
+  </ion-item>
+</ion-list>
+
+<form [formGroup]="commentForm" [hidden]="!isPending">
+ <ion-item >
+        <ion-label>Comment *</ion-label>
+        <ion-textarea name = "cmnt" [(ngModel)]="comments" formControlName="comment" spellcheck="false" autocapitalize="off"
+					required ></ion-textarea>
+        <p ion-text [hidden]="commentForm.controls.comment.valid || submitted == false" color="danger" padding-left>
+				Valid comment is required.
+			</p>    
+        </ion-item>
+	<ion-row>
+			<ion-col col-50>
+				<button [disabled]="!commentForm.controls.comment.valid" class="applybutton" (click)="approveClicked()" type="submit" block>Approve</button>
+			</ion-col>
+      <ion-col col-50>
+				<button [disabled]="!commentForm.controls.comment.valid" class="applybutton" (click)="rejectClicked()" type="submit" block>Reject</button>
+			</ion-col >
+   </ion-row>
+
+   </form>
+  
+
+
+
+
+</ion-content>

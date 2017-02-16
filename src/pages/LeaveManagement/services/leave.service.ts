@@ -175,12 +175,37 @@ export class LeaveService extends BaseService {
 
     // Get approver list 
 
+    getLeaveDetailByRefID(refId:any): Observable<Leave[]> {
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get(this.baseUrl+'LeaveDetails/'+refId,options)
+        .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
+    }
     getApproverListByRefID(refId:any): Observable<any> {
         let headers = new Headers();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         let options = new RequestOptions({ headers: headers });
         return this.http.get(this.baseUrl+'LeaveApprovers/'+refId,options)
         .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
+    }
+
+      getEmployeeDetail(Id:any): Observable<any> {
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get(this.baseUrl+'Employee/'+Id,options)
+         .map(res => {
             return res.json();
         })
         .catch(err => {

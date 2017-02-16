@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController,Alert,ItemSliding,AlertController ,PopoverController,ActionSheetController } from 'ionic-angular';
+import { NavController,Alert,ItemSliding,AlertController ,PopoverController,ActionSheetController,ModalController } from 'ionic-angular';
 
 /** Third Party Dependencies */
 import { Observable } from 'rxjs/Rx';
@@ -12,6 +12,8 @@ import { User } from '../models/user';
 import { ApprovalForm } from '../models/leaveApprovalValidation';
 import { MorePopoverPage } from '../../morePopover/morepopover';
 import { Spinnerservice } from '../../../shared/services/spinner';
+import { LeaveDetails } from '../leaveDetails/leaveDetails';
+import { Toast } from 'ionic-native';
 
 @Component({
   selector: 'page-leaveapproval',
@@ -27,6 +29,7 @@ public editMode: boolean;
 public itemcolor:string;
 public pageIndex:number;
 public totalCount:number;
+public isMoreclicked:boolean;
 leaveID: string;
 leaveObs: Observable<Leave[]>;
 leavesArray:Leave[];
@@ -45,16 +48,33 @@ leaveList:any;
 selectedEmployees: any[];
 comment:string = '';
 
-  constructor(public navCtrl: NavController,public alertCtrl: AlertController , private leaveService: LeaveService,
+  constructor(public navCtrl: NavController,
+  public alertCtrl: AlertController, 
+  private leaveService: LeaveService,
   public spinner:Spinnerservice
-  ,public popoverCtrl: PopoverController ,public actionSheetCtrl: ActionSheetController) {
+  ,public popoverCtrl: PopoverController,
+  public actionSheetCtrl: ActionSheetController, 
+  public modalCtrl: ModalController) {
    
-    this.model = {
+    // this.model = {
+    //         comments: ''
+    //     };
+    //     this.pageIndex = 0;
+
+    // this.selectedEmployees = [];
+    // this.isMoreclicked = false;
+
+    // this.getLeavesToApprove()
+  }
+  ionViewWillEnter()
+  {
+      this.model = {
             comments: ''
         };
         this.pageIndex = 0;
 
     this.selectedEmployees = [];
+    this.isMoreclicked = false;
 
     this.getLeavesToApprove()
   }
@@ -68,6 +88,7 @@ comment:string = '';
    presentActionSheet(leave:any,leaveID:string) {
      if(leave.Status =='Approved'|| leave.Status =='Rejected'||leave.Status =='Cancelled')
      return;
+     this.isMoreclicked = true;
 
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Leave Action',
@@ -78,18 +99,21 @@ comment:string = '';
           handler: () => {
           this.selectedLeaveID = leaveID;
           this.showApproveRejectPromt(true);  
+          this.isMoreclicked = false;
           }
         },{
           text: 'Reject',
           handler: () => {
             this.selectedLeaveID = leaveID;
             this.showApproveRejectPromt(false);  
+            this.isMoreclicked = false;
           }
         },{
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
             console.log('Cancel clicked');
+            this.isMoreclicked = false;
           }
         }
       ]
@@ -116,6 +140,10 @@ comment:string = '';
      this.isSelect = false;
      this.leavechecked = false;
       this.model.comments = '';
+      this.comment = '';
+      this.pageIndex = 0;
+    this.selectedEmployees = [];
+    this.isMoreclicked = false;
      this.spinner.createSpinner('Please wait..');  
      this.leaveService.getApproverLeaves()
     .subscribe(
@@ -125,16 +153,18 @@ comment:string = '';
         //this.leaveObs = res;
         this.leavesArray =[];
         this.leavesArray = res;
+        this.leavesArray.reverse();
          this.leavesArray.forEach(leave => {
           this.selectLeave(leave,false);
         });
         this.totalCount = this.leavesArray.length;
         this.showFirst();
-
-        // this.leaveObs.forEach(leave => {
-        //   this.selectLeave(leave,false);
-        // });
         
+      },
+      error=>
+      {
+        this.spinner.stopSpinner();
+        this.showAlert('Failed','Failed to get response from serevr.');
       });
     
   }
@@ -274,6 +304,8 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
                         this.rejected = false;
                         this.approved = true
                         //this.showAlert('Success!','Leave Approved');
+                      //this.showToast('Leave is Approved successfully!');
+
                         this.getLeavesToApprove();
                     } else {
                         this.showAlert('Failed!','Request failed');
@@ -299,6 +331,7 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
                     if (res) {
                         this.rejected = false;
                         this.approved = true;
+                        this.showToast('Leave is Rejcted successfully!');
                         //this.showAlert('Success!','Leave Rejected');
                         this.getLeavesToApprove();
                     } else {
@@ -359,6 +392,10 @@ selectLeaves()
         //   this.selectLeave(leave,true);
         // });
         
+      },error =>
+      {
+        this.spinner.stopSpinner();
+        this.showAlert('Failed','Failed to get response from server.');
       });
 
       
@@ -546,12 +583,38 @@ let prompt = this.alertCtrl.create({
                this.approved = false;
                this.getLeavesToApprove();
                this.selectedEmployees = [];
+                //this.showToast('All Leaves are' + ' ' + status + ' ' + 'successfully!');
                //this.showAlert('Success','Selected leaves are '+ status + '!');
          } else {
            this.showAlert('Failed','Action failed!');
          }
       });
       }
+  }
+
+/* Show leave details */
+   showLeaveDetails(leave:any)
+  {
+    if(this.isMoreclicked == true || this.isSelect == true)
+    return;
+
+    let leaveDetailsModal = this.modalCtrl.create(LeaveDetails ,{ leave: leave});
+     leaveDetailsModal.onDidDismiss(status => {
+     if(status.changedStatus == true)
+     {
+       var msg :string = '';
+       if(status.approved == true)
+       msg = 'Leave is Approved successfully!';
+       else
+       msg = 'Leave is Rejected successfully!';
+
+       //this.showToast(msg);
+
+      this.getLeavesToApprove();
+     }
+     
+   });
+   leaveDetailsModal.present();
   }
 
 /* Alert */
@@ -562,6 +625,15 @@ let prompt = this.alertCtrl.create({
       buttons: ['OK']
     });
     alert.present();
+  }
+
+  showToast(message:string)
+  {
+    Toast.show(message, '5000', 'center').subscribe(
+  toast => {
+    console.log(toast);
+  }
+);
   }
 
 }

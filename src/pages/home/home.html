@@ -40,24 +40,27 @@
       <ion-list-header (click)="showLeaveManagement()" [ngStyle]="{'height': 36}">
         <ion-icon *ngIf= "isShowLeaveMgt == false" name="arrow-dropdown" item-right></ion-icon>
         <ion-icon *ngIf= "isShowLeaveMgt == true" name="arrow-dropleft" item-right ></ion-icon>
-	     <h2 style="display: inline-block;">Leave Management</h2>
+	     <h2 class="headertext" style="display: inline-block;">Leave Management</h2>
       </ion-list-header>
       <ion-item  class ="animated fadeInUp" ion-item  menuClose *ngFor="let p of leavePages" (click)="openPage(p)">
         <!--<ion-icon item-left [name]="p.icon" [color]="isActive(p)"></ion-icon>-->
         {{p.title}}
       </ion-item>
 
-      <ion-list-header (click)="showTimesheet()">
+      <!--<ion-list-header (click)="showTimesheet()">
         <ion-icon *ngIf= "isShowTimesheet == false" name="arrow-dropdown" item-right></ion-icon>
         <ion-icon *ngIf= "isShowTimesheet == true" name="arrow-dropleft" item-right ></ion-icon>
 	     <h2 style="display: inline-block;">Timesheet</h2>
       </ion-list-header>
 
        <ion-item  class ="animated fadeInUp" ion-item  menuClose *ngFor="let p of timesheetPages" (click)="openPage(p)">
-        <!--<ion-icon item-left [name]="p.icon" [color]="isActive(p)"></ion-icon>-->
         {{p.title}}
-      </ion-item>
+      </ion-item>-->
+      
+
+      <ion-footer>
       <ion-item class ="animated fadeInUp" ion-item menuClose (click)="logout()">Logout</ion-item>
+      </ion-footer>
 
     </ion-list>
 
