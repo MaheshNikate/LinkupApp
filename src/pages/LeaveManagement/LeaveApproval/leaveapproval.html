@@ -1,6 +1,6 @@
 
 
-<ion-content padding >
+<ion-content padding>
   <br>
   <br>
   <br>
@@ -43,22 +43,15 @@
   <ion-card-content>
   </ion-card-content>
 </ion-card>
-
- 
-
-<ion-list>
-  <!--<ion-list-header>
-    Approve Leaves
-  </ion-list-header>-->
-    <!--<ion-row>
-      
-      
-      <button>Approve</button>
-      <button>Reject</button>
-    </ion-row>-->
+<br>
+ <ion-slides pager class="ion-slides-atrribute">
+  <ion-slide class="ion-slide-attribute" *ngFor="let page of slidePages">
+    <br>
+    <br>
+    <ion-list >
   
   <!--<ion-item-sliding #slidingItem *ngFor="let leave of leaveObs let i = index" [attr.status]="leave.Status | lowercase">-->
-    <ion-item [ngStyle]="{'background-color': leave.selectionColor}" *ngFor="let leave of pages let i = index" [attr.status]="leave.Status | lowercase"
+    <ion-item [ngStyle]="{'background-color': leave.selectionColor}" *ngFor="let leave of page let i = index" [attr.status]="leave.Status | lowercase"
     (click)="showLeaveDetails(leave)">
       <h2 *ngIf= "isSelect == false">{{leave.Employee.Name}}</h2>
       <ion-label *ngIf= "isSelect == true">{{leave.Employee.Name}}</ion-label>
@@ -82,6 +75,11 @@
   </ion-item-sliding>-->
   
  </ion-list>
+  </ion-slide>
+  
+ </ion-slides>
+
+
 
 
 </ion-content>

@@ -261,6 +261,21 @@ export class LeaveService extends BaseService {
         });
     }
 
+     checkIfAlreadyAppliedForTrainee(payload:any) {
+        let headers = new Headers();
+        let body=JSON.stringify(payload);
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        headers.append('Content-Type', 'application/json');
+        let options = new RequestOptions({ headers: headers });
+        return this.http.post(this.baseUrl+'LeaveDetails/GetCurrentUserCurrentMonthLeaveCount',body,options)
+         .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
+    }
+
     // Cancel leave
 
      deleteLeaveRecord(leavePayload:any): Observable<boolean> {

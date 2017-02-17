@@ -34,6 +34,8 @@ leaveID: string;
 leaveObs: Observable<Leave[]>;
 leavesArray:Leave[];
 pages:Leave[];
+slidePage:Leave[];
+slidePages:any[];
 selectedLeave:Leave;
 selectedLeaveID:string;
 userDetObs: Observable<User>;
@@ -74,6 +76,7 @@ comment:string = '';
         this.pageIndex = 0;
 
     this.selectedEmployees = [];
+    this.slidePages = [];
     this.isMoreclicked = false;
 
     this.getLeavesToApprove()
@@ -121,6 +124,38 @@ comment:string = '';
     actionSheet.present();
   }
 
+  getPages()
+  {
+    var numberPages:number = this.leavesArray.length;
+    var totalnumberPages:number;
+    var lastpage:number ;
+    while(numberPages >= 10) 
+      { 
+        totalnumberPages = numberPages / 10 ; 
+        numberPages = numberPages % 10;
+        break ; 
+      } 
+
+      for(let index = 0; index < totalnumberPages + 1; index ++ )
+      {
+        this.slidePage = [];
+       for(let innerindex = index*10 ; innerindex< this.getUpperLimit( (index + 1) *10) ; innerindex ++)
+       {
+          this.slidePage.push(this.leavesArray[innerindex]);
+       }
+       this.slidePages.push(this.slidePage);
+      }
+      console.log('Pages' + this.slidePages);
+
+  }
+
+getUpperLimit(num:number)
+{
+  if(this.leavesArray.length - num > 10)
+  return 10;
+  else
+  return this.leavesArray.length - num;
+}
 
   getLeavetoAcceptRejcet(leave:any,approve:boolean)
   {
@@ -157,6 +192,7 @@ comment:string = '';
          this.leavesArray.forEach(leave => {
           this.selectLeave(leave,false);
         });
+        this.getPages();
         this.totalCount = this.leavesArray.length;
         this.showFirst();
         

@@ -84,39 +84,53 @@
   </ion-card-header>
   <ion-card-content>
 
-  <form #applyleaveform="ngForm" novalidate>
+  <form [formGroup]="applyLeaveForm">
 	 <ion-row>
        <ion-col>
 		<ion-list class="list">
       <ion-item>
         <ion-label>Leave Type *</ion-label>
-        <ion-select [(ngModel)]="model.leaveType" name ="leavetype" (ionChange)= "validateLeaveType()" >
+        <ion-select [(ngModel)]="model.leaveType" name ="leavetype" (ionChange)= "validateLeaveType()" formControlName="leaveType">
           <ion-option [value]="leavetype" *ngFor="let leavetype of leaves">{{ leavetype.Type }}</ion-option>
         </ion-select>
+         <p ion-text [hidden]="applyLeaveForm.controls.leaveType.valid || submitted == false" color="danger" padding-left>
+				Leave type is required.
+	      </p> 
      </ion-item>
-			<ion-item>
-				<ion-label floating color="primary">Number of Leaves *</ion-label>
-				<ion-input  name="numLeaves" type="text" disabled="true"  autocapitalize="off"
+			<ion-item >
+				<!--<ion-label floating color="primary">Number of Leaves *</ion-label>-->
+				<!--<ion-input  [disabled]="true" name="numLeaves"
 					[ngModel]="model.numDays" required>
-				</ion-input>
+				</ion-input>-->
+        <h2>Number of Leaves *</h2>
+        <h3>{{model.numDays}}</h3>
 			</ion-item>
 		
 			<br>
 
 			<ion-item>
-      <ion-label>Start Date</ion-label>
-      <ion-datetime name ="startdate" [(ngModel)]="model.start" displayFormat="MMM DD YYYY"  (ionChange)="startChanged()" ></ion-datetime>
+      <ion-label>Start Date *</ion-label>
+      <ion-datetime name ="startdate" [(ngModel)]="model.start" displayFormat="MMM DD YYYY"  (ionChange)="startChanged()" formControlName="start"></ion-datetime>
+       <p ion-text [hidden]="applyLeaveForm.controls.start.valid || submitted == false" color="danger" padding-left>
+				Start Date is required.
+	      </p> 
       </ion-item>
 
       <ion-item>
-      <ion-label>End Date</ion-label>
-      <ion-datetime name ="enddate"  [(ngModel)]="model.end" displayFormat="MMM DD YYYY"  (ionChange)="endChanged()"></ion-datetime>
+      <ion-label>End Date *</ion-label>
+      <ion-datetime name ="enddate"  [(ngModel)]="model.end" displayFormat="MMM DD YYYY"  (ionChange)="endChanged()" formControlName="end"></ion-datetime>
+      <p ion-text [hidden]="applyLeaveForm.controls.end.valid || submitted == false" color="danger" padding-left>
+				End Date is required.
+	    </p> 
       </ion-item>
 	
 		
       <ion-item>
         <ion-label>Reason *</ion-label>
-        <ion-textarea name ="reason"  [(ngModel)]="model.reason" max="600"></ion-textarea>
+        <ion-textarea name ="reason"  [(ngModel)]="model.reason" formControlName="reason" ></ion-textarea>
+        <p ion-text [hidden]="applyLeaveForm.controls.reason.valid || submitted == false" color="danger" padding-left>
+				Reason is required.
+	     </p> 
       </ion-item>
 		</ion-list>
        </ion-col>
@@ -124,10 +138,10 @@
 
 		<ion-row>
 			<ion-col col-50>
-				<button class="applybutton" (click)="onAddLeave()" type="submit" block>Add Leaves</button>
+				<button [disabled]="applyLeaveForm.invalid || this.isValidationMessage || this.itsWeekend" class="applybutton" (click)="onAddLeave()" type="submit" block>Add Leaves</button>
 			</ion-col>
       <ion-col col-50>
-				<button class="applybutton" (click)="submitForm()" type="submit" block>Submit</button>
+				<button [disabled]="applyLeaveForm.invalid || this.isValidationMessage || this.itsWeekend" class="applybutton" (click)="submitForm()" type="submit" block>Submit</button>
 			</ion-col >
 		</ion-row>
 	</form>

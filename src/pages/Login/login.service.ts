@@ -58,7 +58,7 @@ export class AuthService extends BaseService {
         let headers = new Headers();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.baseUrl+'auth/currentusername',options)
+        return this.http.get(this.baseUrl+'Employee/currentuser',options)
          .map((res: Response) => {
            this.setLoggedInUserDetail(res);
         })
@@ -89,6 +89,6 @@ export class AuthService extends BaseService {
             throw new Error('Bad response status: ' + res.status);
         }
         let body = res.json();
-        localStorage.setItem('loggedInUserDetails', body.Name);
+        localStorage.setItem('loggedInUserDetails', JSON.stringify(body));
     }
 }
