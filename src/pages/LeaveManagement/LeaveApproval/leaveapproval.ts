@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
-import { NavController,Alert,ItemSliding,AlertController ,PopoverController,ActionSheetController,ModalController } from 'ionic-angular';
+import { NavController,Alert,ItemSliding,AlertController ,PopoverController,ActionSheetController,ModalController ,Slides} from 'ionic-angular';
 
 /** Third Party Dependencies */
 import { Observable } from 'rxjs/Rx';
+import { ViewChild } from '@angular/core';
 
 /** Module Level Dependencies */
 import { LeaveService } from '../services/leave.service';
@@ -22,6 +23,8 @@ import { Toast } from 'ionic-native';
 })
 export class LeaveApproval {
 
+  @ViewChild('Slides') slides: Slides;
+
 public isSelectall:boolean;
 public isSelect:boolean;
 public leavechecked: boolean;
@@ -30,6 +33,7 @@ public itemcolor:string;
 public pageIndex:number;
 public totalCount:number;
 public isMoreclicked:boolean;
+public activeIndex:number;
 leaveID: string;
 leaveObs: Observable<Leave[]>;
 leavesArray:Leave[];
@@ -49,6 +53,7 @@ rejected: boolean = false;
 leaveList:any;
 selectedEmployees: any[];
 comment:string = '';
+totalnumberPages:number;
 
   constructor(public navCtrl: NavController,
   public alertCtrl: AlertController, 
@@ -57,6 +62,8 @@ comment:string = '';
   ,public popoverCtrl: PopoverController,
   public actionSheetCtrl: ActionSheetController, 
   public modalCtrl: ModalController) {
+
+  
    
     // this.model = {
     //         comments: ''
@@ -127,36 +134,53 @@ comment:string = '';
   getPages()
   {
     var numberPages:number = this.leavesArray.length;
-    var totalnumberPages:number;
+    //var totalnumberPages:number;
     var lastpage:number ;
     while(numberPages >= 10) 
       { 
-        totalnumberPages = numberPages / 10 ; 
+        this.totalnumberPages = numberPages / 10 ; 
         numberPages = numberPages % 10;
         break ; 
       } 
-
-      for(let index = 0; index < totalnumberPages + 1; index ++ )
+      var pagen:string =  this.totalnumberPages.toString();
+      this.totalnumberPages = parseInt(pagen) + 1;
+      console.log('total pages ====' + pagen);
+   
+      for(let index = 0; index < this.totalnumberPages; index ++ )
       {
         this.slidePage = [];
-       for(let innerindex = index*10 ; innerindex< this.getUpperLimit( (index + 1) *10) ; innerindex ++)
+       for(let innerindex = index*10; innerindex < this.getUpperLimit((index + 1) *10); innerindex ++)
        {
           this.slidePage.push(this.leavesArray[innerindex]);
        }
        this.slidePages.push(this.slidePage);
       }
       console.log('Pages' + this.slidePages);
-
   }
 
 getUpperLimit(num:number)
 {
-  if(this.leavesArray.length - num > 10)
-  return 10;
+  if(this.leavesArray.length  > num )
+  return num;
   else
-  return this.leavesArray.length - num;
+  return this.leavesArray.length
 }
 
+slideChanged()
+{
+  this.activeIndex = this.slides.getActiveIndex();
+}
+
+slideToPage(index:number)
+{
+  if(index  == -1)
+  return
+  if(index == this.totalnumberPages+1)
+  return;
+
+  this.slides.slideTo(index, 500, true);
+  
+}
   getLeavetoAcceptRejcet(leave:any,approve:boolean)
   {
      console.log(status);
@@ -171,6 +195,7 @@ getUpperLimit(num:number)
 
   getLeavesToApprove()
   {
+    this.activeIndex = 0;
      this.isSelectall = false;
      this.isSelect = false;
      this.leavechecked = false;
