@@ -25,6 +25,8 @@ export class MyLeaves {
   leaves: {};
   leave: any;
   public isShowMyLeave:boolean;
+  selectedLeave:any;
+  leaveID: any;
 
   constructor(public navCtrl: NavController , 
   private leaveService: LeaveService,
@@ -70,6 +72,24 @@ export class MyLeaves {
   //   let leaveDetailsModal = this.modalCtrl.create(LeaveDetails,{leave:leave});
   //  leaveDetailsModal.present();
   }
+
+  cancelClicked(leavID:string) {
+        let leaveTobeCancelled= {
+            Status: 'Cancelled',
+            LeaveRequestMasterId: leavID,
+            ID: this.selectedLeave.ID
+        };
+        this.leaveService.deleteLeaveRecord(leaveTobeCancelled).subscribe(res => {
+            if (res) {
+               // this.messageService.addMessage({ severity: 'success', summary: 'Success', detail: 'Leave application deleted!' });
+               // this.closeClicked();
+            } else {
+                //this.messageService.addMessage({ severity: 'error', summary: 'Fail', detail: 'Request not completed.' });
+            }
+        });
+    }
+
+    
 
     showAlert(title:string, subTitle:string) {
       this.spinner.stopSpinner();

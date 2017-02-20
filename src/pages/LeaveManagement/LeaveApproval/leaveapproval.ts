@@ -136,6 +136,7 @@ totalnumberPages:number;
     var numberPages:number = this.leavesArray.length;
     //var totalnumberPages:number;
     var lastpage:number ;
+    this.slidePages = [];
     while(numberPages >= 10) 
       { 
         this.totalnumberPages = numberPages / 10 ; 
@@ -316,7 +317,7 @@ slideToPage(index:number)
           this.selectLeave(leave,true);
         });
         this.totalCount = this.leavesArray.length;
-        this.showFirst();
+       // this.showFirst();
 
         // this.leaveObs = res;
         // this.leaveObs.forEach(leave => {
@@ -447,7 +448,8 @@ selectLeaves()
           this.selectLeave(leave,true);
         });
         this.totalCount = this.leavesArray.length;
-        this.showFirst();
+        this.getPages();
+        //this.showFirst();
         // this.leaveObs = res;
         // this.leaveObs.forEach(leave => {
         //   this.selectLeave(leave,true);
