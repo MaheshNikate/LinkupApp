@@ -132,8 +132,7 @@ export class HomePage {
 
     logout()
     {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('loggedInUserDetails');
+      localStorage.clear();
       this.appCtrl.getRootNav().setRoot(LoginPage);
     }
   

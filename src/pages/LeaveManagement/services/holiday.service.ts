@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 /** Module Level Dependencies */
 import { BaseService } from '../../../shared/index';
 import { Holiday } from '../models/holiday';
+import {App} from 'ionic-angular';
 // import { Employee } from '../models/employee';
 
 /** Context for service calls */
@@ -18,7 +19,7 @@ export const CONTEXT = 'Holiday';
 @Injectable()
 export class HolidayService extends BaseService {
 
-    constructor(public http: Http) {
+    constructor(public http: Http ,public apCtrl:App) {
         super( http, CONTEXT);
     }
 
@@ -49,6 +50,6 @@ export class HolidayService extends BaseService {
           let headers = new Headers();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.baseUrl+'Holiday',options).map((res => res.json()));
+        return this.http.get(this.baseUrl+'Holiday/2016',options).map((res => res.json()));
     }
 }

@@ -3,6 +3,7 @@ import { Http, Response,Headers,RequestOptions } from '@angular/http';
 // import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { BaseService } from '../../shared/index';
+import {App} from 'ionic-angular';
 
 export const CONTEXT = 'auth';
 
@@ -10,7 +11,7 @@ export const CONTEXT = 'auth';
 export class AuthService extends BaseService {
     private authenticated = false;
 
-    constructor(httpService: Http,private http : Http) {
+    constructor(httpService: Http,private http : Http,public apCtrl:App) {
         super(httpService, CONTEXT);
     }
 

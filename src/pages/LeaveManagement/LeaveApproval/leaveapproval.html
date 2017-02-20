@@ -24,8 +24,8 @@
 <ion-card >
   <ion-card-header>
   <h2 >Approve Leaves</h2>
-   <ion-item>
-        <button  ion-button icon-only item-left clear (click)="selectAllLeaves()"> 
+   <ion-item *ngIf="isBulkApprovePermission == true">
+        <button  ion-button icon-only item-left clear (click)="selectAllLeaves()" > 
         <ion-icon *ngIf= "isSelectall == false" name="radio-button-off" item-left></ion-icon>
         <ion-icon *ngIf= "isSelectall == true" name="radio-button-on" item-left ></ion-icon>
          Select All </button>
@@ -59,7 +59,7 @@
       <ion-label *ngIf= "isSelect == true">{{leave.Employee.Name}}</ion-label>
       <h3>{{leave.StartDate | date:'dd/MM/y'}}</h3>
       <h3>{{leave.EndDate | date:'dd/MM/y'}}</h3>
-      <ion-badge item-right>{{leave.NumberOfDays}}</ion-badge>
+      <ion-badge item-right>{{leave.NumberOfLeaves | number : '1.1-3'}}</ion-badge>
       <ion-checkbox *ngIf= "isSelect == true && leave.Status == 'Pending'" item-left color="red" 
       [(ngModel)]="leave.selected" (click) = "selectLeaveClicked(leave,leavechecked,i)"></ion-checkbox>
       <!--<ion-icon name="more" item-right (click)="showMoreMenu(leave.LeaveRequestMasterId)"></ion-icon>-->

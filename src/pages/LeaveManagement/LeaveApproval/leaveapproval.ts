@@ -54,6 +54,10 @@ leaveList:any;
 selectedEmployees: any[];
 comment:string = '';
 totalnumberPages:number;
+isBulkApprovePermission:boolean;
+public userPermissions : any [];
+public isHrApprove :boolean;
+
 
   constructor(public navCtrl: NavController,
   public alertCtrl: AlertController, 
@@ -63,8 +67,10 @@ totalnumberPages:number;
   public actionSheetCtrl: ActionSheetController, 
   public modalCtrl: ModalController) {
 
+  this.isBulkApprovePermission = false;
+   this.userPermissions = JSON.parse(localStorage.getItem("loggedInUserPermission"));
+   this.isBulkApprovePermission = this.checkBulkApprovePermission('LEAVE.BULK_APPROVAL.MANAGE');
   
-   
     // this.model = {
     //         comments: ''
     //     };
@@ -89,6 +95,19 @@ totalnumberPages:number;
     this.getLeavesToApprove()
   }
 
+  checkBulkApprovePermission(feature:string)
+  {
+    for(let innerindex  = 0 ; innerindex < this.userPermissions.length; innerindex ++ )
+      {
+        if(feature == this.userPermissions[innerindex])
+        {
+          return true;
+        }
+    }
+    return false;
+  }
+
+
     showMoreMenu(event: Event) {
     let popover = this.popoverCtrl.create(MorePopoverPage,{event});
     popover.present({ ev: event });
@@ -100,9 +119,9 @@ totalnumberPages:number;
      return;
      this.isMoreclicked = true;
 
-    let actionSheet = this.actionSheetCtrl.create({
-      title: 'Leave Action',
-      buttons: [
+     
+
+     let actbuttons : any [] = [
         {
           text: 'Approve',
           role: 'destructive',
@@ -118,6 +137,15 @@ totalnumberPages:number;
             this.showApproveRejectPromt(false);  
             this.isMoreclicked = false;
           }
+        },
+        {
+          text: 'HR Approve',
+          handler: () => {
+            this.selectedLeaveID = leaveID;
+            this.isHrApprove = true;
+            this.showApproveRejectPromt(true);  
+            this.isMoreclicked = false;
+          }
         },{
           text: 'Cancel',
           role: 'cancel',
@@ -126,8 +154,46 @@ totalnumberPages:number;
             this.isMoreclicked = false;
           }
         }
-      ]
+      ];
+
+    if(this.checkBulkApprovePermission('LEAVE.HRAPPROVAL.UPDATE') == false)
+    {
+      actbuttons.splice(2,1);
+    }
+    
+
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Leave Action',
+      buttons:actbuttons
+      // buttons: [
+      //   {
+      //     text: 'Approve',
+      //     role: 'destructive',
+      //     handler: () => {
+      //     this.selectedLeaveID = leaveID;
+      //     this.showApproveRejectPromt(true);  
+      //     this.isMoreclicked = false;
+      //     }
+      //   },{
+      //     text: 'Reject',
+      //     handler: () => {
+      //       this.selectedLeaveID = leaveID;
+      //       this.showApproveRejectPromt(false);  
+      //       this.isMoreclicked = false;
+      //     }
+      //   },{
+      //     text: 'Cancel',
+      //     role: 'cancel',
+      //     handler: () => {
+      //       console.log('Cancel clicked');
+      //       this.isMoreclicked = false;
+      //     }
+      //   }
+      // ]
+      
     });
+
+    
     actionSheet.present();
   }
 
@@ -196,6 +262,7 @@ slideToPage(index:number)
 
   getLeavesToApprove()
   {
+    this.isHrApprove = false;
     this.activeIndex = 0;
      this.isSelectall = false;
      this.isSelect = false;
@@ -300,6 +367,8 @@ slideToPage(index:number)
 
    getPendingLeavesToApprove()
   {
+    this.isHrApprove = false;
+    this.activeIndex = 0;
      this.isSelectall = false;
      this.isSelect = false;
      this.leavechecked = false;
@@ -349,9 +418,18 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
     this.showApproveRejectPromt(false);
   }
 
+  resetAllFlags()
+  {
+     this.isHrApprove = false;
+    this.activeIndex = 0;
+     this.isSelectall = false;
+     this.isSelect = false;
+     this.leavechecked = false;
+      this.model.comments = '';
+  }
+
   approveClicked() {
 
-         
              var params = {
                 LeaveRequestRefId: this.selectedLeaveID,
                 Comments: this.comment,
@@ -359,7 +437,9 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
             };
 
             this.spinner.createSpinner('Please wait..');
-            this.leaveService.singleLeaveApprove(params)
+            if(this.isHrApprove == true)
+            {
+              this.leaveService.hrsingleLeaveApprove(params)
                 .subscribe(res => {
                   this.spinner.stopSpinner();
                     if (res) {
@@ -373,8 +453,31 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
                         this.showAlert('Failed!','Request failed');
                         this.rejected = true;
                         this.approved = false;
+                        this.resetAllFlags();
                     }
                 });
+            }
+            else
+            {
+               this.leaveService.singleLeaveApprove(params)
+                .subscribe(res => {
+                  this.spinner.stopSpinner();
+                    if (res) {
+                        this.rejected = false;
+                        this.approved = true
+                        //this.showAlert('Success!','Leave Approved');
+                      //this.showToast('Leave is Approved successfully!');
+
+                        this.getLeavesToApprove();
+                    } else {
+                        this.showAlert('Failed!','Request failed');
+                        this.rejected = true;
+                        this.approved = false;
+                        this.resetAllFlags();
+                    }
+                });
+            }
+           
     }
 
     rejectClicked() {
@@ -400,6 +503,7 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
                         this.showAlert('Failed!','Request failed');
                         this.rejected = true;
                         this.approved = false
+                        this.resetAllFlags();
                     }
                 });
     }
@@ -650,6 +754,7 @@ let prompt = this.alertCtrl.create({
                //this.showAlert('Success','Selected leaves are '+ status + '!');
          } else {
            this.showAlert('Failed','Action failed!');
+           this.resetAllFlags();
          }
       });
       }

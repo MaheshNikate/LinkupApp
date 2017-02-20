@@ -45,6 +45,7 @@
         <br>
         <p>{{leaveDetail.HalfdayLeaveTaken}}</p>
         <br>
+        <br>
         <p>{{leaveDetail.AbsentTaken}}</p>
         <br>
         <p>{{leaveDetail.HalfdayAbsentTaken}}</p>
@@ -53,9 +54,10 @@
       <ion-col width-15>
         <p>Balance</p>
         <br>
-        <p>{{leaveDetail.LeaveBalance}}</p>
+        <p>{{leaveDetail.PLB}}</p>
         <br>
         <p>--</p>
+        <br>
         <br>
         <p>--</p>
         <br>
@@ -88,6 +90,9 @@
 	 <ion-row>
        <ion-col>
 		<ion-list class="list">
+      <ion-item *ngIf="isValidationMessage == true">
+        <p class="validationerror">{{ validationMessage }}</p>
+      </ion-item>
       <ion-item>
         <ion-label>Leave Type *</ion-label>
         <ion-select [(ngModel)]="model.leaveType" name ="leavetype" (ionChange)= "validateLeaveType()" formControlName="leaveType">
@@ -97,14 +102,27 @@
 				Leave type is required.
 	      </p> 
      </ion-item>
-			<ion-item >
-				<!--<ion-label floating color="primary">Number of Leaves *</ion-label>-->
-				<!--<ion-input  [disabled]="true" name="numLeaves"
-					[ngModel]="model.numDays" required>
-				</ion-input>-->
-        <h2>Number of Leaves *</h2>
+			<!--<ion-item >
+        <ion-row>
+        <ion-col>
+        <h2 class="graycolor">Number of Leaves *</h2>
+        </ion-col>
+        <ion-col>
         <h3>{{model.numDays}}</h3>
-			</ion-item>
+        </ion-col>
+        </ion-row>
+			</ion-item>-->
+
+       <ion-item>
+        <ion-label class="graycolor" >Number of Leaves *</ion-label>
+        <!--<ion-select [(ngModel)]="model.numDays" name ="noleave" formControlName="noleave" >
+          <ion-option [value]="noleave" selected="true">{{model.numDays}}</ion-option>
+        </ion-select>-->
+        <ion-badge item-right>{{model.numDays | number : '1.1-3'}}</ion-badge>
+         <!--<p ion-text [hidden]="applyLeaveForm.controls.leaveType.valid || submitted == false" color="danger" padding-left>
+				No of Leave is required.
+	      </p> -->
+     </ion-item>
 		
 			<br>
 
@@ -149,5 +167,30 @@
 
   </ion-card-content>
 </ion-card>
+
+<ion-list *ngIf ="submitted == true">
+  <ion-list-header>
+    <h2 class="textcolor">Leaves to submit</h2>
+  </ion-list-header>
+ 
+    <ion-item  *ngFor="let leave of addLeaveArr" >
+      <h2>{{leave.LeaveType.Value}}</h2>
+      <p>Start Date : {{leave.StartDate | date:'dd/MM/y'}}</p>
+      <p>End Date : {{leave.EndDate | date:'dd/MM/y'}}</p>
+      <p>Reason : {{leave.Reason}}</p>
+      <!--<p>Number of Leaves : {{leave.NumberOfDays}}</p>
+      <p>Reason : {{leave.Reason}}</p>
+      <p>Comment : {{leave.Comment.title}}</p>
+      <p>Status : {{leave.Status}}</p>-->
+      <ion-badge item-right>{{leave.NumberOfLeaves}}</ion-badge>
+      <!--<ion-badge item-right>2</ion-badge>-->
+      <!--<p>Approver : </p>
+      <p *ngFor="let approver of leave.Approvers"> {{approver.Manager}} - {{approver.Status}} </p>-->
+
+      <!--<ion-icon  name="more" item-right (click)="presentActionSheet(leave , leave.LeaveRequestMasterId)"></ion-icon>-->
+    </ion-item>
+</ion-list>
+
+
 
 </ion-content>

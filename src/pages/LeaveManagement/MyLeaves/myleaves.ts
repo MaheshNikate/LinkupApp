@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController,ModalController ,AlertController} from 'ionic-angular';
+import { NavController,ModalController ,AlertController,ActionSheetController} from 'ionic-angular';
 /** Third Party Dependencies */
 import { Observable } from 'rxjs/Rx';
 
@@ -27,14 +27,19 @@ export class MyLeaves {
   public isShowMyLeave:boolean;
   selectedLeave:any;
   leaveID: any;
+  isMoreclicked:boolean;
+  selectedLeaveID:string;
 
   constructor(public navCtrl: NavController , 
   private leaveService: LeaveService,
     private userService: UserService, 
     public spinner:Spinnerservice,
     public modalCtrl: ModalController,
-    public alertCtrl:AlertController) {
+    public alertCtrl:AlertController,
+    public actionSheetCtrl:ActionSheetController) {
       this.isShowMyLeave = false;
+      this.isMoreclicked = false;
+      
       this.leaves = [];
       this.getLeaves();
     
@@ -88,6 +93,60 @@ export class MyLeaves {
             }
         });
     }
+
+     presentActionSheet(leave:any,leaveID:string) {
+     if(leave.Status =='Approved'|| leave.Status =='Rejected'||leave.Status =='Cancelled')
+     return;
+     this.isMoreclicked = true;
+
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Leave Action',
+      buttons: [
+        {
+          text: 'Cancel Leave',
+          role: 'destructive',
+          handler: () => {
+          this.selectedLeaveID = leaveID;
+          this.showConfirm();  
+          this.isMoreclicked = false;
+          }
+        },{
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+            this.isMoreclicked = false;
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
+  showConfirm() {
+    let confirm = this.alertCtrl.create({
+      title: 'Leave',
+      message: 'Do you want to cancel selected leave?',
+      buttons: [
+        {
+          text: 'NO',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'YES',
+          handler: () => {
+            console.log('Agree clicked');
+            this.cancelClicked(this.selectedLeaveID);
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
+
 
     
 

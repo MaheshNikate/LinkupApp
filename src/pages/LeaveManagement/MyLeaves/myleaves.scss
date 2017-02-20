@@ -14,7 +14,7 @@ $categories: (
 page-myleaves {
 
    @each $status, $value in auxiliary-categories() {
-   ion-item-sliding[status=#{$status}] ion-label {
+   ion-item[status=#{$status}] ion-label {
      border-left: 2px solid $value;
      padding-left: 10px;
    }

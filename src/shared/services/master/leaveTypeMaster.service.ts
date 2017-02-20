@@ -10,6 +10,7 @@ import 'rxjs/add/operator/map';
 /** Module Level Dependencies */
 import { Select } from '../../../pages/LeaveManagement/models/select';
 import { BaseService } from '../../../shared/index';
+import {App} from 'ionic-angular';
 // import { Employee } from '../models/employee';
 
 /** Context for service calls */
@@ -19,7 +20,7 @@ const CONTEXT = 'LeaveType';
 @Injectable()
 export class LeaveTypeMasterService extends BaseService {
 
-    constructor( public http: Http) {
+    constructor( public http: Http , public apCtrl:App) {
         super( http, CONTEXT);
     }
 

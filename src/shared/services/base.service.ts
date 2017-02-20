@@ -1,8 +1,13 @@
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import {App,Events} from 'ionic-angular';
+import { Component ,ViewChild} from '@angular/core';
 import { Observable } from 'rxjs/Rx';
+
+//import { LoginPage } from '../../../pages/Login/login';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
+
 
 /** HttpService interface Definition*/
 interface HttpServices {
@@ -14,15 +19,25 @@ interface HttpServices {
     delete$(id: string, isSecured?: boolean): Observable<Response>;
 }
 
+
+// @Component({
+//   providers:[LoginPage]
+// })
+
 /** Base Service Definition */
 export class BaseService implements HttpServices {
-    public baseUrl: string = 'api/';
+    //public baseUrl: string = 'api/';
+    public baseUrl: string = 'http://192.168.101.21:8009/api/';
+    //public baseUrl: string = 'http://linkupmobile.eternussolutions.com/webapi/api/';
     public options: RequestOptions;
     private httpService: Http;
     private requestUrl: string;
+    public unauthorizedEvent :Events;
 
     /** Base Service constructor : Accepts Analytics Service, Http Service, Context path, Log service */
-    constructor(_httpService: Http, _context: string) {
+
+    //,public appCtrl: App
+    constructor(_httpService: Http, _context: string ) {
         this.httpService = _httpService;
         this.requestUrl = this.baseUrl.concat(_context);
     }
@@ -105,6 +120,10 @@ export class BaseService implements HttpServices {
         // In a real world app, we might use a remote logging infrastructure
         let errMsg: string;
         if (error instanceof Response) {
+
+             if(error.status===401) {
+                this.onUnAuthorized();
+            }
             const body = error.json() || '';
             const err = body.error || JSON.stringify(body);
             //errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
@@ -124,4 +143,11 @@ export class BaseService implements HttpServices {
         }
         this.options = new RequestOptions({ headers: headers });
     }
+
+     private onUnAuthorized() {
+        localStorage.clear();
+        this.unauthorizedEvent.publish('Token Expired');
+       // this.appCtrl.getRootNav().setRoot(LoginPage);
+
+     }
 }

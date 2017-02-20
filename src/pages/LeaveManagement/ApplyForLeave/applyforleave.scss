@@ -7,4 +7,16 @@ page-applyforleave {
           border: 1px solid #fff;
           background-color: #39acdc;
       }
+
+      .graycolor
+      {
+        color: #B1B1B1;
+      }
+
+      .validationerror
+      {
+        color: red;
+        text-decoration: underline;
+        white-space: pre-wrap;
+      }
 }

@@ -18,11 +18,12 @@ import { Leave } from '../models/leave';
 import { Select } from '../models/select';
 import { LeaveDetail } from '../models/leaveDetail';
 import { Spinnerservice } from '../../../shared/services/spinner';
+import { MessageService } from '../../../shared/services/message.service';
 
 @Component({
   selector: 'page-applyforleave',
   templateUrl: 'applyforleave.html',
-  providers:[LeaveService,UserService ,LeaveTypeMasterService,HolidayService,Spinnerservice,AuthService]
+  providers:[LeaveService,UserService ,LeaveTypeMasterService,HolidayService,Spinnerservice,AuthService,MessageService]
 })
 export class ApplyForLeave {
 
@@ -36,6 +37,8 @@ export class ApplyForLeave {
   public minEdate :string;
   public maxSdate :string;
   public maxEdate :string;
+  public startSDate:Date;
+  public endEDate:Date;
   numberdays:boolean;
   applyLeaveForm: FormGroup;
 
@@ -66,7 +69,7 @@ export class ApplyForLeave {
     isValidationMessage:boolean=false;
     validationMessage:string='';
     itsWeekend:boolean=false;
-    submitted:boolean = true;
+    submitted:boolean = false;
 
   constructor(public navCtrl: NavController , 
   private leaveService: LeaveService,
@@ -75,10 +78,12 @@ export class ApplyForLeave {
   private holidayService: HolidayService,
   public spinner:Spinnerservice,
   public formBuilder: FormBuilder,
-  public authService : AuthService) {
+  public authService : AuthService,
+ private messageService: MessageService) {
 
        this.applyLeaveForm = this.formBuilder.group({
             leaveType: ['', [Validators.required]],
+            noleave: ['', [Validators.required]],
             start: ['', [Validators.required]],
             end: ['', [Validators.required]],
             reason: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(600)]]
@@ -88,10 +93,17 @@ export class ApplyForLeave {
       this.leaves = [];
       this.sdate = new Date().toString();
       this.edate = new Date().toString();
+      this.startSDate = new Date();
+      this.endEDate = new Date();
+      
 
         this.leaves = [];
         this.addLeaveArr = [];
         this.numberdays = true;
+
+        var now = moment();
+        this.sdate = moment(now.format(), moment.ISO_8601).format();
+        this.edate = moment(now.format(), moment.ISO_8601).format();
 
         this.model = {
             User: {
@@ -100,8 +112,8 @@ export class ApplyForLeave {
             },
             numDays: 1,
             leaveType: {ID :1,Value:'Leave',id:1,Name: '', Type:''},
-            end: moment(moment().format('MM/DD/YYYY')).toDate(),
-            start: moment(moment().format('MM/DD/YYYY')).toDate(),
+            end: this.sdate,
+            start: this.edate,
             reason: ''
         };
         this.getLeaveAssets();
@@ -114,6 +126,7 @@ export class ApplyForLeave {
       this.leaveService.getLeaveDetails().subscribe((res:any) => {
         if(res===null) {
         this.isValidationMessage=true;
+        this.validationMessage=MessageService.APPLY_LEAVE_1;
         }
         else
         {
@@ -266,7 +279,7 @@ export class ApplyForLeave {
              for(let j=0;j<totalNoOfdays;j++) {
                  if(moment((this.model.start)).add(j, 'days').diff(this.addLeaveArr[i].StartDate)===0) {
                       this.isValidationMessage=true;
-                    //  this.validationMessage=MessageService.APPLY_LEAVE_13;
+                      this.validationMessage=MessageService.APPLY_LEAVE_13;
                       break;
                  }
              }
@@ -297,9 +310,9 @@ export class ApplyForLeave {
      checkPending(totalLeaveApplied:number) {
         if(this.leaveDetail.ActualBalance-this.pendingLeaveCount.LeaveTotal < totalLeaveApplied ) {
             if(this.pendingLeaveCount.LeaveTotal==0) {
-                //this.validationMessage=MessageService.APPLY_LEAVE_3;
+                this.validationMessage=MessageService.APPLY_LEAVE_3;
             } else {
-                //this.validationMessage=MessageService.APPLY_LEAVE_4;
+                this.validationMessage=MessageService.APPLY_LEAVE_4;
             }
             this.isValidationMessage=true;
         }
@@ -315,7 +328,7 @@ export class ApplyForLeave {
             this.leaveService.checkIfAlreadyApplied(param).subscribe(res => {
             if(res.StartDate!==null && !this.isValidationMessage) {
                  this.validationMessage='You have already applied a leave from '
-                                        +moment(res.StartDate).format('DD/MM/YYYY')+' to '+moment(res.EndDate).format('DD/MM/YYYY');
+                                        +moment(res.StartDate).format('YYYY-MM-DD')+' to '+moment(res.EndDate).format('YYYY-MM-DD');
                  this.isValidationMessage=true;
               }
             });
@@ -328,9 +341,9 @@ export class ApplyForLeave {
         let pendingMarriageLeave=this.pendingLeaveCount.MarriageLeaveTotal;
         if(totalMarriageLeave-takenMarriageLeave-pendingMarriageLeave < totalLeaveApplied ) {
             if(pendingMarriageLeave==0) {
-              //  this.validationMessage=MessageService.APPLY_LEAVE_5;
+                this.validationMessage=MessageService.APPLY_LEAVE_5;
             } else {
-               // this.validationMessage=MessageService.APPLY_LEAVE_6;
+               this.validationMessage=MessageService.APPLY_LEAVE_6;
             }
             this.isValidationMessage=true;
         }
@@ -342,9 +355,9 @@ export class ApplyForLeave {
         let pendingPaternityLeave=this.pendingLeaveCount.PaternityLeaveTotal;
         if(totalPaternityLeave-takenPaternityLeave-pendingPaternityLeave < totalLeaveApplied ) {
             if(pendingPaternityLeave==0) {
-               // this.validationMessage=MessageService.APPLY_LEAVE_7;
+                this.validationMessage=MessageService.APPLY_LEAVE_7;
             } else {
-               // this.validationMessage=MessageService.APPLY_LEAVE_8;
+                this.validationMessage=MessageService.APPLY_LEAVE_8;
             }
             this.isValidationMessage=true;
         }
@@ -356,9 +369,9 @@ export class ApplyForLeave {
         let pendingMaternityLeave=this.pendingLeaveCount.MaternityLeaveTotal;
         if(totalMaternityLeave-takenMaternityLeave-pendingMaternityLeave < totalLeaveApplied ) {
             if(pendingMaternityLeave==0) {
-               // this.validationMessage=MessageService.APPLY_LEAVE_9;
+                this.validationMessage=MessageService.APPLY_LEAVE_9;
             } else {
-                //this.validationMessage=MessageService.APPLY_LEAVE_10;
+                this.validationMessage=MessageService.APPLY_LEAVE_10;
             }
             this.isValidationMessage=true;
         }
@@ -377,10 +390,10 @@ export class ApplyForLeave {
                this.leaveService.checkIfAlreadyAppliedForTrainee(param).subscribe(res => {
                  if(res!==null) {
                     if(parseInt(res.LeaveTotal)>=1 || this.model.numDays>1 ) {
-                         //this.validationMessage= MessageService.APPLY_LEAVE_11;
+                         this.validationMessage= MessageService.APPLY_LEAVE_11;
                          this.isValidationMessage=true;
                     } else if(parseInt(res.HalfdayLeaveTotal)>=1 || this.model.numDays>1 ) {
-                       // this.validationMessage= MessageService.APPLY_LEAVE_12;
+                        this.validationMessage= MessageService.APPLY_LEAVE_12;
                         this.isValidationMessage=true;
                     }
                  }

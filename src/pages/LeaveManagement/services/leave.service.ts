@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Rx';
 import { BaseService } from '../../../shared/index';
 import { Leave } from '../models/leave';
 import { LeaveDetail } from '../models/leaveDetail';
+import {App} from 'ionic-angular';
 
 export const CONTEXT = 'Leave';
 
@@ -144,6 +145,21 @@ export class LeaveService extends BaseService {
         headers.append('Content-Type', 'application/json');
         let options = new RequestOptions({ headers: headers });
         return this.http.put(this.baseUrl+'LeaveApprovers/ApproveByManager',body,options)
+         .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
+    }
+
+    hrsingleLeaveApprove(payload:any) {
+        let headers = new Headers();
+        let body=JSON.stringify(payload);
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        headers.append('Content-Type', 'application/json');
+        let options = new RequestOptions({ headers: headers });
+        return this.http.put(this.baseUrl+'LeaveApprovers/ApproveByHR',body,options)
          .map(res => {
             return res.json();
         })
