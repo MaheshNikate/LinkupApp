@@ -1,10 +1,50 @@
 
+<ion-header >
+  <ion-navbar hideBackButton="true" align-title=”center”>
+     <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-toolbar>
+    <ion-title>
+      Leave Approval
+    </ion-title>
+     <ion-buttons end>
+      <button ion-button *ngIf= "editMode == false" (click)="editleaves()">
+        Edit
+      </button>
+      <button ion-button *ngIf= "editMode == true" (click)="editleaves()">
+        Done
+      </button>
+    </ion-buttons>
+    </ion-toolbar>
+  </ion-navbar>
+</ion-header>
+
+<ion-footer *ngIf= "editMode == true" class ="animated fadeInUp">
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button (click)="selectAllLeaves()">
+        All
+      </button>
+      </ion-buttons>
+       <ion-buttons end>
+      <button ion-button [disabled] = "leavechecked == false" (click)="approveBulkLeave()">
+        Approve
+      </button>
+      <button ion-button [disabled] = "leavechecked == false" (click)="rejectBulkLeave()">
+        Reject
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
+
+
 
 <ion-content padding>
+  <!--<br>
   <br>
   <br>
-  <br>
-  <br>
+  <br>-->
  
 
    <ion-fab left bottom>
@@ -21,10 +61,51 @@
 
   
 
-<ion-card >
-  <ion-card-header>
-  <h2 >Approve Leaves</h2>
-   <ion-item *ngIf="isBulkApprovePermission == true">
+
+<!--<br>-->
+ <ion-slides #Slides class="ion-slides-atrribute" (ionSlideDidChange)="slideChanged()">
+  <ion-slide class="ion-slide-attribute" *ngFor="let page of slidePages">
+    <!--<br>
+    <br>-->
+    <ion-list class="ion-list-attribute">
+
+  <!--<ion-item-sliding #slidingItem *ngFor="let leave of leaveObs let i = index" [attr.status]="leave.Status | lowercase">-->
+    <ion-item [ngStyle]="{'background-color': leave.selectionColor}" *ngFor="let leave of page let i = index" [attr.status]="leave.Status | lowercase"
+    (click)="showLeaveDetails(leave)">
+      <h2 *ngIf= "isSelect == false">{{leave.Employee.Name}}</h2>
+      <h3 *ngIf= "isSelect == false">{{leave.StartDate | date:'dd/MM/y'}}</h3>
+      <h3 *ngIf= "isSelect == false">{{leave.EndDate | date:'dd/MM/y'}}</h3>
+      
+       <ion-label class="textwrap"  *ngIf= "isSelect == true">{{leave.Employee.Name}} {{leave.StartDate | date:'dd/MM/y'}} {{leave.EndDate | date:'dd/MM/y'}}</ion-label>
+      <ion-badge item-right>{{leave.NumberOfLeaves | number : '1.1-3'}}</ion-badge>
+      <ion-checkbox *ngIf= "isSelect == true && leave.Status == 'Pending'" item-left color="red" 
+      [(ngModel)]="leave.selected" (click) = "selectLeaveClicked(leave,leavechecked,i)"></ion-checkbox>
+      <!--<ion-icon name="more" item-right (click)="showMoreMenu(leave.LeaveRequestMasterId)"></ion-icon>-->
+       <ion-icon *ngIf= "leave.Status == 'Pending' " name="more" item-right (click)="presentActionSheet(leave , leave.LeaveRequestMasterId)"></ion-icon>
+    </ion-item>
+    <!--<ion-item-divider class="itemDeviderColor"></ion-item-divider>-->
+   <!--<ion-item-options side="right">
+      <button ion-button color="secondary" (click)="approveLeave(leave,slidingItem)">
+        Approve
+      </button>
+      <button ion-button color="danger" (click)="rejectLeave(leave,slidingItem)">
+        Reject
+      </button>
+    </ion-item-options>
+  </ion-item-sliding>-->
+  
+ </ion-list>
+
+
+ 
+  </ion-slide>
+  
+ </ion-slides>
+
+  <ion-fab left bottom>
+  <ion-card *ngIf="isBulkApprovePermission == true">
+  <ion-card-content>
+     <ion-item >
         <button  ion-button icon-only item-left clear (click)="selectAllLeaves()" > 
         <ion-icon *ngIf= "isSelectall == false" name="radio-button-off" item-left></ion-icon>
         <ion-icon *ngIf= "isSelectall == true" name="radio-button-on" item-left ></ion-icon>
@@ -40,46 +121,9 @@
         <ion-icon name="close" item-right></ion-icon>
         </button>
     </ion-item>
-
-  </ion-card-header>
-  <ion-card-content>
   </ion-card-content>
 </ion-card>
-<br>
- <ion-slides #Slides class="ion-slides-atrribute" (ionSlideDidChange)="slideChanged()">
-  <ion-slide class="ion-slide-attribute" *ngFor="let page of slidePages">
-    <br>
-    <br>
-    <ion-list class="ion-list-attribute">
-
-  <!--<ion-item-sliding #slidingItem *ngFor="let leave of leaveObs let i = index" [attr.status]="leave.Status | lowercase">-->
-    <ion-item [ngStyle]="{'background-color': leave.selectionColor}" *ngFor="let leave of page let i = index" [attr.status]="leave.Status | lowercase"
-    (click)="showLeaveDetails(leave)">
-      <h2 *ngIf= "isSelect == false">{{leave.Employee.Name}}</h2>
-      <ion-label *ngIf= "isSelect == true">{{leave.Employee.Name}}</ion-label>
-      <h3>{{leave.StartDate | date:'dd/MM/y'}}</h3>
-      <h3>{{leave.EndDate | date:'dd/MM/y'}}</h3>
-      <ion-badge item-right>{{leave.NumberOfLeaves | number : '1.1-3'}}</ion-badge>
-      <ion-checkbox *ngIf= "isSelect == true && leave.Status == 'Pending'" item-left color="red" 
-      [(ngModel)]="leave.selected" (click) = "selectLeaveClicked(leave,leavechecked,i)"></ion-checkbox>
-      <!--<ion-icon name="more" item-right (click)="showMoreMenu(leave.LeaveRequestMasterId)"></ion-icon>-->
-       <ion-icon *ngIf= "isSelectall == false" name="more" item-right (click)="presentActionSheet(leave , leave.LeaveRequestMasterId)"></ion-icon>
-    </ion-item>
-    <!--<ion-item-divider class="itemDeviderColor"></ion-item-divider>-->
-   <!--<ion-item-options side="right">
-      <button ion-button color="secondary" (click)="approveLeave(leave,slidingItem)">
-        Approve
-      </button>
-      <button ion-button color="danger" (click)="rejectLeave(leave,slidingItem)">
-        Reject
-      </button>
-    </ion-item-options>
-  </ion-item-sliding>-->
-  
- </ion-list>
-  </ion-slide>
-  
- </ion-slides>
+  </ion-fab>
 
 
 

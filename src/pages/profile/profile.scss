@@ -1,3 +1,32 @@
 page-profile {
 
+     .masters {
+    background: url('../assets/images/background.png') no-repeat;
+    background-size: cover;
+    background-position: center; 
+    margin: auto; 
+    z-index: 2; 
+}
+
+  .profilephoto {
+         img {
+                height: 70px !important;
+                width: 70px !important;
+                margin: 0 auto;
+                border-radius: 40px !important;
+             }
+            }
+
+      .centertext{
+          text-align: center;
+          color:whitesmoke;
+      }
+
+      .headertext{
+       font: bold;
+       font-size: 44;
+       color: black;
+      }
+
+
 }

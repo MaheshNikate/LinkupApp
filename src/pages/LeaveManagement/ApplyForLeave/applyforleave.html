@@ -1,12 +1,17 @@
 
 
-
+<ion-header >
+  <ion-navbar hideBackButton="true" align-title=”center”>
+     <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Apply Leave
+    </ion-title>
+  </ion-navbar>
+</ion-header>
 
 <ion-content padding>
-<br>
-<br>
-<br>
-<br>
 
 <!--<ion-card>
   <ion-card-header>
@@ -15,7 +20,17 @@
 </ion-card>-->
 
 <ion-card>
-  <ion-card-header (click)="showMyLeaves()">
+
+  <ion-list>
+    <ion-list-header>
+    <h2> Active on Projects </h2>
+  </ion-list-header>
+  <ion-item *ngFor="let project of activeProjects">
+    <h2>{{ project.Title }}</h2>
+    <p>{{ project.ProjectManager.Name }}</p>
+  </ion-item>
+</ion-list>
+  <!--<ion-card-header (click)="showMyLeaves()">
    <ion-item>
         My Leaves
         <button ion-button icon-only item-right clear>
@@ -65,19 +80,10 @@
         <br>
       </ion-col>
      </ion-row>
-  </ion-card-content>
+  </ion-card-content>-->
 </ion-card>
 
-<ion-list>
-    <ion-list-header>
-    <h2> Active on Projects </h2>
-  </ion-list-header>
-  <ion-item *ngFor="let project of activeProjects">
-    <h2>{{ project.Title }}</h2>
-    <p>{{ project.ProjectManager.Name }}</p>
 
-  </ion-item>
-</ion-list>
 
 
 <ion-card>

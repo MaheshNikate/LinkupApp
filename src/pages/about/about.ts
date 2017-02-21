@@ -1,14 +1,19 @@
 import { Component } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
+import { AuthService } from '../Login/login.service';
 
 @Component({
     selector: 'page-about',
-    templateUrl: 'about.html'
+    templateUrl: 'about.html',
+    providers:[AuthService]
 })
 export class AboutPage {
+public userDetail : any;
+    constructor(public navCtrl: NavController,
+    public authService:AuthService) {
 
-    constructor(public navCtrl: NavController) {
+        this.userDetail=this.authService.getCurrentUser();
 
     }
 

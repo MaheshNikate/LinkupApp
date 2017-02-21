@@ -51,7 +51,6 @@ export class HomePage {
 
   ionViewDidLoad() { 
     this.nav.setRoot(MyLeaves);
-        
     }
 
   openProfile(){
@@ -64,9 +63,9 @@ export class HomePage {
       if(this.isShowLeaveMgt == false)
       {
       this.leavePages = [
-          { title: 'Apply For Leave', component: ApplyForLeave, permission:this.getPermission([ 'LEAVE.APPLYFORLEAVE.READ','LEAVE.APPLYFORLEAVE.ADD','LEAVE.APPLYFORLEAVE.UPDATE','LEAVE.APPLYFORLEAVE.DELETE'])},
-          { title: 'My Leaves', component: MyLeaves,permission:this.getPermission(['LEAVE.MY_LEAVE.READ','LEAVE.MY_LEAVE.MANAGE',]), index: 1 },
           { title: 'Holidays', component: Holidays, permission:this.getPermission(['LEAVE.HOLIDAY.READ']), index: 2 },
+          { title: 'My Leaves', component: MyLeaves,permission:this.getPermission(['LEAVE.MY_LEAVE.READ','LEAVE.MY_LEAVE.MANAGE',]), index: 1 },
+          { title: 'Apply For Leave', component: ApplyForLeave, permission:this.getPermission([ 'LEAVE.APPLYFORLEAVE.READ','LEAVE.APPLYFORLEAVE.ADD','LEAVE.APPLYFORLEAVE.UPDATE','LEAVE.APPLYFORLEAVE.DELETE'])},
           { title: 'Leave Approval', component: LeaveApproval,permission:this.getPermission(['LEAVE.APPROVAL.MANAGE','LEAVE.APPROVAL.READ','LEAVE.APPROVAL.UPDATE']),  index: 3 }
         ];
         this.isShowLeaveMgt = true;

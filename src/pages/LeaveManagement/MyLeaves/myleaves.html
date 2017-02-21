@@ -1,27 +1,22 @@
-<!--<ion-header>
-  <ion-navbar>
+<ion-header >
+  <ion-navbar hideBackButton="true" align-title=”center”>
+     <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>
-      My Leaves
+      <img src="assets/images/elogo.png">
     </ion-title>
   </ion-navbar>
-</ion-header>-->
+</ion-header>
 
 <ion-content padding >
+  <!--<br>
   <br>
   <br>
-  <br>
-  <br>
+  <br>-->
   <ion-card>
   <ion-card-header class="headercolor">
-    <h2 class="textcolor">My Leaves</h2>
-    
-   <!--<ion-item>
-        My Leaves
-        <button ion-button icon-only item-right clear>
-        <ion-icon *ngIf= "isShowMyLeave == false" name="arrow-dropdown" item-right></ion-icon>
-        <ion-icon *ngIf= "isShowMyLeave == true" name="arrow-dropleft" item-right ></ion-icon>
-      </button>
-      </ion-item>-->
+   <h2> Leave status </h2>
   </ion-card-header>
   <ion-card-content *ngIf="isShowMyLeave == true">
      <ion-row>
@@ -68,9 +63,20 @@
 </ion-card>
 
 <ion-list>
-  <ion-list-header class="subhedaercolor">
-    <h2 class="textcolor">Leave Status</h2>
+  <ion-list-header>
+    <ion-item>
+        My Leaves
+        <button ion-button icon-only item-right clear (click)="showMyLeaves()">
+        <ion-icon *ngIf= "isShowMyLeave == false" name="arrow-dropdown" item-right></ion-icon>
+        <ion-icon *ngIf= "isShowMyLeave == true" name="arrow-dropleft" item-right ></ion-icon>
+      </button>
+      </ion-item>
   </ion-list-header>
+</ion-list>
+
+<ion-list  [hidden]= "isShowMyLeave == true">
+  <!--<ion-list-header class="subhedaercolor">
+  </ion-list-header>-->
   <!--<ion-item-sliding ion-item-sliding *ngFor="let leave of leaveObs"  [attr.status]="leave.Status | lowercase">-->
     <ion-item (click)="showLeaveDetails(leave)" *ngFor="let leave of leaveObs"  [attr.status]="leave.Status | lowercase">
       <!--<h2>{{leave.Type.Title}}</h2>-->
@@ -85,7 +91,7 @@
       <!--<p>Approver : </p>
       <p *ngFor="let approver of leave.Approvers"> {{approver.Manager}} - {{approver.Status}} </p>-->
 
-      <ion-icon  *ngIf="leave.Status == Pending" name="more" item-right (click)="presentActionSheet(leave , leave.LeaveRequestMasterId)"></ion-icon>
+      <ion-icon  *ngIf="leave.Status == 'Pending' " name="more" item-right (click)="presentActionSheet(leave , leave.LeaveRequestMasterId)"></ion-icon>
     </ion-item>
    <!--<ion-item-options side="right">
       <button ion-button color="primary">
@@ -136,3 +142,5 @@
   </ion-item-sliding>-->
  </ion-list>
 </ion-content>
+
+<ion-nav [root]="rootPage" #content></ion-nav>

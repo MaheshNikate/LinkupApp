@@ -28,7 +28,7 @@ interface HttpServices {
 export class BaseService implements HttpServices {
     //public baseUrl: string = 'api/';
     public baseUrl: string = 'http://192.168.101.21:8009/api/';
-    //public baseUrl: string = 'http://linkupmobile.eternussolutions.com/webapi/api/';
+    // public baseUrl: string = 'http://linkupmobile.eternussolutions.com/webapi/api/';
     public options: RequestOptions;
     private httpService: Http;
     private requestUrl: string;
@@ -125,7 +125,8 @@ export class BaseService implements HttpServices {
                 this.onUnAuthorized();
             }
             const body = error.json() || '';
-            const err = body.error || JSON.stringify(body);
+             const err = body.error || body.Message || JSON.stringify(body);
+            errMsg=err;  
             //errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
         } else {
             errMsg = error.message ? error.message : error.toString();

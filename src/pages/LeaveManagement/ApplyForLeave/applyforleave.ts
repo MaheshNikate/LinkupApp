@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { App,NavController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 //import { AboutPage } from '../../about/about';
 /** Third Party Dependencies */
@@ -9,6 +9,7 @@ import * as moment from 'moment/moment';
 //import { SelectItem } from 'primeng/primeng';
 
 import { ApplyLeaveValidation } from '../models/applyLeaveValidation';
+import { HomePage } from '../../home/home';
 import { LeaveTypeMasterService } from '../../../shared/services/master/leaveTypeMaster.service';
 import { HolidayService } from '../services/holiday.service';
 import { LeaveService } from '../services/leave.service';
@@ -19,6 +20,7 @@ import { Select } from '../models/select';
 import { LeaveDetail } from '../models/leaveDetail';
 import { Spinnerservice } from '../../../shared/services/spinner';
 import { MessageService } from '../../../shared/services/message.service';
+import { Toast } from 'ionic-native';
 
 @Component({
   selector: 'page-applyforleave',
@@ -79,7 +81,8 @@ export class ApplyForLeave {
   public spinner:Spinnerservice,
   public formBuilder: FormBuilder,
   public authService : AuthService,
- private messageService: MessageService) {
+ private messageService: MessageService,
+ public appCtrl:App) {
 
        this.applyLeaveForm = this.formBuilder.group({
             leaveType: ['', [Validators.required]],
@@ -152,7 +155,12 @@ export class ApplyForLeave {
             this.activeProjects=res;
         });
         this.userDetail=this.authService.getCurrentUser();
-        this.holidayService.getHolidayByFinancialYear('2016').subscribe(res => {
+
+        let financialYear = moment().year();
+        if(moment().month()<=2 ) {
+            financialYear=financialYear-1;
+        }
+        this.holidayService.getHolidayByFinancialYear(financialYear.toString()).subscribe(res => {
             this.holidayList=res;
         });
         this.leaveService.getCurrentUserPendingLeaveCount().subscribe(res => {
@@ -170,16 +178,25 @@ export class ApplyForLeave {
                 return;
             this.onAddLeave();
         }
+        this.spinner.createSpinner('Please wait..');
         this.leaveService.submitLeaveRecord(this.addLeaveArr).subscribe(res => {
             if (res) {
+              this.spinner.stopSpinner();
+                this.showToast('Leave applied successfully!');
                 // this.messageService.addMessage({ severity: 'success', summary: 'Success', detail: 'Leave applied!' });
-               // this.cancelClick();
+                this.cancelClick();
             } else {
+                this.spinner.stopSpinner();
+                this.showToast('Failed to apply leave please try again!');
                 // this.messageService.addMessage({ severity: 'error', summary: 'Failed', detail: 'Failed to process your request.' });
             }
         });
     }
 
+    cancelClick()
+    {
+     this.appCtrl.getRootNav().setRoot(HomePage);
+    }
     onAddLeave() {
         this.submitted = true;
         this.checkIfAlreadyAdded();
@@ -424,4 +441,15 @@ export class ApplyForLeave {
   {
     this.isShowMyLeave = !this.isShowMyLeave;
   }
+
+   showToast(message:string)
+  {
+    Toast.show(message, '5000', 'center').subscribe(
+  toast => {
+    console.log(toast);
+  }
+);
+  }
+
+  
 }

@@ -38,8 +38,17 @@ export class AuthService extends BaseService {
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
         let options = new RequestOptions({ headers: headers });
         return this.http.post(this.baseUrl+'auth/Token', credentialString, options)
-            .map((res: Response) => { this.setToken(res); })
-            .catch(this.handleError);
+        //     .map((res: Response) => { this.setToken(res); })
+        //    .catch(err => {
+        //     return this.handleError(err);
+        // });
+
+        .map((res: Response) => {
+           this.setToken(res);
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
     }
     
     getLoggedInUserPermission() {

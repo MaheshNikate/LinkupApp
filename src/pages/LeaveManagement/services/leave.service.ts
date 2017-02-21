@@ -41,7 +41,14 @@ export class LeaveService extends BaseService {
         let headers = new Headers();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.baseUrl+'Leave/myleaves',options).map((res => res.json()));
+        return this.http.get(this.baseUrl+'Leave/myleaves',options)
+        //.map((res => res.json()));
+          .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
     }
    
    // Get Leaves to approve 
@@ -51,7 +58,14 @@ export class LeaveService extends BaseService {
         let headers = new Headers();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.baseUrl+'Leave/ApproverLeaves',options).map((res => res.json()));
+        return this.http.get(this.baseUrl+'Leave/ApproverLeaves',options)
+        //.map((res => res.json()));
+          .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
     }
     
     // Get Pending status leaves for bulk approval
@@ -61,7 +75,14 @@ export class LeaveService extends BaseService {
         let headers = new Headers();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.baseUrl+'Leave/ByStatus/Pending',options).map((res => res.json()));
+        return this.http.get(this.baseUrl+'Leave/ByStatus/Pending',options)
+        // .map((res => res.json()));
+         .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
     }
 
     // Get My applied leave details
@@ -70,7 +91,14 @@ export class LeaveService extends BaseService {
         let headers = new Headers();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.baseUrl+'EmployeeLeaves/GetMyLeaveDetails',options).map((res => res.json()));
+        return this.http.get(this.baseUrl+'EmployeeLeaves/GetMyLeaveDetails',options)
+        // .map((res => res.json()));
+          .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
     }
     /**
      * 
@@ -116,7 +144,14 @@ export class LeaveService extends BaseService {
          let headers = new Headers();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         let options = new RequestOptions({ headers: headers });
-        return this.http.put(this.baseUrl+'LeaveApprovers/ApproveByManager',payload,options).map((res => res.json()));
+        return this.http.put(this.baseUrl+'LeaveApprovers/ApproveByManager',payload,options)
+        // .map((res => res.json()));
+          .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
     }
 
     // Bulk approval 

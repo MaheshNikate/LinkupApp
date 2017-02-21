@@ -67,9 +67,10 @@ public isHrApprove :boolean;
   public actionSheetCtrl: ActionSheetController, 
   public modalCtrl: ModalController) {
 
-  this.isBulkApprovePermission = false;
+  
    this.userPermissions = JSON.parse(localStorage.getItem("loggedInUserPermission"));
    this.isBulkApprovePermission = this.checkBulkApprovePermission('LEAVE.BULK_APPROVAL.MANAGE');
+   //this.isBulkApprovePermission = true;
   
     // this.model = {
     //         comments: ''
@@ -262,6 +263,7 @@ slideToPage(index:number)
 
   getLeavesToApprove()
   {
+    this.editMode = false;
     this.isHrApprove = false;
     this.activeIndex = 0;
      this.isSelectall = false;
@@ -446,7 +448,7 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
                         this.rejected = false;
                         this.approved = true
                         //this.showAlert('Success!','Leave Approved');
-                      //this.showToast('Leave is Approved successfully!');
+                      this.showToast('Leave is Approved successfully!');
 
                         this.getLeavesToApprove();
                     } else {
@@ -466,7 +468,7 @@ approveLeave(sLeave:any , slidingItem: ItemSliding)
                         this.rejected = false;
                         this.approved = true
                         //this.showAlert('Success!','Leave Approved');
-                      //this.showToast('Leave is Approved successfully!');
+                      this.showToast('Leave is Approved successfully!');
 
                         this.getLeavesToApprove();
                     } else {
@@ -528,15 +530,13 @@ selectLeaves()
 
 }
 
-  selectAllLeaves()
+editleaves()
+{
+  this.editMode = !this.editMode;
+  if(this.editMode == true)
   {
-    this.isSelectall = !this.isSelectall;
-    this.isSelect = false;
-    if(this.isSelectall == true)
-    {
-     this.isSelectall = false;
-     this.isSelect = false;
-     this.leavechecked = false;
+    this.isSelectall = false;
+    // this.leavechecked = false;
      this.model.comments = '';
       this.selectedEmployees = [];
       this.spinner.createSpinner('Please wait..');
@@ -545,11 +545,11 @@ selectLeaves()
       (res:any) =>  {
         this.spinner.stopSpinner();
         console.log("Data from server", res); 
-
+          this.isSelect = true;
          this.leavesArray =[];
         this.leavesArray = res;
          this.leavesArray.forEach(leave => {
-          this.selectLeave(leave,true);
+          this.selectLeave(leave,false);
         });
         this.totalCount = this.leavesArray.length;
         this.getPages();
@@ -564,21 +564,73 @@ selectLeaves()
         this.spinner.stopSpinner();
         this.showAlert('Failed','Failed to get response from server.');
       });
+  }
+  else
+  {
+     this.selectedEmployees = [];
+      this.getLeavesToApprove();
+  }
+}
+
+  selectAllLeaves()
+  {
+    this.isSelect = true;
+    this.isSelectall = true;
+      this.leavechecked = false;
+      this.model.comments = '';
+      this.selectedEmployees = [];
+      this.leavesArray.forEach(leave => {
+          this.selectLeave(leave,true);
+        });
+    // this.isSelectall = !this.isSelectall;
+    // this.isSelect = false;
+    // if(this.isSelectall == true)
+    // {
+    //  this.isSelectall = false;
+    //  this.isSelect = false;
+    //  this.leavechecked = false;
+    //  this.model.comments = '';
+    //   this.selectedEmployees = [];
+    //   this.spinner.createSpinner('Please wait..');
+    //  this.leaveService.getLeaveByStatus('Pending')
+    // .subscribe(
+    //   (res:any) =>  {
+    //     this.spinner.stopSpinner();
+    //     console.log("Data from server", res); 
+
+    //      this.leavesArray =[];
+    //     this.leavesArray = res;
+    //      this.leavesArray.forEach(leave => {
+    //       this.selectLeave(leave,true);
+    //     });
+    //     this.totalCount = this.leavesArray.length;
+    //     this.getPages();
+    //     //this.showFirst();
+    //     // this.leaveObs = res;
+    //     // this.leaveObs.forEach(leave => {
+    //     //   this.selectLeave(leave,true);
+    //     // });
+        
+    //   },error =>
+    //   {
+    //     this.spinner.stopSpinner();
+    //     this.showAlert('Failed','Failed to get response from server.');
+    //   });
 
       
-      // this.leaveObs.forEach(leave => {
-      //     this.selectLeave(leave,true);
-      //   });
-    }
-    else
-    {
-      this.selectedEmployees = [];
-      this.getLeavesToApprove();
-      // this.editMode = false;
-      //   this.leaveObs.forEach(leave => {
-      //     this.selectLeave(leave,false);
-      //   });
-    }
+    //   // this.leaveObs.forEach(leave => {
+    //   //     this.selectLeave(leave,true);
+    //   //   });
+    // }
+    // else
+    // {
+    //   this.selectedEmployees = [];
+    //   this.getLeavesToApprove();
+    //   // this.editMode = false;
+    //   //   this.leaveObs.forEach(leave => {
+    //   //     this.selectLeave(leave,false);
+    //   //   });
+    // }
     
   }
   // selectLeaveClicked(leave:any, slidingItem: ItemSliding , checked:boolean , index:number)
@@ -750,7 +802,7 @@ let prompt = this.alertCtrl.create({
                this.approved = false;
                this.getLeavesToApprove();
                this.selectedEmployees = [];
-                //this.showToast('All Leaves are' + ' ' + status + ' ' + 'successfully!');
+                this.showToast('All Leaves are' + ' ' + status + ' ' + 'successfully!');
                //this.showAlert('Success','Selected leaves are '+ status + '!');
          } else {
            this.showAlert('Failed','Action failed!');
@@ -776,7 +828,7 @@ let prompt = this.alertCtrl.create({
        else
        msg = 'Leave is Rejected successfully!';
 
-       //this.showToast(msg);
+       this.showToast(msg);
 
       this.getLeavesToApprove();
      }

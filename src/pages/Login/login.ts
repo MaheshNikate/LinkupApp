@@ -5,6 +5,7 @@ import {App, NavController ,Nav ,LoadingController ,AlertController} from 'ionic
 import { HomePage } from '../../pages/home/home';
 import { AuthService } from './login.service';
 import { Spinnerservice } from '../../shared/services/spinner';
+import { Toast } from 'ionic-native';
 
 // import { SignupPage } from '../signup/signup';
 // import { TabsPage } from '../tabs/tabs';
@@ -50,7 +51,10 @@ export class LoginPage {
                 this.spinner.stopSpinner();
                 this.showAlert('Failed','Failed to login!');
                 this.showError = true;
+                if(error.message)
                 this.errorMessage = error.message;
+                else
+                this.errorMessage = error;
             });
    }
   }
@@ -74,6 +78,7 @@ export class LoginPage {
             results => {
                this.spinner.stopSpinner();
                 // this.navCtrl.push(HomePage);
+                //this.showToast('Logged in successfully!');
                 this.appCtrl.getRootNav().setRoot(HomePage);
             },
             error => {
@@ -107,6 +112,15 @@ export class LoginPage {
             });
             alert.present();
         }
+
+         showToast(message:string)
+      {
+       Toast.show(message, '5000', 'center').subscribe(
+     toast => {
+    console.log(toast);
+      }
+    );
+    }
 
 }
 

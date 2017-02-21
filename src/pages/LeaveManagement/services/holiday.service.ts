@@ -40,7 +40,13 @@ export class HolidayService extends BaseService {
      getHolidayByFinancialYear(id:string) {
         return this
             .get$(id,true)
-            .map(res => res.json());
+            // .map(res => res.json());
+              .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
     }
    
     /* Mobile API */
@@ -50,6 +56,13 @@ export class HolidayService extends BaseService {
           let headers = new Headers();
         headers.append('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.baseUrl+'Holiday/2016',options).map((res => res.json()));
+        return this.http.get(this.baseUrl+'Holiday/2016',options)
+        //.map((res => res.json()));
+          .map(res => {
+            return res.json();
+        })
+        .catch(err => {
+            return this.handleError(err);
+        });
     }
 }

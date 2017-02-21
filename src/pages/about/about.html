@@ -4,6 +4,41 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content padding style="background-color:#e600e6">
-<h1 text-center>About</h1>
+<ion-content padding>
+  <ion-card  class="masters">
+    <div class="profilephoto">  
+     <img src="assets/images/default-user.png"/>
+    </div>
+      <ion-card-content >
+        <h2 class="centertext">{{userDetail.FirstName}} {{userDetail.LastName}} - {{userDetail.EmpID}} </h2>
+        <br>
+		<p class="centertext">
+          {{userDetail.Designation.Value}}
+        </p>
+		<br>
+		 <p class="centertext">
+          {{userDetail.Department.Value}}
+        </p>
+		<br>
+
+		<p class="centertext">
+        {{userDetail.EmailIDOfficial}}
+        </p>
+		<br>
+
+		 <p class="centertext">
+          DOB : {{userDetail.DOB | date:'dd/MM/y'}}
+        </p>
+		<br>
+
+		<p class="centertext">
+          DOJ : {{userDetail.DOJ | date:'dd/MM/y'}}
+        </p>
+		<br>
+
+		<p class="centertext">
+          Contact : {{userDetail.PersonalContactNumber}}
+        </p>
+      </ion-card-content>
+    </ion-card>
 </ion-content>

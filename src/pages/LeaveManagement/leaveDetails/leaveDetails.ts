@@ -11,6 +11,7 @@ import { UserService } from '../services/user.service';
 import { Leave } from '../models/leave';
 import { LeaveDetail } from '../models/leaveDetail';
 import { Spinnerservice } from '../../../shared/services/spinner';
+import { Toast } from 'ionic-native';
 
 @Component({
   selector: 'page-leaveDetails',
@@ -67,25 +68,39 @@ export class LeaveDetails {
   }
   getLeaves()
   {
-      
-      this.leaveService.getLeaveDetailByRefID(this.leaveID).subscribe(res => {
-            
+      this.spinner.createSpinner('Please wait..');
+      this.leaveService.getLeaveDetailByRefID(this.leaveID).subscribe(
+          res => {
             this.leaveList = res;
             this.getEmployeeDetails(this.leaveList[0].EmpID);
             if(this.leaveList[0].Status =='Pending') {
                 this.isPending=true;
             }
+        },
+        error =>
+        {
+           this.spinner.stopSpinner();
         });
-        this.leaveService.getApproverListByRefID(this.leaveID).subscribe(res => {
+        this.leaveService.getApproverListByRefID(this.leaveID).subscribe(
+            res => {
             this.approverList=res;
+        },
+        error =>
+        {
+          this.spinner.stopSpinner();
         });
         
   }
 
   getEmployeeDetails(id:any) {
-        this.leaveService.getEmployeeDetail(id).subscribe(res => {
+        this.leaveService.getEmployeeDetail(id).subscribe(
+            res => {
             this.ishowLeaveDetails = true;
             this.userDetail=res;
+            this.spinner.stopSpinner();
+        },
+        error=>{
+            this.spinner.stopSpinner();
         });
     }
      approveClicked() {
@@ -97,13 +112,18 @@ export class LeaveDetails {
                 Status: 'Approved',
                 LeaveRequestRefId:this.leaveID
             };
+            this.spinner.createSpinner('Please wait..');
             this.leaveService.singleLeaveApprove(params)
                 .subscribe(res => {
                     if (res) {
+                        this.spinner.stopSpinner();
                         this.rejected = false;
                         this.approved = true;
+                       // this.showToast('Leave is approved successfully!');
                         this.dismiss();
                     } else {
+                        this.showToast('Failed to approve Leave!');
+                        this.spinner.stopSpinner();
                         this.rejected = true;
                         this.approved = false;
                     }
@@ -128,8 +148,12 @@ export class LeaveDetails {
                     if (res) {
                         this.rejected = true;
                         this.approved = false;
+                        this.spinner.stopSpinner();
+                       // this.showToast('Leave is rejcted successfully!');
                         this.dismiss();
                     } else {
+                        this.showToast('Failed to reject Leave!');
+                        this.spinner.stopSpinner();
                         this.rejected = false;
                         this.approved = true;
                     }
@@ -137,6 +161,17 @@ export class LeaveDetails {
             }
         
     }
+
+     showToast(message:string)
+  {
+    Toast.show(message, '5000', 'center').subscribe(
+  toast => {
+    console.log(toast);
+  }
+);
+  }
+
+  
 
   dismiss()
   {

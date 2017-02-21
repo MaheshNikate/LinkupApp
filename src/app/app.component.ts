@@ -54,7 +54,7 @@ export class MyApp {
 
     this.unauthorizedEvent.subscribe('Token Expired', (user, time) => {
   // user and time are the same arguments passed in `events.publish(user, time)`
-   this.showAlert('Session Expired','Please Login again.');
+   this.tpkenExpiredAlert('Session Expired','Please Login again.');
     });
 
    // this.initializeApp();

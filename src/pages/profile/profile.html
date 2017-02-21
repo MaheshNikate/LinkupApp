@@ -1,9 +1,17 @@
-<ion-header>
+<!--<ion-header>
     <ion-navbar>
         <ion-title>Profile</ion-title>
     </ion-navbar>
-</ion-header>
-<ion-content padding style="background-color:#e600e6">
+</ion-header>-->
+<ion-content padding >
+
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+
+   
 <ion-tabs [scrollable-tabs]="selectedTabIndex" color="default" mode='md' tabsHighlight="true" tabsPlacement="top">
 	<ion-tab [root]="AboutRoot" (ionSelect)="selectTab(1)" tabIcon="information-circle" tabTitle="Personal Info"></ion-tab>
 	<ion-tab [root]="AboutRoot" (ionSelect)="selectTab(2)" tabIcon="information-circle" tabTitle="Details"></ion-tab>

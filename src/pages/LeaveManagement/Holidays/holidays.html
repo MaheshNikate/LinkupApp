@@ -1,16 +1,17 @@
 
+<ion-header >
+  <ion-navbar hideBackButton="true" align-title=”center”>
+     <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Holidays
+    </ion-title>
+  </ion-navbar>
+</ion-header>
 
 <ion-content padding>
-
-  <br>
-  <br>
-  <br>
-  <br>
-  
   <ion-list >
-    <ion-list-header>
-    <h2> Holidays </h2>
-  </ion-list-header>
   <ion-item *ngFor="let holiday of holidaysObs" [attr.holidaytype]="holiday.HolidayType.Value | lowercase">
     <h2>{{holiday.Title}}</h2>
     <p>{{holiday.HolidayDate | date:'dd/MM/y'}}</p>
