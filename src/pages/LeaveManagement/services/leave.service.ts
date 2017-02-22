@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Rx';
 import { BaseService } from '../../../shared/index';
 import { Leave } from '../models/leave';
 import { LeaveDetail } from '../models/leaveDetail';
-import {App} from 'ionic-angular';
+import {App,Events} from 'ionic-angular';
 
 export const CONTEXT = 'Leave';
 
@@ -13,8 +13,8 @@ export const CONTEXT = 'Leave';
 
  @Injectable()
 export class LeaveService extends BaseService {
-    constructor( public http: Http) {
-        super( http, CONTEXT);
+    constructor( public http: Http , public unAuthorizedEvent:Events) {
+        super( http, CONTEXT,unAuthorizedEvent);
     }
     /* Mobile API */
 

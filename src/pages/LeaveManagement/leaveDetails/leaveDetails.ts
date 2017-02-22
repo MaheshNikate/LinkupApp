@@ -119,7 +119,7 @@ export class LeaveDetails {
                         this.spinner.stopSpinner();
                         this.rejected = false;
                         this.approved = true;
-                       // this.showToast('Leave is approved successfully!');
+                        this.showToast('Leave is approved successfully!');
                         this.dismiss();
                     } else {
                         this.showToast('Failed to approve Leave!');
@@ -149,7 +149,7 @@ export class LeaveDetails {
                         this.rejected = true;
                         this.approved = false;
                         this.spinner.stopSpinner();
-                       // this.showToast('Leave is rejcted successfully!');
+                        this.showToast('Leave is rejcted successfully!');
                         this.dismiss();
                     } else {
                         this.showToast('Failed to reject Leave!');

@@ -9,7 +9,7 @@ import 'rxjs/add/operator/map';
 /** Module Level Dependencies */
 import { BaseService } from '../../../shared/index';
 import { Holiday } from '../models/holiday';
-import {App} from 'ionic-angular';
+import {App,Events} from 'ionic-angular';
 // import { Employee } from '../models/employee';
 
 /** Context for service calls */
@@ -19,8 +19,8 @@ export const CONTEXT = 'Holiday';
 @Injectable()
 export class HolidayService extends BaseService {
 
-    constructor(public http: Http ,public apCtrl:App) {
-        super( http, CONTEXT);
+    constructor(public http: Http ,public unAuthorizedEvent:Events) {
+        super( http, CONTEXT,unAuthorizedEvent);
     }
 
     /**

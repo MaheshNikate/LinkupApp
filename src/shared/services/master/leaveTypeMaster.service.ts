@@ -4,13 +4,14 @@ import { Http } from '@angular/http';
 
 /** Third Party Dependencies */
 import { Observable } from 'rxjs/Rx';
+
 import 'rxjs/add/operator/map';
 
 
 /** Module Level Dependencies */
 import { Select } from '../../../pages/LeaveManagement/models/select';
 import { BaseService } from '../../../shared/index';
-import {App} from 'ionic-angular';
+import {App,Events} from 'ionic-angular';
 // import { Employee } from '../models/employee';
 
 /** Context for service calls */
@@ -20,8 +21,8 @@ const CONTEXT = 'LeaveType';
 @Injectable()
 export class LeaveTypeMasterService extends BaseService {
 
-    constructor( public http: Http , public apCtrl:App) {
-        super( http, CONTEXT);
+    constructor( public http: Http , public unAuthorizedEvent:Events) {
+        super( http, CONTEXT,unAuthorizedEvent);
     }
 
     /**

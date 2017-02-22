@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Rx';
 import { HolidayService } from '../services/holiday.service';
 import { Holiday } from '../models/holiday';
 import { Spinnerservice } from '../../../shared/services/spinner';
+import * as moment from 'moment/moment';
 
 export class MyEvent {
   id: number;
@@ -37,6 +38,9 @@ export class Holidays {
   holidayDetails: boolean = false;
   holiday: Holiday;
 
+  holidayList: any;
+  pendingHoliday: any;
+
   constructor(
     public navCtrl: NavController, 
     private holidayService: HolidayService,
@@ -51,11 +55,20 @@ export class Holidays {
   {
     // this.holidaysObs = this.holidayService.getHolidays();
     // this.holidaysObs.subscribe();
+
+      this.holidayList = [];
+      this.pendingHoliday = [];
       this.spinner.createSpinner('Please wait..')
       this.holidayService.getHolidays().subscribe((res:any) => {
         this.spinner.stopSpinner();
         this.holidaysObs = res;
         this.holidaysObs.reverse();
+          for (let i = 0; i < res.length; i++) {
+          res[i].start = moment(res[i].HolidayDate);
+         if ((moment(res[i].start).diff(moment(), 'days')) > -1) {
+          this.pendingHoliday.push(res[i]);
+        }
+          }
     },
     error =>{
        this.spinner.stopSpinner();

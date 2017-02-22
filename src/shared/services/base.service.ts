@@ -26,20 +26,19 @@ interface HttpServices {
 
 /** Base Service Definition */
 export class BaseService implements HttpServices {
-    //public baseUrl: string = 'api/';
-    public baseUrl: string = 'http://192.168.101.21:8009/api/';
-    // public baseUrl: string = 'http://linkupmobile.eternussolutions.com/webapi/api/';
+    public baseUrl: string = 'api/';
     public options: RequestOptions;
     private httpService: Http;
     private requestUrl: string;
-    public unauthorizedEvent :Events;
-
+    //public unauthorizedEvent :Events;
+    
     /** Base Service constructor : Accepts Analytics Service, Http Service, Context path, Log service */
 
     //,public appCtrl: App
-    constructor(_httpService: Http, _context: string ) {
+    constructor(_httpService: Http, _context: string , public unauthorizedEvent:Events ) {
         this.httpService = _httpService;
         this.requestUrl = this.baseUrl.concat(_context);
+        //this.unauthorizedEvent = new Events();
     }
     /**
      * Get Single object using get$ method. 
@@ -146,8 +145,9 @@ export class BaseService implements HttpServices {
     }
 
      private onUnAuthorized() {
-        localStorage.clear();
-        this.unauthorizedEvent.publish('Token Expired');
+        //localStorage.clear();
+        
+        this.unauthorizedEvent.publish('Token Expired','Token');
        // this.appCtrl.getRootNav().setRoot(LoginPage);
 
      }

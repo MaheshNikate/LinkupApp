@@ -11,7 +11,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding class="masters">
 
 <!--<ion-card>
   <ion-card-header>
@@ -100,7 +100,7 @@
         <p class="validationerror">{{ validationMessage }}</p>
       </ion-item>
       <ion-item>
-        <ion-label>Leave Type *</ion-label>
+        <ion-label class="required">Leave Type</ion-label>
         <ion-select [(ngModel)]="model.leaveType" name ="leavetype" (ionChange)= "validateLeaveType()" formControlName="leaveType">
           <ion-option [value]="leavetype" *ngFor="let leavetype of leaves">{{ leavetype.Type }}</ion-option>
         </ion-select>
@@ -120,7 +120,7 @@
 			</ion-item>-->
 
        <ion-item>
-        <ion-label class="graycolor" >Number of Leaves *</ion-label>
+        <ion-label class="graycolor required" > Number of Leaves </ion-label>
         <!--<ion-select [(ngModel)]="model.numDays" name ="noleave" formControlName="noleave" >
           <ion-option [value]="noleave" selected="true">{{model.numDays}}</ion-option>
         </ion-select>-->
@@ -133,7 +133,7 @@
 			<br>
 
 			<ion-item>
-      <ion-label>Start Date *</ion-label>
+      <ion-label class="required">Start Date</ion-label>
       <ion-datetime name ="startdate" [(ngModel)]="model.start" displayFormat="MMM DD YYYY"  (ionChange)="startChanged()" formControlName="start"></ion-datetime>
        <p ion-text [hidden]="applyLeaveForm.controls.start.valid || submitted == false" color="danger" padding-left>
 				Start Date is required.
@@ -141,7 +141,7 @@
       </ion-item>
 
       <ion-item>
-      <ion-label>End Date *</ion-label>
+      <ion-label class="required">End Date</ion-label>
       <ion-datetime name ="enddate"  [(ngModel)]="model.end" displayFormat="MMM DD YYYY"  (ionChange)="endChanged()" formControlName="end"></ion-datetime>
       <p ion-text [hidden]="applyLeaveForm.controls.end.valid || submitted == false" color="danger" padding-left>
 				End Date is required.
@@ -150,7 +150,7 @@
 	
 		
       <ion-item>
-        <ion-label>Reason *</ion-label>
+        <ion-label class="required">Reason</ion-label>
         <ion-textarea name ="reason"  [(ngModel)]="model.reason" formControlName="reason" ></ion-textarea>
         <p ion-text [hidden]="applyLeaveForm.controls.reason.valid || submitted == false" color="danger" padding-left>
 				Reason is required.

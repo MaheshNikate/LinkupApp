@@ -19,4 +19,14 @@ page-applyforleave {
         text-decoration: underline;
         white-space: pre-wrap;
       }
+
+      .required label:after {
+      color: #e32;
+      content: ' *';
+      display:inline;
+      }
+
+      .masters {
+    overflow: hidden;
+     }
 }

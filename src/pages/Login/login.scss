@@ -9,6 +9,7 @@ page-user {
     background-position: center; 
     margin: auto; 
     z-index: 2; 
+    overflow: hidden;
 }
   .logo {
     padding: 20px 0;
@@ -19,6 +20,10 @@ page-user {
       max-width: 150px;
     }
   }
+
+  .no-scroll .scroll-content{
+     overflow: hidden;
+}
 
   .scroll-content {
       display: flex;

@@ -52,14 +52,23 @@ export class MyApp {
       Splashscreen.hide();
     });
 
-    this.unauthorizedEvent.subscribe('Token Expired', (user, time) => {
+ 
+
+    this.unauthorizedEvent.subscribe('Token Expired', (Token) => {
   // user and time are the same arguments passed in `events.publish(user, time)`
+        // localStorage.clear();
+         //this.apCtrl.getRootNav().setRoot(LoginPage);
    this.tpkenExpiredAlert('Session Expired','Please Login again.');
     });
 
    // this.initializeApp();
   }
 
+eventFired()
+{
+    localStorage.clear();
+    this.apCtrl.getRootNav().setRoot(LoginPage);
+}
   
 
     showAlert(title:string, subTitle:string) {
@@ -81,8 +90,15 @@ export class MyApp {
             subTitle: subTitle,
             buttons: ['OK']
             });
-            alert.onDidDismiss(() =>  this.apCtrl.getRootNav().setRoot(LoginPage));
+            alert.onDidDismiss(() =>  
+           this.clearToken()
+            );
             alert.present();
+        }
+        clearToken()
+        {
+         localStorage.clear();
+         this.apCtrl.getRootNav().setRoot(LoginPage);
         }
 
 }

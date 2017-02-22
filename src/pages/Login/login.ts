@@ -48,6 +48,7 @@ export class LoginPage {
                 this.getLoggedInUserPermission();
             },
             error => { 
+               // this.submitted = false;
                 this.spinner.stopSpinner();
                 this.showAlert('Failed','Failed to login!');
                 this.showError = true;
@@ -66,6 +67,7 @@ export class LoginPage {
                 this.getCurrentUserDetails();
             },
             error => {
+                this.submitted = false;
                 this.showAlert('Failed','Failed to get user permissions!');
                 this.spinner.stopSpinner();
                 this.showError = true;
@@ -82,6 +84,7 @@ export class LoginPage {
                 this.appCtrl.getRootNav().setRoot(HomePage);
             },
             error => {
+                this.submitted = false;
                  this.showAlert('Failed','Failed to get user details!');
                 this.spinner.stopSpinner();
                 this.showError = true;

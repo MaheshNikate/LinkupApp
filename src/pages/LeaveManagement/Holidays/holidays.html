@@ -12,7 +12,7 @@
 
 <ion-content padding>
   <ion-list >
-  <ion-item *ngFor="let holiday of holidaysObs" [attr.holidaytype]="holiday.HolidayType.Value | lowercase">
+  <ion-item *ngFor="let holiday of pendingHoliday" [attr.holidaytype]="holiday.HolidayType.Value | lowercase">
     <h2>{{holiday.Title}}</h2>
     <p>{{holiday.HolidayDate | date:'dd/MM/y'}}</p>
     <ion-badge item-right>{{holiday.WeekDay}}</ion-badge>

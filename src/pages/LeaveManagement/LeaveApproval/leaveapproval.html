@@ -8,7 +8,7 @@
     <ion-title>
       Leave Approval
     </ion-title>
-     <ion-buttons end>
+     <ion-buttons end *ngIf="isBulkApprovePermission == true">
       <button ion-button *ngIf= "editMode == false" (click)="editleaves()">
         Edit
       </button>
@@ -54,7 +54,7 @@
       <button ion-fab (click)="slideToPage(activeIndex - 1)"><ion-icon name="rewind" ></ion-icon></button>
       <button ion-fab>{{activeIndex}}</button>
       <button ion-fab  (click)="slideToPage(activeIndex + 1)" ><ion-icon name="fastforward" ></ion-icon></button>
-      <button ion-fab><ion-icon name="arrow-dropdown-circle" (click)="slideToPage(totalnumberPages)"></ion-icon></button>
+      <button ion-fab><ion-icon name="arrow-dropdown-circle" (click)="slideToPage(totalnumberPages-1)"></ion-icon></button>
     </ion-fab-list>
   </ion-fab>
   
@@ -102,7 +102,7 @@
   
  </ion-slides>
 
-  <ion-fab left bottom>
+  <!--<ion-fab left bottom>
   <ion-card *ngIf="isBulkApprovePermission == true">
   <ion-card-content>
      <ion-item >
@@ -123,7 +123,7 @@
     </ion-item>
   </ion-card-content>
 </ion-card>
-  </ion-fab>
+  </ion-fab>-->
 
 
 

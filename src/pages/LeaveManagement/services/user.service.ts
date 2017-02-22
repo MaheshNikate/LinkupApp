@@ -10,7 +10,7 @@ import 'rxjs/add/operator/map';
 import { BaseService } from '../../../shared/index';
 import { User } from '../models/user';
 import { LeaveDetail } from '../models/leaveDetail';
-import {App} from 'ionic-angular';
+import {App,Events} from 'ionic-angular';
 
 /** Context for service calls */
 export const CONTEXT = 'Users';
@@ -18,8 +18,8 @@ export const CONTEXT = 'Users';
 /** Service Definition */
 @Injectable()
 export class UserService extends BaseService {
-    constructor(public http: Http ,public apCtrl:App) {
-        super( http, CONTEXT);
+    constructor(public http: Http ,public unAuthorizedEvent:Events) {
+        super( http, CONTEXT,unAuthorizedEvent);
     }
 
     getUserDetails(): Observable<User> {

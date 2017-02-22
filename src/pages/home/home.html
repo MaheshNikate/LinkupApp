@@ -42,7 +42,7 @@
         <ion-icon *ngIf= "isShowLeaveMgt == true" name="arrow-dropleft" item-right ></ion-icon>
 	     <h2 class="headertext" style="display: inline-block;">Leave Management</h2>
       </ion-list-header>
-      <ion-item  class ="animated fadeInUp" ion-item  menuClose *ngFor="let p of leavePages" (click)="openPage(p)">
+      <ion-item  class ="animated fadeInDown" ion-item  menuClose *ngFor="let p of leavePages" (click)="openPage(p)">
         <!--<ion-icon item-left [name]="p.icon" [color]="isActive(p)"></ion-icon>-->
         {{p.title}}
       </ion-item>

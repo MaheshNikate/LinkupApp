@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NavController,ModalController ,AlertController,ActionSheetController} from 'ionic-angular';
+import { NavController,ModalController ,AlertController,ActionSheetController,Events} from 'ionic-angular';
 /** Third Party Dependencies */
 import { Observable } from 'rxjs/Rx';
 
@@ -8,8 +8,9 @@ import { LeaveService } from '../services/leave.service';
 import { UserService } from '../services/user.service';
 import { Leave } from '../models/leave';
 import { LeaveDetail } from '../models/leaveDetail';
-import { LeaveDetails } from '../leaveDetails/leaveDetails';
+import { MyLeaveDetails } from '../myLeaveDetails/myLeaveDetails';
 import { Spinnerservice } from '../../../shared/services/spinner';
+import { Toast } from 'ionic-native';
 
 @Component({
   selector: 'page-myleaves',
@@ -36,27 +37,29 @@ export class MyLeaves {
     public spinner:Spinnerservice,
     public modalCtrl: ModalController,
     public alertCtrl:AlertController,
-    public actionSheetCtrl:ActionSheetController) {
-      this.isShowMyLeave = false;
-      this.isMoreclicked = false;
-      
-      this.leaves = [];
+    public actionSheetCtrl:ActionSheetController,
+    public testevent:Events) {
+   
       this.getLeaves();
     
   }
   getLeaves()
   {
+      this.isShowMyLeave = false;
+      this.isMoreclicked = false;
+      this.leaves = [];
     this.spinner.createSpinner('Please wait..');
     console.log('calling leaves');
      //this.leaveObs = this.leaveService.getMyLeaves();
 
       this.leaveService.getMyLeaves().subscribe((res:any) => {
         this.leaveObs  = res;
+       // this.testevent.publish('Test',leaveID);
         this.leaveObs.reverse();
     },
     error =>{
-                
-          this.showAlert('Failed','Failed to get response from server.');
+         // this.showToast('Failed to get response from server');      
+          //this.showAlert('Failed','Failed to get response from server.');
         });
      
       this.leaveService.getLeaveDetails().subscribe((res:any) => {
@@ -72,10 +75,21 @@ export class MyLeaves {
   {
     this.isShowMyLeave = !this.isShowMyLeave;
   }
+  
   showLeaveDetails(leave:any)
   {
-  //   let leaveDetailsModal = this.modalCtrl.create(LeaveDetails,{leave:leave});
-  //  leaveDetailsModal.present();
+    if(this.isMoreclicked == true)
+    return;
+
+    let myleaveDetailsModal = this.modalCtrl.create(MyLeaveDetails ,{ leave: leave});
+     myleaveDetailsModal.onDidDismiss(status => {
+     if(status.changedStatus == true)
+     {
+       //this.showToast('Leave is cancelled successfully!');
+       this.getLeaves();
+     }
+   });
+   myleaveDetailsModal.present();
   }
 
   cancelClicked(leavID:string) {
@@ -84,13 +98,19 @@ export class MyLeaves {
             LeaveRequestMasterId: leavID,
             ID: this.selectedLeave.ID
         };
-        this.leaveService.deleteLeaveRecord(leaveTobeCancelled).subscribe(res => {
+        this.leaveService.deleteLeaveRecord(leaveTobeCancelled).subscribe((res:any) => {
             if (res) {
+             // this.showToast(res.Message);
+              this.getLeaves();
                // this.messageService.addMessage({ severity: 'success', summary: 'Success', detail: 'Leave application deleted!' });
                // this.closeClicked();
             } else {
                 //this.messageService.addMessage({ severity: 'error', summary: 'Fail', detail: 'Request not completed.' });
             }
+        },
+        error=>
+        {
+          this.showToast('Failed to cancel leave.');
         });
     }
 
@@ -107,6 +127,7 @@ export class MyLeaves {
           role: 'destructive',
           handler: () => {
           this.selectedLeaveID = leaveID;
+          this.selectedLeave = leave;
           this.showConfirm();  
           this.isMoreclicked = false;
           }
@@ -147,7 +168,14 @@ export class MyLeaves {
   }
 
 
-
+    showToast(message:string)
+  {
+    Toast.show(message, '5000', 'center').subscribe(
+  toast => {
+    console.log(toast);
+  }
+);
+  }
     
 
     showAlert(title:string, subTitle:string) {
