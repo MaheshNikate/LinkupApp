@@ -45,7 +45,7 @@ export class MyLeaveDetails {
         };
         this.leaveService.deleteLeaveRecord(leaveTobeCancelled).subscribe((res:any) => {
             if (res) {
-              //this.showToast(res.Message);
+             this.showToast(res.Message);
               this.isCancelled = true;
             this.dismiss()
             } else {

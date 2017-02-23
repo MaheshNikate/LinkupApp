@@ -58,7 +58,8 @@ export class MyLeaves {
         this.leaveObs.reverse();
     },
     error =>{
-         // this.showToast('Failed to get response from server');      
+      this.spinner.stopSpinner();
+          this.showToast('Failed to get response from server');      
           //this.showAlert('Failed','Failed to get response from server.');
         });
      
@@ -85,7 +86,7 @@ export class MyLeaves {
      myleaveDetailsModal.onDidDismiss(status => {
      if(status.changedStatus == true)
      {
-       //this.showToast('Leave is cancelled successfully!');
+       this.showToast('Leave is cancelled successfully!');
        this.getLeaves();
      }
    });
@@ -100,7 +101,7 @@ export class MyLeaves {
         };
         this.leaveService.deleteLeaveRecord(leaveTobeCancelled).subscribe((res:any) => {
             if (res) {
-             // this.showToast(res.Message);
+              this.showToast(res.Message);
               this.getLeaves();
                // this.messageService.addMessage({ severity: 'success', summary: 'Success', detail: 'Leave application deleted!' });
                // this.closeClicked();
@@ -170,11 +171,11 @@ export class MyLeaves {
 
     showToast(message:string)
   {
-    Toast.show(message, '5000', 'center').subscribe(
-  toast => {
-    console.log(toast);
-  }
-);
+//     Toast.show(message, '5000', 'center').subscribe(
+//   toast => {
+//     console.log(toast);
+//   }
+// );
   }
     
 

@@ -54,7 +54,7 @@
       <button ion-fab (click)="slideToPage(activeIndex - 1)"><ion-icon name="rewind" ></ion-icon></button>
       <button ion-fab>{{activeIndex}}</button>
       <button ion-fab  (click)="slideToPage(activeIndex + 1)" ><ion-icon name="fastforward" ></ion-icon></button>
-      <button ion-fab><ion-icon name="arrow-dropdown-circle" (click)="slideToPage(totalnumberPages-1)"></ion-icon></button>
+      <button ion-fab *ngIf="isAllPagesDisplay == true"><ion-icon name="arrow-dropdown-circle" (click)="slideToPage(totalnumberPages-1)"></ion-icon></button>
     </ion-fab-list>
   </ion-fab>
   
@@ -64,7 +64,7 @@
 
 <!--<br>-->
  <ion-slides #Slides class="ion-slides-atrribute" (ionSlideDidChange)="slideChanged()">
-  <ion-slide class="ion-slide-attribute" *ngFor="let page of slidePages">
+  <ion-slide class="ion-slide-attribute" *ngFor="let page of activeSlidePages">
     <!--<br>
     <br>-->
     <ion-list class="ion-list-attribute">

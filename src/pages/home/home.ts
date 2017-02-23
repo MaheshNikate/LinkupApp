@@ -46,6 +46,7 @@ export class HomePage {
     this.isShowTimesheet = false;
     this.userdetails = JSON.parse(localStorage.getItem('loggedInUserDetails'));
     this.userPermissions = JSON.parse(localStorage.getItem("loggedInUserPermission"));
+    this.showLeaveManagement();
     // console.log('calling profile' + this.userdetails);
   }
 

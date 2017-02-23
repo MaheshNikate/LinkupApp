@@ -27,6 +27,7 @@ interface HttpServices {
 /** Base Service Definition */
 export class BaseService implements HttpServices {
     public baseUrl: string = 'api/';
+   
     public options: RequestOptions;
     private httpService: Http;
     private requestUrl: string;

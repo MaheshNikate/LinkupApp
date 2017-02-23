@@ -40,6 +40,7 @@ leavesArray:Leave[];
 pages:Leave[];
 slidePage:Leave[];
 slidePages:any[];
+activeSlidePages:any[];
 selectedLeave:Leave;
 selectedLeaveID:string;
 userDetObs: Observable<User>;
@@ -50,6 +51,7 @@ approverList:any;
 validationMessage: string = '';
 approved: boolean = false;
 rejected: boolean = false;
+isAllPagesDisplay:boolean;
 leaveList:any;
 selectedEmployees: any[];
 comment:string = '';
@@ -70,6 +72,7 @@ public isHrApprove :boolean;
   
    this.userPermissions = JSON.parse(localStorage.getItem("loggedInUserPermission"));
    this.isBulkApprovePermission = this.checkBulkApprovePermission('LEAVE.BULK_APPROVAL.MANAGE');
+   this.isAllPagesDisplay = false;
    //this.isBulkApprovePermission = true;
   
     // this.model = {
@@ -91,6 +94,7 @@ public isHrApprove :boolean;
 
     this.selectedEmployees = [];
     this.slidePages = [];
+    this.activeSlidePages = [];
     this.isMoreclicked = false;
 
     this.getLeavesToApprove()
@@ -204,6 +208,7 @@ public isHrApprove :boolean;
     //var totalnumberPages:number;
     var lastpage:number ;
     this.slidePages = [];
+    this.activeSlidePages = [];
     while(numberPages >= 10) 
       { 
         this.totalnumberPages = numberPages / 10 ; 
@@ -224,7 +229,35 @@ public isHrApprove :boolean;
        this.slidePages.push(this.slidePage);
       }
       console.log('Pages' + this.slidePages);
+      this.getActiveSlidePages(0);
   }
+
+  getActiveSlidePages(slideno:number)
+  {
+     if(this.activeSlidePages.length == this.slidePages.length)
+    {
+      this.isAllPagesDisplay = true;
+      return;
+    }
+    this.spinner.createSpinner('Please wait..');
+    var upperlimit:number = this.getUpperLimitSlide(slideno+10);
+    for( let sldieindex = slideno ;sldieindex<upperlimit; sldieindex++ )
+    {
+      this.activeSlidePages.push(this.slidePages[sldieindex]);
+    }
+   
+    this.totalnumberPages = this.activeSlidePages.length;
+    
+    this.spinner.stopSpinner();
+  }
+
+  getUpperLimitSlide(num:number)
+{
+  if(this.slidePages.length  > num )
+  return num;
+  else
+  return this.slidePages.length
+}
 
 getUpperLimit(num:number)
 {
@@ -237,6 +270,11 @@ getUpperLimit(num:number)
 slideChanged()
 {
   this.activeIndex = this.slides.getActiveIndex();
+  if(this.activeIndex == this.activeSlidePages.length-1)
+  {
+    
+    this.getActiveSlidePages(this.activeIndex + 1);
+  }
 }
 
 slideToPage(index:number)
@@ -849,11 +887,11 @@ let prompt = this.alertCtrl.create({
 
   showToast(message:string)
   {
-    Toast.show(message, '5000', 'center').subscribe(
-  toast => {
-    console.log(toast);
-  }
-);
+//     Toast.show(message, '5000', 'center').subscribe(
+//   toast => {
+//     console.log(toast);
+//   }
+// );
   }
 
 }

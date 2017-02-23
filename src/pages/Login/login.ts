@@ -50,7 +50,8 @@ export class LoginPage {
             error => { 
                // this.submitted = false;
                 this.spinner.stopSpinner();
-                this.showAlert('Failed','Failed to login!');
+               // this.showAlert('Failed','Failed to login!');
+                 this.showToast('Failed to Login!');
                 this.showError = true;
                 if(error.message)
                 this.errorMessage = error.message;
@@ -68,7 +69,8 @@ export class LoginPage {
             },
             error => {
                 this.submitted = false;
-                this.showAlert('Failed','Failed to get user permissions!');
+                //this.showAlert('Failed','Failed to get user permissions!');
+                this.showToast('Failed to get user details!');
                 this.spinner.stopSpinner();
                 this.showError = true;
                 this.errorMessage = error.message;
@@ -81,11 +83,12 @@ export class LoginPage {
                this.spinner.stopSpinner();
                 // this.navCtrl.push(HomePage);
                 //this.showToast('Logged in successfully!');
+                
                 this.appCtrl.getRootNav().setRoot(HomePage);
             },
             error => {
                 this.submitted = false;
-                 this.showAlert('Failed','Failed to get user details!');
+                // this.showAlert('Failed','Failed to get user details!');
                 this.spinner.stopSpinner();
                 this.showError = true;
                 this.errorMessage = error.message;
@@ -118,11 +121,11 @@ export class LoginPage {
 
          showToast(message:string)
       {
-       Toast.show(message, '5000', 'center').subscribe(
-     toast => {
-    console.log(toast);
-      }
-    );
+    //    Toast.show(message, '5000', 'center').subscribe(
+    //  toast => {
+    // console.log(toast);
+    //   }
+    // );
     }
 
 }
